@@ -97,7 +97,7 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
     private Dialog dialog;//操作按钮弹出框
     private View dialog_operation;//操作的view
 
-    private final int ONE = 1;//视频播放完操作
+    private final int ONE = 1;//视频播放完
     private final int TWO = 2;//下拉刷新更新数据
     private final int THREE = 3;//点赞列表
     Handler handler = new Handler(){
