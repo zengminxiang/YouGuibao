@@ -67,6 +67,7 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
     private ImageView image_bg,follow,like;//视频的背景图，关注按钮，点赞按钮
     private RelativeLayout showview;
 
+    //这是更新操作
     private VideoListJson videoListJson;//数据
     private TextView context,time,v_browse_number,more_tv;
 
