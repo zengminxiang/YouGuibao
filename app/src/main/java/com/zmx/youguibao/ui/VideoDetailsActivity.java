@@ -99,7 +99,7 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
 
     private final int ONE = 1;//视频播放
     private final int TWO = 2;//下拉刷新更新数
-    private final int THREE = 3;//点赞列表
+    private final int THREE = 3;//点赞列表5555555
     Handler handler = new Handler(){
 
         @Override
