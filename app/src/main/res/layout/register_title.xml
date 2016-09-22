@@ -1,0 +1,43 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:background="@mipmap/login_bg_cover"
+    android:layout_height="50dp"
+    android:id="@+id/view_head"
+    >
+
+    <TextView
+        android:id="@+id/tvHead"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginRight="65dp"
+        android:layout_marginLeft="65dp"
+        android:gravity="center"
+        android:textColor="#fff"
+        android:textSize="18sp"
+        android:singleLine="true"
+        android:text="完善个人资料"
+        />
+
+    <ImageView
+        android:id="@+id/ibBack"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_centerVertical="true"
+        android:padding="8dp"
+        android:clickable="true"
+        android:scaleType="fitXY"
+        android:background="@mipmap/nav_btn_back_white_normal" />
+
+
+    <ImageView
+        android:id="@+id/head_rightIv"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:padding="10dp"
+        android:scaleType="fitXY"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:background="@mipmap/nav_btn_done_white_normal"
+        android:clickable="true" />
+
+</RelativeLayout>

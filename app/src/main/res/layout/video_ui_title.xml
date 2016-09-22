@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/video_title_rl"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/white"
+        >
+
+        <View
+            android:id="@+id/back"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_centerVertical="true"
+            android:onClick="onClickBack"
+            android:background="@drawable/buttonstyle_a" />
+
+        <ImageView
+            android:id="@+id/follow"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@+id/back"
+            android:background="@drawable/ic_follow_a" />
+
+        <ImageView
+            android:id="@+id/like"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@+id/follow"
+            android:background="@mipmap/nav_btn_like_pressed"
+         />
+
+        <ImageView
+            android:id="@+id/cccc"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@+id/like"
+            android:background="@mipmap/portfolio_bottombar_more_pressed"
+            android:onClick="onClickOperation" />
+
+        <com.zmx.youguibao.utils.view.ImageViewUtil
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
+            android:src="@mipmap/filter_preview_lomo" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/textcolorone" />
+
+    </RelativeLayout>
+
+
+</LinearLayout>

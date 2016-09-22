@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.zhy.android.percent.support.PercentRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@mipmap/a"
+        android:padding="10dp">
+
+        <ImageButton
+            android:id="@+id/emoji"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@mipmap/btn_pb_expression_s" />
+
+        <EditText
+            android:id="@+id/comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@+id/send"
+            android:layout_toRightOf="@+id/emoji"
+            android:background="@drawable/edittext_comment"
+            android:hint="我也说一句"
+            android:inputType="textMultiLine"
+            android:maxLines="3"
+            android:padding="5dp" />
+
+        <Button
+            android:id="@+id/send"
+            android:layout_width="40dp"
+            android:layout_height="32dp"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/button_comment"
+            android:text="发表" />
+
+    </com.zhy.android.percent.support.PercentRelativeLayout>
+
+
+</RelativeLayout>

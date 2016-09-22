@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="tabtext">#f5f2f3</color>
+    <color name="bage">#d6cdd0</color>
+    <color name="bages">#f9f7f8</color>
+    <color name="textcolorone">#b9b7b8</color>
+    <color name="white">#ffffff</color>
+    <color name="blue_text">#3cafff</color>
+    <color name="text_color">#2897FF</color>
+    <color name="sc_transparent_background">#00111111</color>
+    <color name="black_semi_transparent">#B2000000</color>
+    <color name="transparent">#00000000</color>
+</resources>

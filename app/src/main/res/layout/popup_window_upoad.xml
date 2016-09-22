@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_corners"
+    android:orientation="vertical">
+
+
+    <com.zmx.youguibao.customview.MyRoundProgressBar
+        android:id="@+id/loading"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:progress="1"
+        app:progressbar_radius="60dp"
+        app:progressbar_reach_color="@color/blue_text"
+        app:progressbar_text_color="#56f4da"
+        app:progressbar_text_size="18sp"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        app:progressbar_unreach_color="#56f4da"
+        >
+    </com.zmx.youguibao.customview.MyRoundProgressBar>
+
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/loading"
+        android:layout_marginTop="5dp"
+        android:layout_centerHorizontal="true"
+        android:text="视频上传中......"
+        />
+
+    <Button
+        android:id="@+id/btn_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/shape_rectangle_white"
+        android:textColor="@color/blue_text"
+        android:gravity="center"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="15dp"
+        android:text="取消" />
+
+</RelativeLayout>

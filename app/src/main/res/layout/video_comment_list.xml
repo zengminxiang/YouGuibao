@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        >
+
+        <com.zmx.youguibao.utils.view.ImageViewUtil
+            android:id="@+id/head"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@mipmap/filter_preview_lomo" />
+
+        <RelativeLayout
+            android:id="@+id/layout"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="2dp"
+            android:layout_toRightOf="@+id/head"
+            >
+
+            <TextView
+                android:id="@+id/video_comment_item_name"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="刘大妈"
+                android:textColor="#000000"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="15dp"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/video_comment_item_name"
+                android:background="@mipmap/icon_grade_lv1"
+                />
+
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/comtext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/layout"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_toRightOf="@+id/head"
+            android:text="一般般而已。。。。。。"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="10sp"
+            android:text="2016-02-27"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="5dp"
+            android:layout_below="@+id/comtext"
+            android:layout_toRightOf="@+id/head"
+            />
+
+        <ImageView
+            android:id="@+id/comment_button"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@mipmap/btn_sml_floor_reply_n_1"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="5dp"
+            android:layout_below="@+id/comtext"
+            android:layout_alignParentRight="true"
+            />
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#e6e4e4"
+            android:layout_toRightOf="@+id/head"
+            android:layout_below="@+id/time"
+            ></View>
+
+
+        <TextView
+            android:id="@+id/comment_one"
+            android:layout_below="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/head"
+            android:lineSpacingExtra="3dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="15dp"
+            android:visibility="gone"
+            android:text="我是第一条评论"
+            />
+
+
+        <TextView
+            android:id="@+id/comment_two"
+            android:layout_below="@+id/comment_one"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="3dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="15dp"
+            android:layout_toRightOf="@+id/head"
+            android:visibility="gone"
+            android:text="我是第一条评论"
+            />
+
+        <TextView
+            android:id="@+id/comment_more"
+            android:layout_below="@+id/comment_two"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/head"
+            android:gravity="center"
+            android:layout_marginBottom="20dp"
+            android:visibility="gone"
+            android:textColor="@color/text_color"
+            android:text="更多回复"
+            />
+
+        <View
+            android:id="@+id/comment_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#e6e4e4"
+            android:layout_toRightOf="@+id/head"
+            android:layout_below="@+id/comment_more"
+            ></View>
+
+    </RelativeLayout>
+
+
+
+</LinearLayout>

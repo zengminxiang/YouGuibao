@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/choice_delect"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="删除"
+        android:gravity="center"
+        android:textColor="@drawable/photo_textview"
+        android:textSize="20sp"
+        android:background="@color/white"
+        />
+
+    <TextView
+        android:id="@+id/choice_photo"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="举报"
+        android:gravity="center"
+        android:textColor="@drawable/photo_textview"
+        android:textSize="20sp"
+        android:background="@color/white"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="取消"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:textColor="@color/blue_text"
+        android:background="@color/bages"
+        />
+
+
+</LinearLayout>

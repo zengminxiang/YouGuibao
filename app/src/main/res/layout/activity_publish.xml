@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.android.percent.support.PercentRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:id="@+id/layout"
+    android:layout_height="match_parent"
+    >
+
+    <RelativeLayout
+        android:id="@+id/main_title_rl"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        >
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="发表"
+            android:textColor="#bfbcbc"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:id="@+id/close"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_centerVertical="true"
+            android:background="@mipmap/nav_btn_close_black_normal"
+            />
+        <ImageView
+            android:id="@+id/publish"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:src="@mipmap/nav_btn_done_black_pressed"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/textcolorone"
+            android:layout_alignParentBottom="true"
+            />
+
+    </RelativeLayout>
+
+    <com.zhy.android.percent.support.PercentRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        android:layout_below="@+id/main_title_rl"
+        android:id="@+id/layout_a"
+        >
+
+        <ImageView
+            android:id="@+id/video_img"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_heightPercent="20%"
+            app:layout_widthPercent="30%"
+            android:scaleType="fitXY"
+            />
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_toRightOf="@+id/video_img"
+            android:layout_marginLeft="5dp"
+            android:background="@null"
+            android:enabled="true"
+            android:gravity="top"
+            android:hint="想说点什么"
+            app:layout_textSizePercent="3.5%w"
+            android:inputType="textMultiLine"
+            android:maxLines="10"
+            android:minLines="8"
+            app:layout_heightPercent="20%"
+            app:layout_widthPercent="70%"
+            />
+
+    </com.zhy.android.percent.support.PercentRelativeLayout>
+
+    <TextView
+        android:id="@+id/addre"
+        android:layout_below="@+id/layout_a"
+        style="@style/TxtTitle"
+        android:layout_width="fill_parent"
+        android:background="@drawable/setting_item_selector"
+        android:drawableLeft="@mipmap/share_icon_position_normal"
+        android:drawablePadding="5dp"
+        android:drawableRight="@mipmap/wallet_base_right_arrow"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:text="添加地理位置"
+        android:layout_marginTop="10dp"
+        app:layout_textSizePercent="4%w"
+        android:textColor="@color/textcolorone"
+        app:layout_heightPercent="8%"
+        app:layout_widthPercent="100%"
+        />
+
+
+</com.zhy.android.percent.support.PercentRelativeLayout>
