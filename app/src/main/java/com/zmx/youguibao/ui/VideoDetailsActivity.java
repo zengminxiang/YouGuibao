@@ -61,7 +61,7 @@ import tv.danmaku.ijk.media.player.IMediaPlayer;
  */
 public class VideoDetailsActivity extends BaseActivity implements VideoDetailsView{
 
-    //播放器 斤斤计较就军
+    //播放器 斤斤计较
     private FrameLayout frameLayout,full_screen;
     private VideoPlayView videoItemView;//播放的view
     private ImageView image_bg,follow,like;//视频的背景图，关注按钮，点赞按钮
