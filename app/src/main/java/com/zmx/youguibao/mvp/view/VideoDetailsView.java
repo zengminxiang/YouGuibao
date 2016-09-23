@@ -50,4 +50,16 @@ public interface VideoDetailsView {
      */
     void VSelectLike(List<VideoLikeJson> likeJson,String pagenow);
 
+    /**
+     * 查询是否关注
+     * @param state
+     */
+    void VSelectFollow(String state);
+
+    /**
+     * 添加关注
+     * @param state
+     */
+    void VAddFollow(String state);
+
 }

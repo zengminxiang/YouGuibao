@@ -220,6 +220,37 @@ public class UrlConfig {
 
     }
 
+    /**
+     * 查询是否关注了
+     * @param tag
+     * @param guid  关注的人
+     * @param buid  被关注的人
+     * @return
+     */
+    public static String QueryUserFollow(String tag,String guid,String buid){
+        params = new HashMap<>();
+        params.put("tag",tag);
+        params.put("guid", guid);
+        params.put("buid", buid);
+        return CombinationUrl(USER,params);
+    }
+
+    /**
+     * 添加关注
+     * @param tag
+     * @param guid
+     * @param buid
+     * @return
+     */
+    public static String AddFollow(String tag,String guid,String buid){
+
+        params = new HashMap<>();
+        params.put("tag",tag);
+        params.put("guid", guid);
+        params.put("buid", buid);
+        return CombinationUrl(USER,params);
+
+    }
 
 
     //组合url

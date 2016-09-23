@@ -65,11 +65,25 @@ public class UploadVideoModel implements IUploadVideoModel {
 
     }
 
-    public void SelectLike(String tag, String vid,String pagenow, final IDataRequestListener listener){
+    //查询点赞列表
+    public void SelectLike(String tag, String vid,String pagenow, IDataRequestListener listener){
 
         ISelectLike(tag,vid,pagenow,listener);
 
     }
+
+    //查询是否关注用户
+    public void SelectFollow(String tag, String guid, String buid, IDataRequestListener listener){
+
+        ISelectFollow(tag,guid,buid,listener);
+
+    }
+
+    //添加关注
+    public void AddUserFollow(String tag, String guid, String buid, IDataRequestListener listener){
+        IAddUserFollow(tag,guid,buid,listener);
+    }
+
 
 
     /**
@@ -341,6 +355,64 @@ public class UploadVideoModel implements IUploadVideoModel {
         MyApplication.getHttpQueues().add(reqI);
         reqI.setShouldCache(true); // 控制是否缓存
 
+    }
+
+    /**
+     *
+     * @param tag 查询是否关注某个用户了
+     * @param guid
+     * @param buid
+     * @param listener
+     */
+    @Override
+    public void ISelectFollow(String tag, String guid, String buid, final IDataRequestListener listener) {
+
+        JsonObjectRequest reqJ = new JsonObjectRequest(Request.Method.GET, UrlConfig.QueryUserFollow(tag,guid,buid), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+
+                listener.loadSuccess(jsonObject.toString());
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+            }
+        });
+
+        reqJ.setTag("reqJ");
+        MyApplication.getHttpQueues().add(reqJ);
+        reqJ.setShouldCache(true); // 控制是否缓存
+
+    }
+
+    /**
+     *
+     * @param tag 添加关注
+     * @param guid
+     * @param buid
+     * @param listener
+     */
+    @Override
+    public void IAddUserFollow(String tag, String guid, String buid, final IDataRequestListener listener) {
+        JsonObjectRequest reqK = new JsonObjectRequest(Request.Method.GET, UrlConfig.AddFollow(tag,guid,buid), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+
+                listener.loadSuccess(jsonObject.toString());
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+            }
+        });
+
+        reqK.setTag("reqK");
+        MyApplication.getHttpQueues().add(reqK);
+        reqK.setShouldCache(true); // 控制是否缓存
     }
 
 

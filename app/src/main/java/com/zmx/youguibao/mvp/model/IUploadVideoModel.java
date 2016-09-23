@@ -88,5 +88,22 @@ public interface IUploadVideoModel {
      */
     void ISelectLike(String tag,String vid,String pagenow,IDataRequestListener listener);
 
+    /**
+     *
+     * @param tag 查询是否关注某个用户了
+     * @param guid
+     * @param buid
+     * @param listener
+     */
+    void ISelectFollow(String tag,String guid,String buid,IDataRequestListener listener);
+
+    /**
+     *
+     * @param tag 添加关注
+     * @param guid
+     * @param buid
+     * @param listener
+     */
+    void IAddUserFollow(String tag,String guid,String buid,IDataRequestListener listener);
 
 }

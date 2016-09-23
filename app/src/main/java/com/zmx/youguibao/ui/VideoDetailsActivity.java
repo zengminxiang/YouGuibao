@@ -67,6 +67,10 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
     private ImageView image_bg,follow,like;//视频的背景图，关注按钮，点赞按钮
     private RelativeLayout showview;
 
+    private boolean WheterLogin = false;//判断是否登录
+    private String VideoID;//视频用户id
+    private String uid;//当前用户id
+
     //这是更新操作
     private VideoListJson videoListJson;//数据
     private TextView context,time,v_browse_number,more_tv;
@@ -100,6 +104,7 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
     private final int ONE = 1;//视频播放
     private final int TWO = 2;//下拉刷新新
     private final int THREE = 3;//点赞列表5
+    private final int FROU = 4;//是否关注了的ui更新
     Handler handler = new Handler(){
 
         @Override
@@ -148,6 +153,10 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
 
                     break;
 
+                case FROU:
+                    follow.setVisibility(View.GONE);
+                    break;
+
             }
 
         }
@@ -160,14 +169,17 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
     @Override
     protected void initViews() {
 
+        if(!SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,"").equals("")){
+            WheterLogin = true;
+        }
         setTitleGone();
         StatusBarUtil.setColor(this,getResources().getColor(R.color.white),0);
-        overridePendingTransition(R.anim.push_left_in,R.anim.push_left_out);
+        overridePendingTransition(R.anim.push_left_in,R.anim.push_left_out);//弹出的样式
         videoItemView = new VideoPlayView(this);
         videoListJson = (VideoListJson) getIntent().getSerializableExtra("video");
-
+        VideoID = videoListJson.getUid()+"";
         presenter = new UploadVideoPresenter(this,this);
-        presenter.QueryComment("QueryComment", pagesize+"",videoListJson.getV_id()+"");//查询评论
+//        presenter.QueryComment("QueryComment", pagesize+"",videoListJson.getV_id()+"");//查询评论
 
         headview =  View.inflate(this, R.layout.video_xml_head, null);
         ptrClassicFrameLayout = (PtrClassicFrameLayout) this.findViewById(R.id.test_list_view_frame);
@@ -190,7 +202,7 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
         layout_c = (RelativeLayout) headview.findViewById(R.id.layout_c);
         adapterLike = new VideoLikeAdapter(this,likelists);
         gridview.setAdapter(adapterLike);
-        presenter.SelectLike("SelectLike",videoListJson.getV_id()+"","1");
+        presenter.SelectLike("SelectLike",videoListJson.getV_id()+"","1");//查询点赞列表
 
         follow = (ImageView) findViewById(R.id.follow);
         follow.setOnClickListener(this);
@@ -198,8 +210,15 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
         like.setOnClickListener(this);
 
         //查询是否点赞了，在登录的状态下
-        if(!SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,"").equals("")){
+        if(WheterLogin){
+
+            if(SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,"").equals(VideoID)){
+                follow.setVisibility(View.GONE);
+            }
+
             presenter.QueryWheterLike("WhetherLike",videoListJson.getV_id()+"",SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,""));
+            presenter.SelectFollows("AddFollowUser",SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,""),videoListJson.getV_id()+"");
+
         }
 
         //视频模块
@@ -366,7 +385,7 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
             //关注
             case R.id.follow:
 
-                follow.setVisibility(View.GONE);
+                presenter.AddFollows("AddFollowUser",SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,""),VideoID);
 
                 break;
 
@@ -543,13 +562,32 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
     @Override
     public void VSelectLike(List<VideoLikeJson> likeJson, String pagenow) {
 
-        Log.e("点赞列表",""+likeJson.size());
-
         this.likePagenow = Integer.parseInt(pagenow);
         for (VideoLikeJson j:likeJson){
             likelists.add(j);
         }
         handler.sendEmptyMessage(THREE);
+
+    }
+
+    //查询是否关注某个用户了
+    @Override
+    public void VSelectFollow(String state) {
+
+        if(state.equals("200")){
+            handler.sendEmptyMessage(FROU);
+        }
+
+    }
+
+    //添加关注
+    @Override
+    public void VAddFollow(String state) {
+
+        if(state.equals("200")){
+            toast("关注成功");
+            handler.sendEmptyMessage(FROU);
+        }
 
     }
 
