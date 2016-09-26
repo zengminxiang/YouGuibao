@@ -69,7 +69,6 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
 
     private boolean WheterLogin = false;//判断是否登录
     private String VideoID;//视频用户id
-    private String uid;//当前用户id
 
     //这是更新操作
     private VideoListJson videoListJson;//数据
@@ -217,7 +216,7 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
             }
 
             presenter.QueryWheterLike("WhetherLike",videoListJson.getV_id()+"",SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,""));
-            presenter.SelectFollows("AddFollowUser",SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,""),videoListJson.getV_id()+"");
+            presenter.SelectFollows("SelectFollowUser",SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,""),videoListJson.getUid()+"");
 
         }
 
@@ -573,6 +572,8 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
     //查询是否关注某个用户了
     @Override
     public void VSelectFollow(String state) {
+
+        Log.e("state","s"+state);
 
         if(state.equals("200")){
             handler.sendEmptyMessage(FROU);

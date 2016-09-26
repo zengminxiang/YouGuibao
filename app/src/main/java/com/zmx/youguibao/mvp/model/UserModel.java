@@ -21,6 +21,16 @@ public class UserModel implements IUserModel{
         ILogin(tag,name,pwd,listener);
     }
 
+    //查询某个用户的资料
+    public void SelectUserMessage(String tag, String uid,IDataRequestListener listener){
+        ISelectUserMessage(tag,uid,listener);
+    }
+
+    //查询某个用户的视频
+    public void SelectUserVideos(String tag, String pagenow, String uid, IDataRequestListener listener){
+        ISelectUserVideos(tag,pagenow,uid,listener);
+    }
+
     @Override
     public void ILogin(String tag,String name, String pwd,final IDataRequestListener listener) {
 
@@ -42,5 +52,49 @@ public class UserModel implements IUserModel{
         MyApplication.getHttpQueues().add(reqA);
         reqA.setShouldCache(true); // 控制是否缓存
 
+    }
+
+    @Override
+    public void ISelectUserMessage(String tag, String uid,final IDataRequestListener listener) {
+
+        JsonObjectRequest reqB = new JsonObjectRequest(Request.Method.GET, UrlConfig.SelectUserMessage(tag,uid), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+
+                listener.loadSuccess(jsonObject.toString());
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+            }
+        });
+
+        reqB.setTag("reqB");
+        MyApplication.getHttpQueues().add(reqB);
+        reqB.setShouldCache(true); // 控制是否缓存
+    }
+
+    @Override
+    public void ISelectUserVideos(String tag, String pagenow, String uid, final IDataRequestListener listener) {
+
+        JsonObjectRequest reqC = new JsonObjectRequest(Request.Method.GET, UrlConfig.SelectUserVideos(tag,pagenow,uid), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+
+                listener.loadSuccess(jsonObject.toString());
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+            }
+        });
+
+        reqC.setTag("reqC");
+        MyApplication.getHttpQueues().add(reqC);
+        reqC.setShouldCache(true); // 控制是否缓存
     }
 }

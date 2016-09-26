@@ -14,4 +14,13 @@ public interface IUserModel {
      */
     void ILogin(String tag,String name,String pwd,IDataRequestListener listener);
 
+    /**
+     * 查询某个用户的信息
+     * @param tag
+     * @param uid
+     */
+    void ISelectUserMessage(String tag,String uid,IDataRequestListener listener);
+
+    void ISelectUserVideos(String tag,String pagenow,String uid,IDataRequestListener listener);
+
 }

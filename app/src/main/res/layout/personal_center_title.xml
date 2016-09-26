@@ -56,7 +56,7 @@
                         android:textSize="13sp" />
 
                     <TextView
-                        android:id="@+id/user_post"
+                        android:id="@+id/fans"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="103dp"
@@ -68,10 +68,10 @@
                         android:textSize="12sp" />
 
                     <TextView
-                        android:id="@+id/user_book"
+                        android:id="@+id/follows"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/user_post"
+                        android:layout_below="@id/fans"
                         android:layout_marginLeft="103dp"
                         android:layout_marginTop="4dp"
                         android:ellipsize="end"

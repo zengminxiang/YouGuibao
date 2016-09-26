@@ -252,6 +252,39 @@ public class UrlConfig {
 
     }
 
+//    http://localhost:8080/Guiyoubao/UserServlet?tag=UserMessage&uid=1
+    /**
+     * 查询某个用户的资料
+     * @param tag
+     * @param uid
+     * @return
+     */
+    public static String SelectUserMessage(String tag,String uid){
+        params = new HashMap<>();
+        params.put("tag",tag);
+        params.put("uid", uid);
+        return CombinationUrl(USER,params);
+
+    }
+
+//    http://localhost:8080/Guiyoubao/UserServlet?tag=UserVideos&pagenow=1&uid=2
+
+    /**
+     * 查询某个用户发的视频
+     * @param tag
+     * @param pagenow
+     * @param uid
+     * @return
+     */
+    public static String SelectUserVideos(String tag,String pagenow,String uid){
+
+        params = new HashMap<>();
+        params.put("tag",tag);
+        params.put("uid", uid);
+        params.put("pagenow",pagenow);
+        return CombinationUrl(USER,params);
+
+    }
 
     //组合url
     public static String CombinationUrl(String part, Map<String, String> params){
