@@ -1,14 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
     android:id="@+id/cv_item"
-    android:foreground="?android:attr/selectableItemBackground"
-    card_view:cardCornerRadius="4dp"
-    card_view:cardElevation="4dp"
     >
 
     <com.zhy.android.percent.support.PercentRelativeLayout
@@ -16,8 +10,9 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:id="@+id/layout"
-        android:padding="10dp"
-        android:layout_height="match_parent"
+        android:padding="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content"
         >
 
         <RelativeLayout
@@ -39,6 +34,7 @@
                 />
 
             <TextView
+                android:id="@+id/month"
                 android:layout_below="@+id/day"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -164,7 +160,15 @@
             </LinearLayout>
 
         </LinearLayout>
-
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/bage"
+            android:layout_marginTop="5dp"
+            android:layout_below="@+id/umeng_comm_feed_action_layout"
+            ></View>
     </com.zhy.android.percent.support.PercentRelativeLayout>
 
-</android.support.v7.widget.CardView>
+
+
+</RelativeLayout>

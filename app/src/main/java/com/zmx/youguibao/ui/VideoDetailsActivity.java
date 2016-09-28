@@ -178,7 +178,7 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
         videoListJson = (VideoListJson) getIntent().getSerializableExtra("video");
         VideoID = videoListJson.getUid()+"";
         presenter = new UploadVideoPresenter(this,this);
-//        presenter.QueryComment("QueryComment", pagesize+"",videoListJson.getV_id()+"");//查询评论
+        presenter.QueryComment("QueryComment", pagesize+"",videoListJson.getV_id()+"");//查询评论
 
         headview =  View.inflate(this, R.layout.video_xml_head, null);
         ptrClassicFrameLayout = (PtrClassicFrameLayout) this.findViewById(R.id.test_list_view_frame);
@@ -215,8 +215,8 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
                 follow.setVisibility(View.GONE);
             }
 
-            presenter.QueryWheterLike("WhetherLike",videoListJson.getV_id()+"",SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,""));
-            presenter.SelectFollows("SelectFollowUser",SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,""),videoListJson.getUid()+"");
+            presenter.QueryWheterLike("WhetherLike",videoListJson.getV_id()+"",SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,""));//查询是否点赞
+            presenter.SelectFollows("SelectFollowUser",SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,""),videoListJson.getUid()+"");//查询是否关注
 
         }
 
@@ -267,7 +267,6 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
 
                             pagesize++;
                             presenter.QueryComment("QueryComment", pagesize+"",videoListJson.getV_id()+"");//查询评论
-
 
                         ptrClassicFrameLayout.loadMoreComplete(true);
                     }
@@ -473,12 +472,14 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
      */
     @Override
     public void QueryComment(List<VideoCommentJson> lists, String pagenow) {
+
         this.pagenow = Integer.parseInt(pagenow);
+
         for (VideoCommentJson v:lists){
-
             listss.add(v);
-
         }
+
+        Log.e("查询了评论","查了");
 
         handler.sendEmptyMessage(TWO);
 

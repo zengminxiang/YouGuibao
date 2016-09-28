@@ -258,6 +258,7 @@ public class MainActivity extends AppCompatActivity
 
             case R.id.nav_head:
                 Intent intent = new Intent(this, PersonalCenterActivity.class);
+                intent.putExtra("uid",SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,""));
                 startActivity(intent);
                 break;
 
