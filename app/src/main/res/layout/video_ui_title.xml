@@ -49,6 +49,7 @@
             android:onClick="onClickOperation" />
 
         <com.zmx.youguibao.utils.view.ImageViewUtil
+            android:id="@+id/user_head"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_alignParentRight="true"

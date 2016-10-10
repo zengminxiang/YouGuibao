@@ -14,7 +14,6 @@
         android:visibility="gone"
         android:scrollbarStyle="outsideOverlay" />
 
-
     <RelativeLayout
         android:id="@+id/rlTitle"
         android:layout_width="match_parent"

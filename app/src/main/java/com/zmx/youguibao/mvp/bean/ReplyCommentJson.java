@@ -10,6 +10,7 @@ import java.io.Serializable;
 public class ReplyCommentJson implements Serializable{
 
     private String vr_id; //表id
+    private String v_id;//视频id
     private String vc_id; //主评论id
     private String hu_id; //回复用户的id
     private String hu_name;//回复用户的用户名
@@ -60,5 +61,13 @@ public class ReplyCommentJson implements Serializable{
 
     public void setHu_name(String hu_name) {
         this.hu_name = hu_name;
+    }
+
+    public String getV_id() {
+        return v_id;
+    }
+
+    public void setV_id(String v_id) {
+        this.v_id = v_id;
     }
 }

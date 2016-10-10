@@ -1,6 +1,9 @@
 package com.zmx.youguibao.adapter;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -23,21 +26,25 @@ import com.zmx.youguibao.mvp.bean.VideoCommentJson;
 import java.util.List;
 
 /**
- *作者：胖胖祥
- *时间：2016/9/6 0006 上午 9:54
- *功能模块：回复评论的列表
+ * 作者：胖胖祥
+ * 时间：2016/9/6 0006 上午 9:54
+ * 功能模块：回复评论的列表
  */
-public class ReplyCommentAdapter extends BaseAdapter{
+public class ReplyCommentAdapter extends BaseAdapter {
 
     private Context context;
     private List<ReplyCommentJson> lists;
 
-    public ReplyCommentAdapter(Context context,List<ReplyCommentJson> lists){
+    private static Handler handler;
+
+    public ReplyCommentAdapter(Context context, List<ReplyCommentJson> lists,Handler handler) {
 
         this.context = context;
         this.lists = lists;
+        this.handler = handler;
 
     }
+
 
     @Override
     public int getCount() {
@@ -58,50 +65,65 @@ public class ReplyCommentAdapter extends BaseAdapter{
     public View getView(int position, View v, ViewGroup parent) {
 
         ViewHolder holder = null;
-        if(v == null){
+        if (v == null) {
 
-            v = LayoutInflater.from(context).inflate(R.layout.reply_comment_item,null);
+            v = LayoutInflater.from(context).inflate(R.layout.reply_comment_item, null);
             holder = new ViewHolder();
             holder.content = (TextView) v.findViewById(R.id.content);
             v.setTag(holder);
 
-        }else{
+        } else {
             holder = (ViewHolder) v.getTag();
         }
 
 
-        String uid = lists.get(position).getHu_id();
-        String name = lists.get(position).getHu_name();//回复评论的用户
+        final String uid = lists.get(position).getHu_id();
+        final String name = lists.get(position).getHu_name();//回复评论的用户
         String bname = lists.get(position).getBu_name();//被回复的用户
         String comment = lists.get(position).getVr_content();//回复的内容
 
-        Log.e("数据","uid "+uid+"name "+name+"bname "+bname+"comment "+comment);
+        Log.e("数据", "uid " + uid + "name " + name + "bname " + bname + "comment " + comment);
 
 
-        holder.content.setText(UserNameOnclik(holder.content,name,uid,bname,comment));
+        holder.content.setText(UserNameOnclik(holder.content, name, uid, bname, comment));
+
+        holder.content.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Message message = new Message();
+                message.what = 1;
+                Bundle bundleData = new Bundle();
+                bundleData.putString("name", name);
+                bundleData.putString("uid",uid);
+                message.setData(bundleData);
+                handler.sendMessage(message);
+
+            }
+        });
 
         return v;
     }
 
-    public class ViewHolder{
+    public class ViewHolder {
         TextView content;
     }
 
-    public SpannableStringBuilder UserNameOnclik(TextView comment_view, String name, String uid, String bname, String comments){
+    public SpannableStringBuilder UserNameOnclik(TextView comment_view, String name, String uid, String bname, String comments) {
 
         StringBuilder actionText = new StringBuilder();
         actionText
-                .append("<a style=\"text-decoration:none;\" href='"+uid+"'>"
+                .append("<a style=\"text-decoration:none;\" href='" + uid + "'>"
                         + name + " </a>");
 
-        if(!bname.equals("")){
+        if (!bname.equals("")) {
 
             actionText
-                    .append(" 回复 "+bname);
+                    .append(" 回复 " + bname);
 
         }
 
-        actionText.append(" : "+comments);
+        actionText.append(" : " + comments);
         comment_view.setText(Html.fromHtml(actionText.toString()));
         comment_view.setMovementMethod(LinkMovementMethod
                 .getInstance());
@@ -112,7 +134,7 @@ public class ReplyCommentAdapter extends BaseAdapter{
         SpannableStringBuilder stylesBuilder = new SpannableStringBuilder(text);
         stylesBuilder.clearSpans();
         for (URLSpan url : urlspan) {
-            TextViewURLSpan myURLSpan = new TextViewURLSpan(url.getURL(),uid);
+            TextViewURLSpan myURLSpan = new TextViewURLSpan(context,url.getURL(), uid,name);
             stylesBuilder.setSpan(myURLSpan, spannable.getSpanStart(url),
                     spannable.getSpanEnd(url), spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
@@ -124,12 +146,18 @@ public class ReplyCommentAdapter extends BaseAdapter{
     /**
      * 对加色的字符串监听
      */
-    private class TextViewURLSpan extends ClickableSpan {
-        private String clickString;
-        private String name;
+    public static class TextViewURLSpan extends ClickableSpan {
 
-        public TextViewURLSpan(String clickString,String name) {
+        private String clickString;
+        private String uid;
+        private String name;
+        private Context context;
+
+        public TextViewURLSpan(Context context,String clickString, String uid,String name) {
+
+            this.context = context;
             this.clickString = clickString;
+            this.uid = uid;
             this.name = name;
 
         }
@@ -142,12 +170,17 @@ public class ReplyCommentAdapter extends BaseAdapter{
 
         @Override
         public void onClick(View widget) {
-            if (clickString.equals(name)) {
-                Toast.makeText(context, clickString, Toast.LENGTH_LONG)
+            if (clickString.equals(uid)) {
+
+                Toast.makeText(context, "用户id:"+clickString+"用户名："+name, Toast.LENGTH_LONG)
                         .show();
+
             }
         }
+
     }
+
+
 
 
 }

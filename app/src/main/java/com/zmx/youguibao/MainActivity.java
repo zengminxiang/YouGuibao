@@ -37,6 +37,7 @@ import com.zmx.youguibao.ui.LoginActivity;
 import com.zmx.youguibao.ui.NearbyActivity;
 import com.zmx.youguibao.ui.PersonalCenterActivity;
 import com.zmx.youguibao.ui.PublishActivity;
+import com.zmx.youguibao.ui.SetUpActivity;
 import com.zmx.youguibao.utils.UrlConfig;
 import com.zmx.youguibao.utils.view.ImageLoadOptions;
 import com.zmx.youguibao.utils.view.ImageViewUtil;
@@ -49,7 +50,6 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,View.OnClickListener{
 
     private Context context = this;
-
     private TabLayout tabLayout;
     private ViewPager mViewPager;
     private List<Fragment> list_fragment;
@@ -139,7 +139,6 @@ public class MainActivity extends AppCompatActivity
         fab_1.setOnClickListener(this);
         fam = (FloatingActionsMenu) findViewById(R.id.fab_menu);
 
-
         //注册监听广播
         IntentFilter filter = new IntentFilter(LoginActivity.action);
         registerReceiver(broadcastReceiver, filter);
@@ -147,13 +146,16 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
 
             drawer.closeDrawer(GravityCompat.START);
 
         } else {
+
             super.onBackPressed();
+
         }
     }
 
@@ -196,11 +198,28 @@ public class MainActivity extends AppCompatActivity
 
             if(!SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,"").equals("")){
 
+
+
             }else{
+
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
+
             }
         } else if (id == R.id.nav_slideshow) {
+
+            if(!SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,"").equals("")){
+
+                Intent intent = new Intent(this, SetUpActivity.class);
+                startActivity(intent);
+
+            }else{
+
+                Intent intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
+
+            }
+
 
         }else if (id == R.id.nav_share) {
 
@@ -257,9 +276,11 @@ public class MainActivity extends AppCompatActivity
                 break;
 
             case R.id.nav_head:
+
                 Intent intent = new Intent(this, PersonalCenterActivity.class);
                 intent.putExtra("uid",SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,""));
                 startActivity(intent);
+
                 break;
 
         }
@@ -283,9 +304,16 @@ public class MainActivity extends AppCompatActivity
     public void UpdateMessage(){
 
         if(!SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,"").equals("")){
+
             ImageLoader.getInstance().displayImage(UrlConfig.HEAD+SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_headurl,""),head,
                     ImageLoadOptions.getOptions());
             name.setText(SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_name,""));
+
+        }else{
+
+            head.setBackgroundResource(R.mipmap.ic_launcher);
+            name.setText("点击头像登录...");
+
         }
 
     }

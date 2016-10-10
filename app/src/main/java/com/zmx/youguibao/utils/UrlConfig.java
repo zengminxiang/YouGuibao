@@ -129,6 +129,27 @@ public class UrlConfig {
     }
 
     /**
+     * 回复评论
+     * @param tag
+     * @param vcid  主评论id
+     * @param huid  回复用户的id
+     * @param buname  被回复用户名
+     * @param vrcontent 回复的内容
+     * @param vid  回复的视频id
+     * @return
+     */
+    public static String ReplyComment(String tag,String vcid,String huid,String buname,String vrcontent,String vid){
+        params = new HashMap<>();
+        params.put("tag",tag);
+        params.put("vcid", vcid);
+        params.put("huid", huid);
+        params.put("buname", buname);
+        params.put("vrcontent", vrcontent);
+        params.put("vid", vid);
+        return CombinationUrl(UPLOADVIDEO,params);
+    }
+
+    /**
      * 点赞视频
      * @param tag
      * @param vid 视频id

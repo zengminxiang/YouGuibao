@@ -86,34 +86,47 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="20dp"
+            android:layout_height="25dp"
             android:layout_marginTop="10dp"
             >
 
             <TextView
-                android:id="@+id/v_browse_number"
+                android:id="@+id/address"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
+                android:layout_height="20dp"
+                android:drawableLeft="@mipmap/share_icon_position_normal"
+                android:drawablePadding="4dp"
+                android:ellipsize="end"
                 android:gravity="center"
-                android:text="4584浏览" />
+                android:layout_marginLeft="10dp"
+                android:singleLine="true"
+                android:text="广州市她他会威尼"
+                android:textSize="11sp" />
+
 
             <TextView
                 android:id="@+id/time"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
+                android:layout_height="20dp"
+                android:layout_centerHorizontal="true"
                 android:layout_marginRight="10dp"
-                android:gravity="center"
-                android:text="2016-08-29 02:06:30" />
+                android:layout_alignParentRight="true"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:paddingRight="10dp"
+                android:singleLine="true"
+                android:textColor="#bbbbbb"
+                android:text="2016-05-12 06:30:12"
+                android:textSize="10sp" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
+                android:layout_marginTop="5dp"
                 android:layout_alignParentBottom="true"
-                android:background="@color/textcolorone" />
+                android:background="@color/bage" />
 
         </RelativeLayout>
-
 
 </LinearLayout>

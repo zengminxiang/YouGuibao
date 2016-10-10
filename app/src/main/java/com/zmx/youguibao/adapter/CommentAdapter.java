@@ -106,11 +106,24 @@ public class CommentAdapter extends BaseAdapter{
 
                 Intent intent = new Intent(context, ReplyCommentActivity.class);
                 intent.putExtra("vcid",lists.get(position).getVc_id());
+                intent.putExtra("vid",lists.get(position).getV_id());
                 context.startActivity(intent);
 
             }
         });
 
+        //点击更多评论按钮
+        holder.comment_more.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(context, ReplyCommentActivity.class);
+                intent.putExtra("vcid",lists.get(position).getVc_id());
+                intent.putExtra("vid",lists.get(position).getV_id());
+                context.startActivity(intent);
+
+            }
+        });
         //回复评论区
         holder.replys = lists.get(position).getReplylist();
         if(holder.replys.size()>0){

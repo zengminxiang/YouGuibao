@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.zmx.youguibao.BaseFragment;
 import com.zmx.youguibao.R;
@@ -15,6 +16,9 @@ import com.zmx.youguibao.R;
  *功能模块：关注界面
  */
 public class FollowFragment extends BaseFragment{
+
+    private LinearLayout no_follow;//没有关注用户的时候显示的界面
+
 
     @Nullable
     @Override
@@ -29,6 +33,8 @@ public class FollowFragment extends BaseFragment{
 
     @Override
     protected void initView() {
+
+        no_follow = (LinearLayout) findViewById(R.id.no_follow);
 
     }
 }

@@ -61,6 +61,7 @@ public class PoiAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         if (position == 0 && linearLayout.getChildCount() < 2) {
+
             ImageView imageView = new ImageView(context);
             ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(32, 32);
             imageView.setLayoutParams(params);
@@ -69,6 +70,9 @@ public class PoiAdapter extends BaseAdapter {
             imageView.setScaleType(ImageView.ScaleType.FIT_XY);
             linearLayout.addView(imageView, 0, params);
             holder.locationpoi_name.setTextColor(Color.parseColor("#FF5722"));
+
+        }else {
+            holder.locationpoi_name.setTextColor(Color.parseColor("#b9b7b8"));
         }
 
         PoiInfo poiInfo = pois.get(position);

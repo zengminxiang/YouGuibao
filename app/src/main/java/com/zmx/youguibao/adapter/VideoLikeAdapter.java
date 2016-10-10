@@ -56,9 +56,11 @@ public class VideoLikeAdapter extends BaseAdapter{
             holder.head = (ImageViewUtil) v.findViewById(R.id.head);
             v.setTag(holder);
         }else{
+
             holder = (ViewHolder) v.getTag();
+
         }
-        ImageLoader.getInstance().displayImage("http://b.hiphotos.baidu.com/image/h%3D200/sign=ff0999f6d4160924c325a51be406359b/86d6277f9e2f070861ccd4a0ed24b899a801f241.jpg", holder.head,
+        ImageLoader.getInstance().displayImage(UrlConfig.HEAD+lists.get(position).getU_headurl(), holder.head,
                 ImageLoadOptions.getOptions());
 
         return v;

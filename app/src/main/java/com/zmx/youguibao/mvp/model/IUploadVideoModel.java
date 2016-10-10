@@ -55,6 +55,18 @@ public interface IUploadVideoModel {
     void IQueryOneComment(String tag,String vcid, IDataRequestListener listener);
 
     /**
+     * 回复某条评论
+     * @param tag
+     * @param vcid
+     * @param huid
+     * @param buname
+     * @param vrcontent
+     * @param vid
+     * @param listener
+     */
+    void IReplyComment(String tag,String vcid,String huid,String buname,String vrcontent,String vid, IDataRequestListener listener);
+
+    /**
      * 点赞视频
      * @param tag
      * @param vid 视频id

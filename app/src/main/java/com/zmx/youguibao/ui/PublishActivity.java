@@ -1,13 +1,16 @@
 package com.zmx.youguibao.ui;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -18,8 +21,10 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.duanqu.qupai.bean.QupaiUploadTask;
@@ -51,6 +56,8 @@ public class PublishActivity extends BaseActivity implements UploadVideoView{
     private ImageView video_img,publish,close;//视频第一帧图片、发表按钮,关闭按钮
     private MyRoundProgressBar loading;//加载提示框
     private PopupWindow pw;//弹出框
+    private TextView addre;//选择地址
+    private EditText content;//发表的内容
     private PercentRelativeLayout layout;
     private int screenWidth;
 
@@ -60,6 +67,8 @@ public class PublishActivity extends BaseActivity implements UploadVideoView{
 
     private UploadVideoPresenter presenter;
     private String message;//发表视频后服务器返回的参数
+
+    private String address="";//地址
 
 
     @Override
@@ -87,6 +96,9 @@ public class PublishActivity extends BaseActivity implements UploadVideoView{
         publish.setOnClickListener(this);
         close = (ImageView) findViewById(R.id.close);
         close.setOnClickListener(this);
+        addre = (TextView) findViewById(R.id.addre);
+        addre.setOnClickListener(this);
+        content = (EditText) findViewById(R.id.content);
 
         initpw();
     }
@@ -108,11 +120,21 @@ public class PublishActivity extends BaseActivity implements UploadVideoView{
             //发表
             case R.id.publish:
 
+                if(TextUtils.isEmpty(content.getText().toString())){
+                    Toast.makeText(this,"输入内容",Toast.LENGTH_LONG).show();
+                    return;
+                }
                 pw.showAtLocation(layout, Gravity.CENTER, 0, 0);
                 makeWindowDark();
                 startUpload();
 
             break;
+
+            case R.id.addre:
+
+                startActivity(AddressChoiceActivity.class,null,1);
+
+                break;
 
         }
 
@@ -251,14 +273,14 @@ public class PublishActivity extends BaseActivity implements UploadVideoView{
                 imageUrl = Contant.domain + "/v/" + responseMessage + ".jpg";
                 Log.e("videoUrl",""+videoUrl);
                 Log.e("imageUrl",""+imageUrl);
-                presenter.Upload("publish","1","广州","大家好，刚来两天的小剃刀，我的环境不知道怎么样？大家给我看看",imageUrl,videoUrl);
+                presenter.Upload("publish",SharePreferenceUtil.getInstance(mActivity).getString(SharePreferenceUtil.u_id,""),address,content.getText().toString(),imageUrl,videoUrl);
             }
         });
         String uuid = UUID.randomUUID().toString();
         Log.e("uuid","uuid"+uuid);
         Log.e("QupaiAuth",  "accessToken" + SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.accessToken,"") +"space"+ Contant.space);
         startUpload(createUploadTask(this, uuid, new File(videourl), new File(videoimg),
-                SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.accessToken,""), "1", Contant.shareType, Contant.tags, Contant.description));
+                SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.accessToken,""), SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,""), Contant.shareType, Contant.tags, Contant.description));
     }
 
     /**
@@ -311,5 +333,33 @@ public class PublishActivity extends BaseActivity implements UploadVideoView{
 
         handler.sendEmptyMessage(FINISH);
 
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        Bundle bundle;
+
+       switch (requestCode){
+
+           case 1:
+
+               if(data != null){
+
+                   bundle = data.getExtras();
+                   String adds = bundle.getString("name");
+                   String city = bundle.getString("city");
+
+                   address = bundle.getString("name")+bundle.getString("city")+"";
+
+                   addre.setText(city+" "+adds);
+
+               }
+
+               break;
+
+       }
     }
 }

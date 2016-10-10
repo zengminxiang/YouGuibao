@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.zmx.youguibao.SharePreferenceUtil;
 import com.zmx.youguibao.mvp.bean.ReplyCommentJson;
 import com.zmx.youguibao.mvp.bean.VideoCommentJson;
 import com.zmx.youguibao.mvp.bean.VideoLikeJson;
@@ -35,6 +36,8 @@ public class UploadVideoPresenter {
     private VideoDetailsView detailsView;
     private ReplyOneCommentView replyOneCommentView;
 
+    private Context context;
+
     /**
      * 视频上传
      * @param view
@@ -42,6 +45,7 @@ public class UploadVideoPresenter {
      */
     public UploadVideoPresenter(UploadVideoView view, Context context){
 
+        this.context = context;
         this.view = view;
         model = new UploadVideoModel();
 
@@ -54,6 +58,7 @@ public class UploadVideoPresenter {
      */
     public UploadVideoPresenter(VideoListView videolist, Context context){
 
+        this.context = context;
         this.videolist = videolist;
         model = new UploadVideoModel();
 
@@ -66,6 +71,7 @@ public class UploadVideoPresenter {
      */
     public UploadVideoPresenter(VideoDetailsView detailsView,Context context){
 
+        this.context = context;
         this.detailsView = detailsView;
         model = new UploadVideoModel();
 
@@ -73,6 +79,7 @@ public class UploadVideoPresenter {
 
     public UploadVideoPresenter(ReplyOneCommentView replyOneCommentView,Context context){
 
+        this.context = context;
         this.replyOneCommentView = replyOneCommentView;
         model = new UploadVideoModel();
 
@@ -179,6 +186,7 @@ public class UploadVideoPresenter {
                         comment.setU_experience(jsonObject.getString("u_experience"));
                         comment.setVc_content(jsonObject.getString("vc_content"));
                         comment.setVc_time(jsonObject.getString("vc_time"));
+                        comment.setV_id(jsonObject.getString("v_id"));
 
                         //获取回复的评论
                         List<ReplyCommentJson> replylists = new ArrayList<ReplyCommentJson>();
@@ -304,6 +312,7 @@ public class UploadVideoPresenter {
                         comment.setU_experience(jsonComment.getString("u_experience"));
                         comment.setVc_content(jsonComment.getString("vc_content"));
                         comment.setVc_time(jsonComment.getString("vc_time"));
+                        comment.setV_id(jsonComment.getString("v_id"));
 
                         //获取回复的评论
                         List<ReplyCommentJson> replylists = new ArrayList<ReplyCommentJson>();
@@ -319,6 +328,7 @@ public class UploadVideoPresenter {
                             reply.setVr_content(rep.getString("vr_content"));
                             reply.setVr_time(rep.getString("vr_time"));
                             reply.setBu_name(rep.getString("bu_name"));
+                            reply.setV_id(rep.getString("v_id"));
                             replylists.add(reply);
 
                         }
@@ -331,6 +341,39 @@ public class UploadVideoPresenter {
                     e.printStackTrace();
                 }
 
+            }
+        });
+
+    }
+
+    /**
+     * 回复某条评论
+     * @param tag
+     * @param vcid
+     * @param huid
+     * @param buname
+     * @param vrcontent
+     * @param vid
+     */
+    public void ReplyComment(final String tag,final String vcid,final String huid,final String buname,final String vrcontent, final String vid){
+
+        model.ReplyComment(tag, vcid, huid, buname, vrcontent, vid, new IDataRequestListener() {
+            @Override
+            public void loadSuccess(Object object) {
+                try {
+
+                    String state = new JSONObject(object.toString()).getString("state");
+                    ReplyCommentJson json = new ReplyCommentJson();
+                    json.setVc_id(vcid);
+                    json.setV_id(vid);
+                    json.setBu_name(buname);
+                    json.setHu_name(SharePreferenceUtil.getInstance(context).getString(SharePreferenceUtil.u_name,""));
+                    json.setVr_content(vrcontent);
+                    replyOneCommentView.VReplyComment(json);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
 

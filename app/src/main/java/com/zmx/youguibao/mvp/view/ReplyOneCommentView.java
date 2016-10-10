@@ -1,5 +1,6 @@
 package com.zmx.youguibao.mvp.view;
 
+import com.zmx.youguibao.mvp.bean.ReplyCommentJson;
 import com.zmx.youguibao.mvp.bean.VideoCommentJson;
 
 /**
@@ -10,5 +11,7 @@ import com.zmx.youguibao.mvp.bean.VideoCommentJson;
 public interface ReplyOneCommentView {
 
     void QureyOneComment(VideoCommentJson comment);
+
+    void VReplyComment(ReplyCommentJson rcj);
 
 }

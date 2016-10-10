@@ -1,6 +1,9 @@
 package com.zmx.youguibao.ui;
 
+import android.content.Intent;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
@@ -38,6 +41,8 @@ public class AddressChoiceActivity extends BaseActivity implements BDLocationLis
     private MapView mMapView;
     private BaiduMap mBaiduMap;
     private ListView poisLL;
+    private List<PoiInfo> poiInfos;
+
     /**
      * 定位模式
      */
@@ -84,6 +89,22 @@ public class AddressChoiceActivity extends BaseActivity implements BDLocationLis
         mBaiduMap = mMapView.getMap();
 
         poisLL = (ListView) findViewById(R.id.main_pois);
+
+        poisLL.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                PoiInfo poiInfo = poiInfos.get(position);
+
+                Intent intent = new Intent(AddressChoiceActivity.this, PublishActivity.class);
+                intent.putExtra("name", poiInfo.name);
+                intent.putExtra("city", city);
+                Log.e("poiInfo.city","333"+city);
+                setResult(RESULT_OK, intent);
+                finish();
+
+            }
+        });
 
         topRL = (RelativeLayout) findViewById(R.id.main_top_RL);
 
@@ -184,6 +205,7 @@ public class AddressChoiceActivity extends BaseActivity implements BDLocationLis
 
         //是否是第一次定位
         if (isFirstLoc) {
+
             isFirstLoc = false;
             LatLng ll = new LatLng(bdLocation.getLatitude(), bdLocation.getLongitude());
             MapStatusUpdate msu = MapStatusUpdateFactory.newLatLngZoom(ll, 18);
@@ -218,11 +240,10 @@ public class AddressChoiceActivity extends BaseActivity implements BDLocationLis
     @Override
     public void onGetReverseGeoCodeResult(ReverseGeoCodeResult reverseGeoCodeResult) {
 
-        Log.e("更新数据","更新数据");
-
-        List<PoiInfo> poiInfos = reverseGeoCodeResult.getPoiList();
+        poiInfos = reverseGeoCodeResult.getPoiList();
         PoiAdapter poiAdapter = new PoiAdapter(this, poiInfos);
         poisLL.setAdapter(poiAdapter);
+
     }
 
 

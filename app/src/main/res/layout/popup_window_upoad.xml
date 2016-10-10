@@ -11,7 +11,7 @@
         android:id="@+id/loading"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:progress="1"
+        android:progress="0"
         app:progressbar_radius="60dp"
         app:progressbar_reach_color="@color/blue_text"
         app:progressbar_text_color="#56f4da"

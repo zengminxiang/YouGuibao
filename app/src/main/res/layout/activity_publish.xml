@@ -67,6 +67,7 @@
             />
 
         <EditText
+            android:id="@+id/content"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_toRightOf="@+id/video_img"

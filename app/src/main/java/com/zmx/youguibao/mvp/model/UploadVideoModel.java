@@ -84,6 +84,11 @@ public class UploadVideoModel implements IUploadVideoModel {
         IAddUserFollow(tag,guid,buid,listener);
     }
 
+    //回复某条评论
+    public void ReplyComment(String tag, String vcid, String huid, String buname, String vrcontent, String vid, IDataRequestListener listener){
+        IReplyComment(tag,vcid,huid,buname,vrcontent,vid,listener);
+    }
+
 
 
     /**
@@ -237,6 +242,27 @@ public class UploadVideoModel implements IUploadVideoModel {
         reqE.setShouldCache(true); // 控制是否缓存
 
 
+    }
+
+    @Override
+    public void IReplyComment(String tag, String vcid, String huid, String buname, String vrcontent, String vid, final IDataRequestListener listener) {
+        JsonObjectRequest reqE = new JsonObjectRequest(Request.Method.GET, UrlConfig.ReplyComment(tag,vcid,huid,buname,vrcontent,vid), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+
+                listener.loadSuccess(jsonObject.toString());
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+            }
+        });
+
+        reqE.setTag("reqE");
+        MyApplication.getHttpQueues().add(reqE);
+        reqE.setShouldCache(true); // 控制是否缓存
     }
 
     /**
@@ -414,6 +440,5 @@ public class UploadVideoModel implements IUploadVideoModel {
         MyApplication.getHttpQueues().add(reqK);
         reqK.setShouldCache(true); // 控制是否缓存
     }
-
 
 }

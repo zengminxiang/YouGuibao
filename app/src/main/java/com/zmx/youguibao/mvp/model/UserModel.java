@@ -1,5 +1,8 @@
 package com.zmx.youguibao.mvp.model;
 
+import android.util.Log;
+
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -93,7 +96,10 @@ public class UserModel implements IUserModel{
             }
         });
 
-        reqC.setTag("reqC");
+        reqC.setTag("reqC");// 设置重连策略
+        reqC.setRetryPolicy(new DefaultRetryPolicy(10*1000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         MyApplication.getHttpQueues().add(reqC);
         reqC.setShouldCache(true); // 控制是否缓存
     }

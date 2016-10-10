@@ -46,7 +46,9 @@ import com.zmx.youguibao.mvp.bean.VideoLikeJson;
 import com.zmx.youguibao.mvp.bean.VideoListJson;
 import com.zmx.youguibao.mvp.presenter.UploadVideoPresenter;
 import com.zmx.youguibao.mvp.view.VideoDetailsView;
+import com.zmx.youguibao.utils.UrlConfig;
 import com.zmx.youguibao.utils.view.ImageLoadOptions;
+import com.zmx.youguibao.utils.view.ImageViewUtil;
 import com.zmx.youguibao.utils.view.StatusBarUtil;
 
 import java.util.ArrayList;
@@ -55,24 +57,25 @@ import java.util.List;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 
 /**
- *作者：胖胖祥
- *时间：2016/8/27 0027 上午 11:20
- *功能模块：视频详情界面
+ * 作者：胖胖祥
+ * 时间：2016/8/27 0027 上午 11:20
+ * 功能模块：视频详情界面
  */
-public class VideoDetailsActivity extends BaseActivity implements VideoDetailsView{
+public class VideoDetailsActivity extends BaseActivity implements VideoDetailsView {
 
     //播放器 斤斤计较
-    private FrameLayout frameLayout,full_screen;
+    private FrameLayout frameLayout, full_screen;
     private VideoPlayView videoItemView;//播放的view
-    private ImageView image_bg,follow,like;//视频的背景图，关注按钮，点赞按钮
+    private ImageView image_bg, follow, like;//视频的背景图，关注按钮，点赞按钮
     private RelativeLayout showview;
+    private ImageViewUtil userhead;//发表视频用户的头像
 
     private boolean WheterLogin = false;//判断是否登录
-    private String VideoID;//视频用户id
+    private String VideoID;//发表视频用户id
 
     //这是更新操作
     private VideoListJson videoListJson;//数据
-    private TextView context,time,v_browse_number,more_tv;
+    private TextView context, time, address, more_tv;
 
     //评论区
     private PtrClassicFrameLayout ptrClassicFrameLayout;
@@ -104,13 +107,13 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
     private final int TWO = 2;//下拉刷新新
     private final int THREE = 3;//点赞列表5
     private final int FROU = 4;//是否关注了的ui更新
-    Handler handler = new Handler(){
+    Handler handler = new Handler() {
 
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
 
-            switch (msg.what){
+            switch (msg.what) {
 
                 case ONE:
 
@@ -122,7 +125,7 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
                 case TWO://更新adapter的数据
 
                     //判断是否是最后一页
-                    if(pagenow ==pagesize){
+                    if (pagenow == pagesize) {
 
                         ptrClassicFrameLayout.setLoadMoreEnable(false);
 
@@ -133,17 +136,15 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
                 case THREE:
 
                     //判断点赞的数量
-                    if(likelists.size()<=0){
+                    if (likelists.size() <= 0) {
 
                         layout_c.setVisibility(View.GONE);
 
-                    }else {
+                    } else {
 
                         layout_c.setVisibility(View.VISIBLE);
-                        if(likePagenow>1){
-
+                        if (likePagenow > 1) {
                             more_tv.setVisibility(View.VISIBLE);
-
                         }
                         adapterLike.notifyDataSetChanged();
 
@@ -160,6 +161,7 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
 
         }
     };
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_video_details;
@@ -168,23 +170,23 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
     @Override
     protected void initViews() {
 
-        if(!SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,"").equals("")){
+        if (!SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id, "").equals("")) {
             WheterLogin = true;
         }
         setTitleGone();
-        StatusBarUtil.setColor(this,getResources().getColor(R.color.white),0);
-        overridePendingTransition(R.anim.push_left_in,R.anim.push_left_out);//弹出的样式
+        StatusBarUtil.setColor(this, getResources().getColor(R.color.white), 0);
+        overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);//弹出的样式
         videoItemView = new VideoPlayView(this);
         videoListJson = (VideoListJson) getIntent().getSerializableExtra("video");
-        VideoID = videoListJson.getUid()+"";
-        presenter = new UploadVideoPresenter(this,this);
-        presenter.QueryComment("QueryComment", pagesize+"",videoListJson.getV_id()+"");//查询评论
+        VideoID = videoListJson.getUid() + "";
+        presenter = new UploadVideoPresenter(this, this);
+        presenter.QueryComment("QueryComment", pagesize + "", videoListJson.getV_id() + "");//查询评论
 
-        headview =  View.inflate(this, R.layout.video_xml_head, null);
+        headview = View.inflate(this, R.layout.video_xml_head, null);
         ptrClassicFrameLayout = (PtrClassicFrameLayout) this.findViewById(R.id.test_list_view_frame);
         mListView = (ListView) this.findViewById(R.id.test_list_view);
         mListView.addHeaderView(headview);
-        adapter = new CommentAdapter(this,listss);
+        adapter = new CommentAdapter(this, listss);
         mListView.setAdapter(adapter);
         commentEdit = (EditText) findViewById(R.id.comment);
         send = (Button) findViewById(R.id.send);
@@ -193,15 +195,20 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
         context.setText(videoListJson.getV_content());
         time = (TextView) headview.findViewById(R.id.time);
         time.setText(videoListJson.getV_time());
-        v_browse_number = (TextView) headview.findViewById(R.id.v_browse_number);
-        v_browse_number.setText(videoListJson.getV_browse_number()+"浏览量");
+        address = (TextView) headview.findViewById(R.id.address);
+        address.setText(videoListJson.getV_addre());
+        userhead = (ImageViewUtil) findViewById(R.id.user_head);
+        ImageLoader.getInstance().displayImage(UrlConfig.HEAD + videoListJson.getU_headurl(), userhead,
+                ImageLoadOptions.getOptions());
+        userhead.setOnClickListener(this);
 
         gridview = (GridView) headview.findViewById(R.id.gridview);
         more_tv = (TextView) headview.findViewById(R.id.more_tv);
         layout_c = (RelativeLayout) headview.findViewById(R.id.layout_c);
-        adapterLike = new VideoLikeAdapter(this,likelists);
+        adapterLike = new VideoLikeAdapter(this, likelists);
         gridview.setAdapter(adapterLike);
-        presenter.SelectLike("SelectLike",videoListJson.getV_id()+"","1");//查询点赞列表
+
+        presenter.SelectLike("SelectLike", videoListJson.getV_id() + "", "1");//查询点赞列表
 
         follow = (ImageView) findViewById(R.id.follow);
         follow.setOnClickListener(this);
@@ -209,14 +216,15 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
         like.setOnClickListener(this);
 
         //查询是否点赞了，在登录的状态下
-        if(WheterLogin){
+        if (WheterLogin) {
 
-            if(SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,"").equals(VideoID)){
+            //判断是否是自己发表的视频
+            if (SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id, "").equals(VideoID)) {
                 follow.setVisibility(View.GONE);
             }
 
-            presenter.QueryWheterLike("WhetherLike",videoListJson.getV_id()+"",SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,""));//查询是否点赞
-            presenter.SelectFollows("SelectFollowUser",SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,""),videoListJson.getUid()+"");//查询是否关注
+            presenter.QueryWheterLike("WhetherLike", videoListJson.getV_id() + "", SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id, ""));//查询是否点赞
+            presenter.SelectFollows("SelectFollowUser", SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id, ""), videoListJson.getUid() + "");//查询是否关注
 
         }
 
@@ -265,8 +273,8 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
                     @Override
                     public void run() {
 
-                            pagesize++;
-                            presenter.QueryComment("QueryComment", pagesize+"",videoListJson.getV_id()+"");//查询评论
+                        pagesize++;
+                        presenter.QueryComment("QueryComment", pagesize + "", videoListJson.getV_id() + "");//查询评论
 
                         ptrClassicFrameLayout.loadMoreComplete(true);
                     }
@@ -318,7 +326,7 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
     }
 
     //返回按钮
-    public void onClickBack(View v){
+    public void onClickBack(View v) {
 
         InputMethodManager inputmanger = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         inputmanger.hideSoftInputFromWindow(v.getWindowToken(), 0);
@@ -327,13 +335,13 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
     }
 
     //操作
-    public void onClickOperation(View v){
+    public void onClickOperation(View v) {
 
-        if(!SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,"").equals("")){
+        if (!SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id, "").equals("")) {
 
             showChoiceSex();
 
-        }else{
+        } else {
 
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
@@ -346,22 +354,22 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
     public void onClick(View v) {
         super.onClick(v);
 
-        switch (v.getId()){
+        switch (v.getId()) {
 
             //评论
             case R.id.send:
 
-                if(!SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,"").equals("")){
+                if (!SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id, "").equals("")) {
 
-                    if(TextUtils.isEmpty(commentEdit.getText().toString())){
-                        Toast.makeText(this,"请输入内容",Toast.LENGTH_LONG).show();
+                    if (TextUtils.isEmpty(commentEdit.getText().toString())) {
+                        Toast.makeText(this, "请输入内容", Toast.LENGTH_LONG).show();
                         return;
                     }
-                    presenter.AddComment("AddComment",videoListJson.getV_id()+"",SharePreferenceUtil.getInstance(mActivity).getString(SharePreferenceUtil.u_id,""),commentEdit.getText().toString());
+                    presenter.AddComment("AddComment", videoListJson.getV_id() + "", SharePreferenceUtil.getInstance(mActivity).getString(SharePreferenceUtil.u_id, ""), commentEdit.getText().toString());
                     commentEdit.setText("");
-                    hideSoftInput(commentEdit.getContext(),commentEdit);
+                    hideSoftInput(commentEdit.getContext(), commentEdit);
 
-                }else{
+                } else {
 
                     Intent intent = new Intent(this, LoginActivity.class);
                     startActivity(intent);
@@ -383,32 +391,48 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
             //关注
             case R.id.follow:
 
-                presenter.AddFollows("AddFollowUser",SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,""),VideoID);
+                if (!SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id, "").equals("")) {
 
+                    presenter.AddFollows("AddFollowUser", SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id, ""), VideoID);
+
+                } else {
+
+                    Intent intent = new Intent(this, LoginActivity.class);
+                    startActivity(intent);
+
+                }
                 break;
 
             //点赞
             case R.id.like:
 
-                if(!SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,"").equals("")){
+                if (!SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id, "").equals("")) {
 
-                    if(wheterLike){
+                    if (wheterLike) {
 
-                        presenter.CancelLike("CancelLike",videoListJson.getV_id()+"",SharePreferenceUtil.getInstance(mActivity).getString(SharePreferenceUtil.u_id,"")); //取消点赞
+                        presenter.CancelLike("CancelLike", videoListJson.getV_id() + "", SharePreferenceUtil.getInstance(mActivity).getString(SharePreferenceUtil.u_id, "")); //取消点赞
 
-                    }else{
+                    } else {
 
-                        presenter.AddClickALike("like",videoListJson.getV_id()+"",SharePreferenceUtil.getInstance(mActivity).getString(SharePreferenceUtil.u_id,""));//点赞
+                        presenter.AddClickALike("like", videoListJson.getV_id() + "", SharePreferenceUtil.getInstance(mActivity).getString(SharePreferenceUtil.u_id, ""));//点赞
 
                     }
 
-                }else{
+                } else {
 
                     Intent intent = new Intent(this, LoginActivity.class);
                     startActivity(intent);
 
                 }
 
+
+                break;
+
+            case R.id.user_head:
+
+                Intent intent = new Intent(this, PersonalCenterActivity.class);
+                intent.putExtra("uid", VideoID);
+                startActivity(intent);
 
                 break;
 
@@ -435,7 +459,7 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
 
                 videoItemView.setContorllerVisiable();
 
-            }else{
+            } else {
 
                 ViewGroup viewGroup = (ViewGroup) videoItemView.getParent();
                 if (viewGroup == null)
@@ -467,7 +491,8 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
 
     /**
      * 查询评论
-     * @param lists  评论
+     *
+     * @param lists   评论
      * @param pagenow 页码
      */
     @Override
@@ -475,11 +500,11 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
 
         this.pagenow = Integer.parseInt(pagenow);
 
-        for (VideoCommentJson v:lists){
+        for (VideoCommentJson v : lists) {
             listss.add(v);
         }
 
-        Log.e("查询了评论","查了");
+        Log.e("查询了评论", "查了");
 
         handler.sendEmptyMessage(TWO);
 
@@ -487,14 +512,14 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
 
     /**
      * 添加评论
+     *
      * @param comment 评论成功
      */
     @Override
     public void AddComment(VideoCommentJson comment) {
 
         toast("评论成功，经验+1");
-        if(pagenow ==pagesize){
-
+        if (pagenow == pagesize) {
             listss.add(comment);
             handler.sendEmptyMessage(TWO);
 
@@ -504,21 +529,27 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
 
     /**
      * 点赞视频
+     *
      * @param state
      */
     @Override
     public void ClickALike(String state) {
 
-        if(state.equals("200")){
+        if (state.equals("200")) {
+
             toast("点赞成功");
             like.setBackgroundResource(R.mipmap.nav_btn_like_selected);
             wheterLike = true;
+
+            presenter.SelectLike("SelectLike", videoListJson.getV_id() + "", "1");
+
         }
 
     }
 
     /**
      * 查询是否点赞了
+     *
      * @param wheterLike
      */
     @Override
@@ -526,13 +557,13 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
 
         this.wheterLike = wheterLike;
 
-        Log.e("是否点赞了"," "+wheterLike);
+        Log.e("是否点赞了", " " + wheterLike);
 
-        if (wheterLike){
+        if (wheterLike) {
 
             like.setBackgroundResource(R.mipmap.nav_btn_like_selected);
 
-        }else{
+        } else {
 
             like.setBackgroundResource(R.mipmap.nav_btn_like_pressed);
 
@@ -543,17 +574,18 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
 
     /**
      * 取消点赞
+     *
      * @param state
      */
     @Override
     public void VCancelLike(String state) {
 
-        if(state.equals("200")){
+        if (state.equals("200")) {
 
             toast("取消点赞");
             wheterLike = false;
             like.setBackgroundResource(R.mipmap.nav_btn_like_pressed);
-
+            presenter.SelectLike("SelectLike", videoListJson.getV_id() + "", "1");
         }
 
     }
@@ -563,20 +595,20 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
     public void VSelectLike(List<VideoLikeJson> likeJson, String pagenow) {
 
         this.likePagenow = Integer.parseInt(pagenow);
-        for (VideoLikeJson j:likeJson){
+        likelists.clear();
+        for (VideoLikeJson j : likeJson) {
             likelists.add(j);
         }
         handler.sendEmptyMessage(THREE);
 
     }
 
-    //查询是否关注某个用户了
     @Override
     public void VSelectFollow(String state) {
 
-        Log.e("state","s"+state);
+        Log.e("state", "s" + state);
 
-        if(state.equals("200")){
+        if (state.equals("200")) {
             handler.sendEmptyMessage(FROU);
         }
 
@@ -586,7 +618,7 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
     @Override
     public void VAddFollow(String state) {
 
-        if(state.equals("200")){
+        if (state.equals("200")) {
             toast("关注成功");
             handler.sendEmptyMessage(FROU);
         }
@@ -621,7 +653,7 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
         dialog.show();//显示对话框
     }
 
-    public static void hideSoftInput(Context context, View view){
+    public static void hideSoftInput(Context context, View view) {
 
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0); //强制隐藏键盘
@@ -635,7 +667,7 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            presenter.QueryWheterLike("WhetherLike",videoListJson.getV_id()+"",SharePreferenceUtil.getInstance(mActivity).getString(SharePreferenceUtil.u_id,""));
+            presenter.QueryWheterLike("WhetherLike", videoListJson.getV_id() + "", SharePreferenceUtil.getInstance(mActivity).getString(SharePreferenceUtil.u_id, ""));
 
         }
     };
@@ -645,7 +677,6 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
         super.onDestroy();
         unregisterReceiver(broadcastReceiver);
     }
-
 
 
 }

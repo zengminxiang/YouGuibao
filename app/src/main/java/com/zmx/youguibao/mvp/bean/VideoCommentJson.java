@@ -11,6 +11,7 @@ import java.util.List;
 public class VideoCommentJson implements Serializable {
 
     private String vc_id; //评论的id
+    private String v_id; //视频id
     private String u_id;  //评论的用户id
     private String u_name; //评论的用户名
     private String u_head;//用户头像
@@ -82,5 +83,13 @@ public class VideoCommentJson implements Serializable {
 
     public void setReplylist(List<ReplyCommentJson> replylist) {
         this.replylist = replylist;
+    }
+
+    public String getV_id() {
+        return v_id;
+    }
+
+    public void setV_id(String v_id) {
+        this.v_id = v_id;
     }
 }
