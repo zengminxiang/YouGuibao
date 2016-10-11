@@ -6,11 +6,14 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.zmx.youguibao.mvp.bean.PersonalCenterPojo;
+import com.zmx.youguibao.mvp.bean.ReplyCommentJson;
 import com.zmx.youguibao.mvp.bean.UserJson;
+import com.zmx.youguibao.mvp.bean.VideoCommentJson;
 import com.zmx.youguibao.mvp.bean.VideoListJson;
 import com.zmx.youguibao.mvp.model.IDataRequestListener;
 import com.zmx.youguibao.mvp.model.UserModel;
 import com.zmx.youguibao.mvp.view.LoginView;
+import com.zmx.youguibao.mvp.view.MessageView;
 import com.zmx.youguibao.mvp.view.PersonalCenterView;
 
 import org.json.JSONArray;
@@ -31,6 +34,7 @@ public class UserPresenter{
     UserModel model;
     LoginView login;
     PersonalCenterView pcv;
+    MessageView mv;
 
     public UserPresenter(Context context, LoginView login){
 
@@ -41,6 +45,11 @@ public class UserPresenter{
 
     public UserPresenter(Context context,PersonalCenterView pcv){
         this.pcv = pcv;
+        model = new UserModel();
+    }
+
+    public UserPresenter(Context context, MessageView mv){
+        this.mv = mv;
         model = new UserModel();
     }
 
@@ -115,6 +124,7 @@ public class UserPresenter{
 
     }
 
+    //查询某个用户的视频
     public void SelectUserVideos(String tag, final String pagenow, String uid){
 
         model.SelectUserVideos(tag, pagenow, uid, new IDataRequestListener() {
@@ -147,6 +157,54 @@ public class UserPresenter{
 
             }
         });
+
+    }
+
+    //查询某个用户所有评论
+    public void SelectMessageComment(String tag, final String pagenow, String vuid){
+
+        model.QueryMessageComment(tag, pagenow, vuid, new IDataRequestListener() {
+            @Override
+            public void loadSuccess(Object object) {
+
+
+                try {
+
+                    String json = new JSONObject(object.toString()).getString("comments");
+                    String pagenows = new JSONObject(object.toString()).getString("sum");
+
+                    Log.e("lists","lists"+json);
+                    List<VideoCommentJson> lists = new ArrayList<VideoCommentJson>();
+
+                    JSONArray array = new JSONArray(json);
+                    for(int i=0;i<array.length();i++){
+
+                        JSONObject jsonObject = array.getJSONObject(i);
+                        VideoCommentJson comment = new VideoCommentJson();
+                        comment.setVc_id(jsonObject.getString("vc_id"));
+                        comment.setU_id(jsonObject.getString("u_id"));
+                        comment.setU_head(jsonObject.getString("u_head"));
+                        comment.setU_name(jsonObject.getString("u_name"));
+                        comment.setU_experience(jsonObject.getString("u_experience"));
+                        comment.setVc_content(jsonObject.getString("vc_content"));
+                        comment.setVc_time(jsonObject.getString("vc_time"));
+                        comment.setV_id(jsonObject.getString("v_id"));
+                        comment.setV_videoimgurl(jsonObject.getString("v_videoimgurl"));
+                        comment.setV_content(jsonObject.getString("v_content"));
+                        lists.add(comment);
+
+                    }
+
+                    mv.SelectMessageComment(lists,pagenows);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+
+
 
     }
 

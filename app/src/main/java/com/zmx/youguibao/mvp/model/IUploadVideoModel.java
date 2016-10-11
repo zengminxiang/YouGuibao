@@ -44,7 +44,7 @@ public interface IUploadVideoModel {
      * @param comment 评论的内容
      * @param listener
      */
-    void IAddVideoComment(String tag,String vid,String uid,String comment,IDataRequestListener listener);
+    void IAddVideoComment(String tag,String vid,String vuid,String uid,String comment,IDataRequestListener listener);
 
     /**
      * 查询某条评论

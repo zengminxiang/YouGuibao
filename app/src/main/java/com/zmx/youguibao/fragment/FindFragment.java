@@ -113,6 +113,7 @@ public class FindFragment extends BaseFragment implements VideoListView {
                 page = 1;
                 load_tag = 0;
                 presenter.QueryAllVideo("queryAll", page + "");
+
             }
         });
 

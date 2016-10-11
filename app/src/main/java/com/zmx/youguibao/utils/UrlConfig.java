@@ -82,11 +82,12 @@ public class UrlConfig {
      */
 //    http://localhost:8080/Guiyoubao/ViedoServlet?tag=AddComment&vid=4&uid=1&comment=%E5%A4%A7%E5%AE%B6%E5%A5%BD%E5%95%8A   添加评论
 
-    public static String  AddVideoComment(String tag,String vid,String uid,String comment){
+    public static String  AddVideoComment(String tag,String vid,String vuid,String uid,String comment){
 
         params = new HashMap<>();
         params.put("tag",tag);
         params.put("vid", vid);
+        params.put("vuid", vuid);
         params.put("uid", uid);
         params.put("comment", comment);
         return CombinationUrl(UPLOADVIDEO,params);
@@ -108,6 +109,23 @@ public class UrlConfig {
         params = new HashMap<>();
         params.put("tag",tag);
         params.put("vid", vid);
+        params.put("pagenow", pagenow);
+        return CombinationUrl(UPLOADVIDEO,params);
+
+    }
+
+    /**
+     *  查询某个用户的评论信息（消息用到 ）
+     * @param tag  http://localhost:8080/Guiyoubao/ViedoServlet?tag=QueryCommentMessage&vuid=1&pagenow=1
+     * @param pagenow
+     * @param vuid
+     * @return
+     */
+    public static String QueryMessageComment(String tag,String pagenow,String vuid){
+
+        params = new HashMap<>();
+        params.put("tag",tag);
+        params.put("vuid", vuid);
         params.put("pagenow", pagenow);
         return CombinationUrl(UPLOADVIDEO,params);
 

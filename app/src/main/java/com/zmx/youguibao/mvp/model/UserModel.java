@@ -34,6 +34,11 @@ public class UserModel implements IUserModel{
         ISelectUserVideos(tag,pagenow,uid,listener);
     }
 
+    //查询某个用户的所有评论
+    public void QueryMessageComment(String tag, String pagenow, String vuid,final IDataRequestListener listener){
+        IQueryMessageComment(tag,pagenow,vuid,listener);
+    }
+
     @Override
     public void ILogin(String tag,String name, String pwd,final IDataRequestListener listener) {
 
@@ -102,5 +107,32 @@ public class UserModel implements IUserModel{
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         MyApplication.getHttpQueues().add(reqC);
         reqC.setShouldCache(true); // 控制是否缓存
+    }
+
+    @Override
+    public void IQueryMessageComment(String tag, String pagenow, String vuid,final IDataRequestListener listener) {
+
+
+        JsonObjectRequest reqD = new JsonObjectRequest(Request.Method.GET, UrlConfig.QueryMessageComment(tag,pagenow,vuid), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+
+                listener.loadSuccess(jsonObject.toString());
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+            }
+        });
+
+        reqD.setTag("reqD");// 设置重连策略
+        reqD.setRetryPolicy(new DefaultRetryPolicy(10*1000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        MyApplication.getHttpQueues().add(reqD);
+        reqD.setShouldCache(true); // 控制是否缓存
+
     }
 }

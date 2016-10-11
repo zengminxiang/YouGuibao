@@ -21,6 +21,22 @@ public interface IUserModel {
      */
     void ISelectUserMessage(String tag,String uid,IDataRequestListener listener);
 
+    /**
+     * 查询某个用户的所有视频
+     * @param tag
+     * @param pagenow
+     * @param uid
+     * @param listener
+     */
     void ISelectUserVideos(String tag,String pagenow,String uid,IDataRequestListener listener);
+
+    /**
+     * 查询某个用户的评论
+     * @param tag
+     * @param pagenow
+     * @param vuid
+     * @param listener
+     */
+    void IQueryMessageComment(String tag,String pagenow,String vuid,IDataRequestListener listener);
 
 }

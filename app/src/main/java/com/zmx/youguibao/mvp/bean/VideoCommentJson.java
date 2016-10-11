@@ -20,6 +20,9 @@ public class VideoCommentJson implements Serializable {
     private String vc_time;  //评论的时间
     private List<ReplyCommentJson> replylist;//回复的评论
 
+    private String v_videoimgurl;//视频的图片路径
+    private String v_content;//视频的内容
+
 
     public String getVc_id() {
         return vc_id;
@@ -91,5 +94,21 @@ public class VideoCommentJson implements Serializable {
 
     public void setV_id(String v_id) {
         this.v_id = v_id;
+    }
+
+    public String getV_videoimgurl() {
+        return v_videoimgurl;
+    }
+
+    public void setV_videoimgurl(String v_videoimgurl) {
+        this.v_videoimgurl = v_videoimgurl;
+    }
+
+    public String getV_content() {
+        return v_content;
+    }
+
+    public void setV_content(String v_content) {
+        this.v_content = v_content;
     }
 }

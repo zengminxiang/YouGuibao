@@ -19,6 +19,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +35,7 @@ import com.zmx.youguibao.qupai.util.RecordResult;
 import com.zmx.youguibao.qupai.util.RequestCode;
 import com.zmx.youguibao.ui.FeedbackActivity;
 import com.zmx.youguibao.ui.LoginActivity;
+import com.zmx.youguibao.ui.MessageActivity;
 import com.zmx.youguibao.ui.NearbyActivity;
 import com.zmx.youguibao.ui.PersonalCenterActivity;
 import com.zmx.youguibao.ui.PublishActivity;
@@ -72,6 +74,7 @@ public class MainActivity extends AppCompatActivity
     private NavigationView mNavigationView;//左侧头部
     private View headerLayout;//左侧头部
     private ImageViewUtil head;//左侧头像
+    private RelativeLayout message_layout;//消息
     private TextView name;//左侧名称
 
     @Override
@@ -104,6 +107,8 @@ public class MainActivity extends AppCompatActivity
 
         head = (ImageViewUtil) headerLayout.findViewById(R.id.nav_head);
         head.setOnClickListener(this);
+        message_layout = (RelativeLayout) headerLayout.findViewById(R.id.message_layout);
+        message_layout.setOnClickListener(this);
         name = (TextView) headerLayout.findViewById(R.id.nav_name);
         UpdateMessage();
 
@@ -116,7 +121,6 @@ public class MainActivity extends AppCompatActivity
         list_fragment.add(fd);
         list_fragment.add(ff);
         /*viewPager通过适配器与fragment关联*/
-
         mViewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
@@ -280,6 +284,19 @@ public class MainActivity extends AppCompatActivity
                 Intent intent = new Intent(this, PersonalCenterActivity.class);
                 intent.putExtra("uid",SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,""));
                 startActivity(intent);
+
+                break;
+
+            case R.id.message_layout:
+
+                if(!SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,"").equals("")){
+                    Intent i = new Intent(this, MessageActivity.class);
+                    startActivity(i);
+
+                }else{
+                    Intent intents = new Intent(this, LoginActivity.class);
+                    startActivity(intents);
+                }
 
                 break;
 

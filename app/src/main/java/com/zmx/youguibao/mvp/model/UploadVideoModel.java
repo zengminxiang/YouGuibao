@@ -35,8 +35,8 @@ public class UploadVideoModel implements IUploadVideoModel {
     }
 
     //发表评论
-    public void AddComment(String tag, String vid, String uid, String comment, IDataRequestListener listener){
-        IAddVideoComment(tag,vid,uid,comment,listener);
+    public void AddComment(String tag, String vid,String vuid, String uid, String comment, IDataRequestListener listener){
+        IAddVideoComment(tag,vid,vuid,uid,comment,listener);
     }
 
     //查询某条评论
@@ -194,8 +194,8 @@ public class UploadVideoModel implements IUploadVideoModel {
      * @param listener
      */
     @Override
-    public void IAddVideoComment(String tag, String vid, String uid, String comment,final IDataRequestListener listener) {
-        JsonObjectRequest reqD = new JsonObjectRequest(Request.Method.GET, UrlConfig.AddVideoComment(tag,vid,uid,comment), new Response.Listener<JSONObject>() {
+    public void IAddVideoComment(String tag, String vid,String vuid, String uid, String comment,final IDataRequestListener listener) {
+        JsonObjectRequest reqD = new JsonObjectRequest(Request.Method.GET, UrlConfig.AddVideoComment(tag,vid,vuid,uid,comment), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
 

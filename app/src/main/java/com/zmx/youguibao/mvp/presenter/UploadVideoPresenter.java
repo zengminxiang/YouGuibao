@@ -230,9 +230,9 @@ public class UploadVideoPresenter {
      * @param uid 评论用户id
      * @param comment 评论内容
      */
-    public void AddComment(String tag, String vid, String uid, String comment){
+    public void AddComment(String tag, String vid,String vuid, String uid, String comment){
 
-        model.AddComment(tag, vid, uid, comment, new IDataRequestListener() {
+        model.AddComment(tag, vid,vuid, uid, comment, new IDataRequestListener() {
             @Override
             public void loadSuccess(Object object) {
 

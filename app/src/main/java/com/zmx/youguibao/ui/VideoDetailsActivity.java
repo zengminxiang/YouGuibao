@@ -365,7 +365,7 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
                         Toast.makeText(this, "请输入内容", Toast.LENGTH_LONG).show();
                         return;
                     }
-                    presenter.AddComment("AddComment", videoListJson.getV_id() + "", SharePreferenceUtil.getInstance(mActivity).getString(SharePreferenceUtil.u_id, ""), commentEdit.getText().toString());
+                    presenter.AddComment("AddComment", videoListJson.getV_id() + "",videoListJson.getUid()+"", SharePreferenceUtil.getInstance(mActivity).getString(SharePreferenceUtil.u_id, ""), commentEdit.getText().toString());
                     commentEdit.setText("");
                     hideSoftInput(commentEdit.getContext(), commentEdit);
 
