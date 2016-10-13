@@ -28,6 +28,7 @@ import com.duanqu.qupai.sdk.android.QupaiService;
 import com.duanqu.qupai.utils.AppGlobalSetting;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
+import com.jauker.widget.BadgeView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zmx.youguibao.fragment.FindFragment;
 import com.zmx.youguibao.fragment.FollowFragment;
@@ -76,6 +77,7 @@ public class MainActivity extends AppCompatActivity
     private ImageViewUtil head;//左侧头像
     private RelativeLayout message_layout;//消息
     private TextView name;//左侧名称
+    private BadgeView badgeView;//消息提示红点
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +111,12 @@ public class MainActivity extends AppCompatActivity
         head.setOnClickListener(this);
         message_layout = (RelativeLayout) headerLayout.findViewById(R.id.message_layout);
         message_layout.setOnClickListener(this);
+        badgeView = new BadgeView(this);
+        badgeView.setTargetView(message_layout);
+        //设置相对位置
+        badgeView.setBadgeMargin(0, 5, 15, 0);
+        //设置显示未读消息条数
+        badgeView.setBadgeCount(2);
         name = (TextView) headerLayout.findViewById(R.id.nav_name);
         UpdateMessage();
 

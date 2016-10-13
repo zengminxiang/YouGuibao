@@ -27,6 +27,8 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.zmx.youguibao.qupai.bean.Contant;
 
+import cn.jpush.android.api.JPushInterface;
+
 /**
  * 作者：胖胖祥
  * 时间：2016/8/18 0018 上午 10:00
@@ -46,6 +48,10 @@ public class MyApplication extends Application {
         mInstance = this;
         //初始化百度地图
         SDKInitializer.initialize(getApplicationContext());
+
+        //初始化极光推送
+        JPushInterface.setDebugMode(true);
+        JPushInterface.init(this);
 
         //初始化volley
         queue = Volley.newRequestQueue(getApplicationContext());
