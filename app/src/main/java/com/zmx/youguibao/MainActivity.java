@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -30,8 +32,10 @@ import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.jauker.widget.BadgeView;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.zmx.youguibao.JPush.JPushReceiver;
 import com.zmx.youguibao.fragment.FindFragment;
 import com.zmx.youguibao.fragment.FollowFragment;
+import com.zmx.youguibao.mvp.bean.MessageCountPojo;
 import com.zmx.youguibao.qupai.util.RecordResult;
 import com.zmx.youguibao.qupai.util.RequestCode;
 import com.zmx.youguibao.ui.FeedbackActivity;
@@ -49,8 +53,10 @@ import com.zmx.youguibao.utils.view.StatusBarUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+import greenDao.MessageCountPojoDao;
+
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,View.OnClickListener{
+        implements NavigationView.OnNavigationItemSelectedListener,View.OnClickListener,JPushReceiver.ServerMessage {
 
     private Context context = this;
     private TabLayout tabLayout;
@@ -78,6 +84,11 @@ public class MainActivity extends AppCompatActivity
     private RelativeLayout message_layout;//消息
     private TextView name;//左侧名称
     private BadgeView badgeView;//消息提示红点
+    private int commentMessageCount;//评论点赞关注未读消息的数量
+    private int noticeCount;//公告消息未读数
+    private int chatCount;//聊天未读数
+    private MessageCountPojoDao dao = MyApplication.getInstance().getDaoSession().getMessageCountPojoDao();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +118,7 @@ public class MainActivity extends AppCompatActivity
 
     private void initView(){
 
+        JPushReceiver.msgListeners.add(this);//设置新消息监听
         head = (ImageViewUtil) headerLayout.findViewById(R.id.nav_head);
         head.setOnClickListener(this);
         message_layout = (RelativeLayout) headerLayout.findViewById(R.id.message_layout);
@@ -115,8 +127,6 @@ public class MainActivity extends AppCompatActivity
         badgeView.setTargetView(message_layout);
         //设置相对位置
         badgeView.setBadgeMargin(0, 5, 15, 0);
-        //设置显示未读消息条数
-        badgeView.setBadgeCount(2);
         name = (TextView) headerLayout.findViewById(R.id.nav_name);
         UpdateMessage();
 
@@ -154,7 +164,25 @@ public class MainActivity extends AppCompatActivity
         //注册监听广播
         IntentFilter filter = new IntentFilter(LoginActivity.action);
         registerReceiver(broadcastReceiver, filter);
+
     }
+
+    private Handler handler = new Handler(){
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+            switch (msg.what){
+
+                case 1:
+                    badgeView.setBadgeCount(commentMessageCount);
+                    break;
+
+            }
+
+        }
+    };
 
     @Override
     public void onBackPressed() {
@@ -328,11 +356,18 @@ public class MainActivity extends AppCompatActivity
      */
     public void UpdateMessage(){
 
+        //登录
         if(!SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,"").equals("")){
 
             ImageLoader.getInstance().displayImage(UrlConfig.HEAD+SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_headurl,""),head,
                     ImageLoadOptions.getOptions());
             name.setText(SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_name,""));
+
+            commentMessageCount = SelectMessageCount(2)+SelectMessageCount(3)+SelectMessageCount(4);//查询评论相关消息未读数
+            noticeCount = SelectMessageCount(1);//查询
+            chatCount = SelectMessageCount(5);//查询聊天未读数
+            //设置显示未读消息条数
+            badgeView.setBadgeCount(commentMessageCount);
 
         }else{
 
@@ -343,10 +378,77 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    /**
+     * 查询本地缓存了多少条未读消息
+     * @param type  消息的类型
+     */
+    public int SelectMessageCount(int type){
+
+        int counts = 0;
+        MessageCountPojo count = null;
+        List<MessageCountPojo> lmcps = MyApplication.getInstance().getDaoSession().getMessageCountPojoDao().queryBuilder()
+                .where(MessageCountPojoDao.Properties.Type.eq(type))
+                .orderAsc(MessageCountPojoDao.Properties.Type)
+                .list();
+
+        for(MessageCountPojo m:lmcps){
+
+            Log.e("未读消息","： "+m.getCount());
+            count = m;
+
+        }
+
+        if(count == null){
+
+            Log.e("ssssssss","sss"+type);
+            insertCount(type,0);//查询是否有未读消息类型了，没有的话就添加进去
+
+        }else {
+
+            counts = count.getCount();
+
+        }
+
+        return counts;
+
+    }
+
+    /**
+     * 插入数据
+     * @param type
+     * @param count
+     *
+     */
+    public void insertCount(int type,int count){
+
+        MessageCountPojo mcp = new MessageCountPojo();
+        mcp.setCount(count);
+        mcp.setType(type);
+        dao.insert(mcp);
+
+    }
+
+
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(broadcastReceiver);
 
     }
+
+    /**
+     * 监听未读评论的消息数量
+     * @param count
+     */
+    @Override
+    public void onServerMessage(int count) {
+
+        commentMessageCount = commentMessageCount+1;
+        handler.sendEmptyMessage(1);
+
+    }
+
+
+
 }

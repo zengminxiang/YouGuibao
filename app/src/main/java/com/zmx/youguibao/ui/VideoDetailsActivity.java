@@ -36,11 +36,14 @@ import com.chanven.lib.cptr.PtrFrameLayout;
 import com.chanven.lib.cptr.loadmore.OnLoadMoreListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zmx.youguibao.BaseActivity;
+import com.zmx.youguibao.DBManager;
+import com.zmx.youguibao.MyApplication;
 import com.zmx.youguibao.R;
 import com.zmx.youguibao.SharePreferenceUtil;
 import com.zmx.youguibao.adapter.CommentAdapter;
 import com.zmx.youguibao.adapter.VideoLikeAdapter;
 import com.zmx.youguibao.ijkplayer.playervideo.VideoPlayView;
+import com.zmx.youguibao.mvp.bean.MessageCountPojo;
 import com.zmx.youguibao.mvp.bean.VideoCommentJson;
 import com.zmx.youguibao.mvp.bean.VideoLikeJson;
 import com.zmx.youguibao.mvp.bean.VideoListJson;
@@ -54,6 +57,9 @@ import com.zmx.youguibao.utils.view.StatusBarUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+import greenDao.DaoMaster;
+import greenDao.DaoSession;
+import greenDao.MessageCountPojoDao;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 
 /**

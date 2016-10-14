@@ -1,11 +1,14 @@
 buildscript {
     repositories {
         jcenter()
+        mavenCentral()
     }
     dependencies {
+        classpath 'org.greenrobot:greendao-gradle-plugin:3.0.0'
     }
 }
 apply plugin: 'com.android.application'
+apply plugin: 'org.greenrobot.greendao'
 
 android {
     compileSdkVersion 23
@@ -62,6 +65,11 @@ repositories {
     }
 }
 
+greendao {
+    targetGenDir 'src/main/java'
+    daoPackage 'greenDao'
+}
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
@@ -94,4 +102,5 @@ dependencies {
     compile 'cn.jiguang:jpush:2.1.8'
     // 此处以SDK 2.1.8版本为例极光
     compile files('libs/badgeview.jar')
+    compile 'org.greenrobot:greendao:3.0.1'//GreenDao 3.0使用方式
 }
