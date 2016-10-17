@@ -386,9 +386,9 @@ public class UploadVideoPresenter {
      * @param vid
      * @param uid
      */
-    public void AddClickALike(String tag,String vid,String uid){
+    public void AddClickALike(String tag,String vuid,String vid,String uid){
 
-        model.ClickALike(tag, vid, uid, new IDataRequestListener() {
+        model.ClickALike(tag,vuid, vid, uid, new IDataRequestListener() {
             @Override
             public void loadSuccess(Object object) {
 

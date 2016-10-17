@@ -25,13 +25,6 @@ import java.util.List;
  */
 public class MessageActivity extends BaseActivity {
 
-//    private TabLayout tabLayout;
-//    private ViewPager mViewPager;
-//    private List<Fragment> list_fragment;
-//    private CommentMessageFragment cmf;
-//    private ZanMessageFragment zmf;
-//    private String[] mTitles = new String[]{"评论","点赞"};
-
     private MessageFragmentAdapter adapter;
     private ViewPager viewPager;
     private TabLayout tabLayout;
@@ -47,33 +40,6 @@ public class MessageActivity extends BaseActivity {
     protected void initViews() {
 
         setTitle("消息");
-//        tabLayout = (TabLayout) findViewById(R.id.message_tabs);
-//        mViewPager = (ViewPager) findViewById(R.id.message_viewpager);
-//        cmf = new CommentMessageFragment();
-//        zmf = new ZanMessageFragment();
-//        list_fragment = new ArrayList<>();
-//        list_fragment.add(cmf);
-//        list_fragment.add(zmf);
-//
-//          /*viewPager通过适配器与fragment关联*/
-//        mViewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
-//            @Override
-//            public Fragment getItem(int position) {
-//                return list_fragment.get(position);
-//            }
-//
-//            @Override
-//            public int getCount() {
-//                return mTitles.length;
-//            }
-//
-//            @Override
-//            public CharSequence getPageTitle(int position) {
-//                return mTitles[position];
-//            }
-//        });
-//        //TabLayout和ViewPager的关联
-//        tabLayout.setupWithViewPager(mViewPager);
 
         //左右滑动
         viewPager = (ViewPager) findViewById(R.id.message_viewpager);

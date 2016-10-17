@@ -14,7 +14,10 @@ public class VideoLikeJson implements Serializable{
     private String u_id;//用户id
     private String vl_time;//点赞时间
     private String u_headurl;//用户的头像
+    private String u_name;//用户昵称
 
+    private String v_videoimgurl;//视频的图片路径
+    private String v_content;//视频的内容
 
     public String getVl_id() {
         return vl_id;
@@ -47,5 +50,27 @@ public class VideoLikeJson implements Serializable{
         this.u_headurl = u_headurl;
     }
 
+    public String getU_name() {
+        return u_name;
+    }
 
+    public void setU_name(String u_name) {
+        this.u_name = u_name;
+    }
+
+    public String getV_videoimgurl() {
+        return v_videoimgurl;
+    }
+
+    public void setV_videoimgurl(String v_videoimgurl) {
+        this.v_videoimgurl = v_videoimgurl;
+    }
+
+    public String getV_content() {
+        return v_content;
+    }
+
+    public void setV_content(String v_content) {
+        this.v_content = v_content;
+    }
 }

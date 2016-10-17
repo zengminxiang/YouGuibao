@@ -35,8 +35,12 @@ public class UserModel implements IUserModel{
     }
 
     //查询某个用户的所有评论
-    public void QueryMessageComment(String tag, String pagenow, String vuid,final IDataRequestListener listener){
+    public void QueryMessageComment(String tag, String pagenow, String vuid,IDataRequestListener listener){
         IQueryMessageComment(tag,pagenow,vuid,listener);
+    }
+
+    public void QueryZanComment(String tag, String pagenow, String vuid,IDataRequestListener listener){
+        IQueryZanComment(tag,pagenow,vuid,listener);
     }
 
     @Override
@@ -109,6 +113,13 @@ public class UserModel implements IUserModel{
         reqC.setShouldCache(true); // 控制是否缓存
     }
 
+    /**
+     * 查询未读评论消息
+     * @param tag
+     * @param pagenow
+     * @param vuid
+     * @param listener
+     */
     @Override
     public void IQueryMessageComment(String tag, String pagenow, String vuid,final IDataRequestListener listener) {
 
@@ -133,6 +144,39 @@ public class UserModel implements IUserModel{
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         MyApplication.getHttpQueues().add(reqD);
         reqD.setShouldCache(true); // 控制是否缓存
+
+    }
+
+    /**
+     * 查询未读点赞消息
+     * @param tag
+     * @param pagenow
+     * @param vuid
+     * @param listener
+     */
+    @Override
+    public void IQueryZanComment(String tag, String pagenow, String vuid,final IDataRequestListener listener) {
+
+        JsonObjectRequest reqE = new JsonObjectRequest(Request.Method.GET, UrlConfig.QueryZanComment(tag,pagenow,vuid), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+
+                listener.loadSuccess(jsonObject.toString());
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+            }
+        });
+
+        reqE.setTag("reqE");// 设置重连策略
+        reqE.setRetryPolicy(new DefaultRetryPolicy(10*1000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        MyApplication.getHttpQueues().add(reqE);
+        reqE.setShouldCache(true); // 控制是否缓存
 
     }
 }

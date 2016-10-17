@@ -73,7 +73,7 @@ public interface IUploadVideoModel {
      * @param uid 点赞用户id
      * @param listener
      */
-    void IClickALike(String tag,String vid,String uid,IDataRequestListener listener);
+    void IClickALike(String tag,String vuid,String vid,String uid,IDataRequestListener listener);
 
     /**
      *
@@ -117,5 +117,7 @@ public interface IUploadVideoModel {
      * @param listener
      */
     void IAddUserFollow(String tag,String guid,String buid,IDataRequestListener listener);
+
+
 
 }

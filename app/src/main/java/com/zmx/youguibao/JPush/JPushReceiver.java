@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.util.Log;
 
 
-import com.zmx.youguibao.DBManager;
 import com.zmx.youguibao.MyApplication;
 import com.zmx.youguibao.mvp.bean.MessageCountPojo;
 
@@ -19,8 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.jpush.android.api.JPushInterface;
-import greenDao.DaoMaster;
-import greenDao.DaoSession;
 import greenDao.MessageCountPojoDao;
 
 /**
@@ -54,8 +51,6 @@ public class JPushReceiver extends BroadcastReceiver {
             //获取后端返回的消息类型
             String json = receivingNotification(context, bundle);
 
-            Log.e("json", "json  " + json);
-
             if (!json.equals("") || json != null) {
 
                 try {
@@ -68,7 +63,6 @@ public class JPushReceiver extends BroadcastReceiver {
                     int counts = count.getCount();
                     counts++;
 
-                    Log.e("更新未读消息", "： " + counts);
                     count.setCount(counts);
                     dao.update(count);//重新更新未读消息写入到数据库
 

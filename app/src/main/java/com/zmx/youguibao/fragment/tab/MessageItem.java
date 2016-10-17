@@ -46,8 +46,10 @@ public class MessageItem {
                 badgeView.setBadgeCount(SelectMessageCount(3));
 
             }else if(i == 2){
+
                 mTvTitle.setText("关注");
                 badgeView.setBadgeCount(SelectMessageCount(4));
+
             }
 
         return view;

@@ -47,8 +47,8 @@ public class UploadVideoModel implements IUploadVideoModel {
     }
 
     //点赞视频
-    public void ClickALike(String tag,String vid,String uid,IDataRequestListener listener){
-        IClickALike(tag,vid,uid,listener);
+    public void ClickALike(String tag,String vuid,String vid,String uid,IDataRequestListener listener){
+        IClickALike(tag,vuid,vid,uid,listener);
     }
 
     //查询是否点赞视频了
@@ -273,9 +273,9 @@ public class UploadVideoModel implements IUploadVideoModel {
      * @param listener
      */
     @Override
-    public void IClickALike(String tag, String vid, String uid, final IDataRequestListener listener) {
+    public void IClickALike(String tag,String vuid, String vid, String uid, final IDataRequestListener listener) {
 
-        JsonObjectRequest reqF = new JsonObjectRequest(Request.Method.GET, UrlConfig.ClickLike(tag,vid,uid), new Response.Listener<JSONObject>() {
+        JsonObjectRequest reqF = new JsonObjectRequest(Request.Method.GET, UrlConfig.ClickLike(tag,vuid,vid,uid), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
 

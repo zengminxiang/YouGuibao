@@ -449,6 +449,21 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
 
+        //查询未读消息，在登录的状态执行
+        if(!SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,"").equals("")){
+
+           commentMessageCount = SelectMessageCount(2)+SelectMessageCount(3)+SelectMessageCount(4);//查询评论相关消息未读数
+            noticeCount = SelectMessageCount(1);//查询
+            chatCount = SelectMessageCount(5);//查询聊天未读数
+            //设置显示未读消息条数
+            badgeView.setBadgeCount(commentMessageCount);
+
+        }
+
+    }
 
 }

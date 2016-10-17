@@ -132,6 +132,23 @@ public class UrlConfig {
     }
 
     /**
+     * 查询未读点赞消息
+     * @param tag
+     * @param pagenow
+     * @param vuid
+     * @return
+     */
+    public static String QueryZanComment(String tag,String pagenow,String vuid){
+
+        params = new HashMap<>();
+        params.put("tag",tag);
+        params.put("vuid", vuid);
+        params.put("pagenow", pagenow);
+        return CombinationUrl(UPLOADVIDEO,params);
+
+    }
+
+    /**
      * 查询某条评论
      * @param tag
      * @param vcid  评论id
@@ -174,10 +191,11 @@ public class UrlConfig {
      * @param uid 点赞用户id
      * @return
      */
-    public static String ClickLike(String tag,String vid,String uid){
+    public static String ClickLike(String tag,String vuid,String vid,String uid){
 
         params = new HashMap<>();
         params.put("tag",tag);
+        params.put("vuid", vuid);
         params.put("vid", vid);
         params.put("uid", uid);
         return CombinationUrl(UPLOADVIDEO,params);

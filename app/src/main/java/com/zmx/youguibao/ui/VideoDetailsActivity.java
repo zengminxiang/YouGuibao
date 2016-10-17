@@ -36,14 +36,11 @@ import com.chanven.lib.cptr.PtrFrameLayout;
 import com.chanven.lib.cptr.loadmore.OnLoadMoreListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zmx.youguibao.BaseActivity;
-import com.zmx.youguibao.DBManager;
-import com.zmx.youguibao.MyApplication;
 import com.zmx.youguibao.R;
 import com.zmx.youguibao.SharePreferenceUtil;
 import com.zmx.youguibao.adapter.CommentAdapter;
 import com.zmx.youguibao.adapter.VideoLikeAdapter;
 import com.zmx.youguibao.ijkplayer.playervideo.VideoPlayView;
-import com.zmx.youguibao.mvp.bean.MessageCountPojo;
 import com.zmx.youguibao.mvp.bean.VideoCommentJson;
 import com.zmx.youguibao.mvp.bean.VideoLikeJson;
 import com.zmx.youguibao.mvp.bean.VideoListJson;
@@ -105,6 +102,7 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
     private Button send;//评论按钮
 
     private boolean wheterLike = false;//是否点赞了
+    private boolean repeatClick = true;//防止多次点击点赞按钮
 
     private Dialog dialog;//操作按钮弹出框
     private View dialog_operation;//操作的view
@@ -412,15 +410,21 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
             //点赞
             case R.id.like:
 
+                if(!repeatClick){
+                    return;
+                }
+
                 if (!SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id, "").equals("")) {
 
                     if (wheterLike) {
 
+                        repeatClick = false;
                         presenter.CancelLike("CancelLike", videoListJson.getV_id() + "", SharePreferenceUtil.getInstance(mActivity).getString(SharePreferenceUtil.u_id, "")); //取消点赞
 
                     } else {
 
-                        presenter.AddClickALike("like", videoListJson.getV_id() + "", SharePreferenceUtil.getInstance(mActivity).getString(SharePreferenceUtil.u_id, ""));//点赞
+                        repeatClick = false;
+                        presenter.AddClickALike("like",videoListJson.getUid()+"", videoListJson.getV_id() + "", SharePreferenceUtil.getInstance(mActivity).getString(SharePreferenceUtil.u_id, ""));//点赞
 
                     }
 
@@ -544,9 +548,9 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
         if (state.equals("200")) {
 
             toast("点赞成功");
-            like.setBackgroundResource(R.mipmap.nav_btn_like_selected);
+            repeatClick = true;
             wheterLike = true;
-
+            like.setBackgroundResource(R.mipmap.nav_btn_like_selected);
             presenter.SelectLike("SelectLike", videoListJson.getV_id() + "", "1");
 
         }
@@ -590,6 +594,7 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
 
             toast("取消点赞");
             wheterLike = false;
+            repeatClick = true;
             like.setBackgroundResource(R.mipmap.nav_btn_like_pressed);
             presenter.SelectLike("SelectLike", videoListJson.getV_id() + "", "1");
         }

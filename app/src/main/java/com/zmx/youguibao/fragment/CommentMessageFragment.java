@@ -16,9 +16,11 @@ import com.chanven.lib.cptr.PtrDefaultHandler;
 import com.chanven.lib.cptr.PtrFrameLayout;
 import com.chanven.lib.cptr.loadmore.OnLoadMoreListener;
 import com.zmx.youguibao.BaseFragment;
+import com.zmx.youguibao.MyApplication;
 import com.zmx.youguibao.R;
 import com.zmx.youguibao.SharePreferenceUtil;
 import com.zmx.youguibao.adapter.MessageCommentAdapter;
+import com.zmx.youguibao.mvp.bean.MessageCountPojo;
 import com.zmx.youguibao.mvp.bean.VideoCommentJson;
 import com.zmx.youguibao.mvp.presenter.UserPresenter;
 import com.zmx.youguibao.mvp.view.MessageView;
@@ -26,10 +28,12 @@ import com.zmx.youguibao.mvp.view.MessageView;
 import java.util.ArrayList;
 import java.util.List;
 
+import greenDao.MessageCountPojoDao;
+
 /**
  *作者：胖胖祥
  *时间：2016/10/10 0010 下午 3:35
- *功能模块：评论的信息列表
+ *功能模块：评论的消息列表
  */
 public class CommentMessageFragment extends BaseFragment implements MessageView{
 
@@ -43,7 +47,9 @@ public class CommentMessageFragment extends BaseFragment implements MessageView{
 
     private int page = 1;//当前页数
     private int pagenow;//总页数
-    private int load_tag = 0;//上拉或者下拉标示
+    private int load_tag = 0;//上拉或者下拉标示、
+
+    private MessageCountPojoDao dao = MyApplication.getInstance().getDaoSession().getMessageCountPojoDao();
 
     @Nullable
     @Override
@@ -57,6 +63,7 @@ public class CommentMessageFragment extends BaseFragment implements MessageView{
     @Override
     protected void initView() {
 
+        UpdateMessageCount();//重置未读消息
         up = new UserPresenter(this.getActivity(),this);
         mListView = (ListView) this.findViewById(R.id.test_list_view);
         adapter = new MessageCommentAdapter(mActivity,listss);
@@ -167,6 +174,39 @@ public class CommentMessageFragment extends BaseFragment implements MessageView{
             mPtrFrame.loadMoreComplete(true);
 
         }
+
+    }
+
+    //修改存储未读信息的个数为0条
+    public void UpdateMessageCount(){
+
+        MessageCountPojo count = SelectMessageCount(2);
+        count.setCount(0);
+        dao.update(count);//重新更新未读消息写入到数据库
+
+    }
+
+    /**
+     * 查询信息
+     *
+     * @param type 消息的类型
+     */
+    public MessageCountPojo SelectMessageCount(int type) {
+
+        MessageCountPojo count = null;
+
+        List<MessageCountPojo> lmcps = dao.queryBuilder()
+                .where(MessageCountPojoDao.Properties.Type.eq(type))
+                .orderAsc(MessageCountPojoDao.Properties.Type)
+                .list();
+
+        for (MessageCountPojo m : lmcps) {
+
+            count = m;
+
+        }
+
+        return count;
 
     }
 

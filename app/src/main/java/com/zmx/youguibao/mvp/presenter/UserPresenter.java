@@ -9,11 +9,13 @@ import com.zmx.youguibao.mvp.bean.PersonalCenterPojo;
 import com.zmx.youguibao.mvp.bean.ReplyCommentJson;
 import com.zmx.youguibao.mvp.bean.UserJson;
 import com.zmx.youguibao.mvp.bean.VideoCommentJson;
+import com.zmx.youguibao.mvp.bean.VideoLikeJson;
 import com.zmx.youguibao.mvp.bean.VideoListJson;
 import com.zmx.youguibao.mvp.model.IDataRequestListener;
 import com.zmx.youguibao.mvp.model.UserModel;
 import com.zmx.youguibao.mvp.view.LoginView;
 import com.zmx.youguibao.mvp.view.MessageView;
+import com.zmx.youguibao.mvp.view.MessageZanView;
 import com.zmx.youguibao.mvp.view.PersonalCenterView;
 
 import org.json.JSONArray;
@@ -35,6 +37,7 @@ public class UserPresenter{
     LoginView login;
     PersonalCenterView pcv;
     MessageView mv;
+    MessageZanView mzv;
 
     public UserPresenter(Context context, LoginView login){
 
@@ -48,8 +51,14 @@ public class UserPresenter{
         model = new UserModel();
     }
 
+
     public UserPresenter(Context context, MessageView mv){
         this.mv = mv;
+        model = new UserModel();
+    }
+
+    public UserPresenter(Context context, MessageZanView mzv){
+        this.mzv = mzv;
         model = new UserModel();
     }
 
@@ -160,7 +169,7 @@ public class UserPresenter{
 
     }
 
-    //查询某个用户所有评论
+    //查询某个用户所有评论消息
     public void SelectMessageComment(String tag, final String pagenow, String vuid){
 
         model.QueryMessageComment(tag, pagenow, vuid, new IDataRequestListener() {
@@ -173,7 +182,6 @@ public class UserPresenter{
                     String json = new JSONObject(object.toString()).getString("comments");
                     String pagenows = new JSONObject(object.toString()).getString("sum");
 
-                    Log.e("lists","lists"+json);
                     List<VideoCommentJson> lists = new ArrayList<VideoCommentJson>();
 
                     JSONArray array = new JSONArray(json);
@@ -204,7 +212,38 @@ public class UserPresenter{
             }
         });
 
+    }
 
+    public void SelectZanMessage(String tag, String pagenow, String vuid){
+
+        model.QueryZanComment(tag, pagenow, vuid, new IDataRequestListener() {
+            @Override
+            public void loadSuccess(Object object) {
+
+
+                try {
+
+                    String json = new JSONObject(object.toString()).getString("zan");
+                    String pagenows = new JSONObject(object.toString()).getString("sum");
+
+                    List<VideoLikeJson> lists = new ArrayList<VideoLikeJson>();
+                    JSONArray array = new JSONArray(json);
+                    Gson gson = new Gson();
+
+                    for(int i=0;i<array.length();i++) {
+                        JSONObject like = array.getJSONObject(i);
+                        VideoLikeJson vlj = gson.fromJson(like.toString(),VideoLikeJson.class);
+                        lists.add(vlj);
+                    }
+                    mzv.SelectZanComment(lists,pagenows);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+        });
 
     }
 

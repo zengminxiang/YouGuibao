@@ -31,12 +31,21 @@ public interface IUserModel {
     void ISelectUserVideos(String tag,String pagenow,String uid,IDataRequestListener listener);
 
     /**
-     * 查询某个用户的评论
+     * 查询某个用户的评论未读消息
      * @param tag
      * @param pagenow
      * @param vuid
      * @param listener
      */
     void IQueryMessageComment(String tag,String pagenow,String vuid,IDataRequestListener listener);
+
+    /**
+     * 查询某个用户点赞未读消息
+     * @param tag
+     * @param pagenow
+     * @param vuid
+     * @param listener
+     */
+    void IQueryZanComment(String tag,String pagenow,String vuid,IDataRequestListener listener);
 
 }

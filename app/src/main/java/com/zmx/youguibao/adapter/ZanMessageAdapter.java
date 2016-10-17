@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zmx.youguibao.R;
-import com.zmx.youguibao.mvp.bean.VideoCommentJson;
+import com.zmx.youguibao.mvp.bean.VideoLikeJson;
 import com.zmx.youguibao.utils.UrlConfig;
 import com.zmx.youguibao.utils.view.ImageLoadOptions;
 import com.zmx.youguibao.utils.view.ImageViewUtil;
@@ -19,15 +19,15 @@ import java.util.List;
 
 /**
  *作者：胖胖祥
- *时间：2016/10/10 0010 下午 5:12
- *功能模块：信息里面的评论适配器
+ *时间：2016/10/17 0017 上午 10:17
+ *功能模块：点赞的消息通知
  */
-public class MessageCommentAdapter extends BaseAdapter{
+public class ZanMessageAdapter extends BaseAdapter{
 
     private Context context;
-    private List<VideoCommentJson> lists;
+    private List<VideoLikeJson> lists;
 
-    public MessageCommentAdapter(Context context,List<VideoCommentJson> lists){
+    public ZanMessageAdapter(Context context,List<VideoLikeJson> lists){
 
         this.context = context;
         this.lists = lists;
@@ -53,13 +53,11 @@ public class MessageCommentAdapter extends BaseAdapter{
     public View getView(int position, View v, ViewGroup parent) {
 
         ViewHolder holder = null;
-
         if(v == null){
 
-            v = LayoutInflater.from(context).inflate(R.layout.message_comment_item,null);
             holder = new ViewHolder();
+            v = LayoutInflater.from(context).inflate(R.layout.message_zan_item,null);
             holder.name = (TextView) v.findViewById(R.id.user_name);
-            holder.comment = (TextView) v.findViewById(R.id.comment);
             holder.time = (TextView) v.findViewById(R.id.createTime);
             holder.content = (TextView) v.findViewById(R.id.content);
             holder.head = (ImageViewUtil) v.findViewById(R.id.user_head);
@@ -71,36 +69,35 @@ public class MessageCommentAdapter extends BaseAdapter{
             holder = (ViewHolder) v.getTag();
 
         }
+        VideoLikeJson vlj = lists.get(position);
 
-        VideoCommentJson vcj = lists.get(position);
-
-        holder.name.setText(vcj.getU_name());
-        holder.comment.setText(vcj.getVc_content());
-        holder.time.setText(vcj.getVc_time());
-        holder.content.setText(vcj.getV_content());
+        holder.name.setText(vlj.getU_name());
+        holder.time.setText(vlj.getVl_time());
+        holder.content.setText(vlj.getV_content());
 
         //处理刷新数据后闪屏问题
         holder.video_img.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        if(!vcj.getV_videoimgurl().equals(holder.video_img.getTag())) {
+        if(!vlj.getV_videoimgurl().equals(holder.video_img.getTag())) {
 
-            holder.video_img.setTag(vcj.getV_videoimgurl());
-            ImageLoader.getInstance().displayImage(vcj.getV_videoimgurl(), holder.video_img,
+            holder.video_img.setTag(vlj.getV_videoimgurl());
+            ImageLoader.getInstance().displayImage(vlj.getV_videoimgurl(), holder.video_img,
                     ImageLoadOptions.getOptions());
 
         }
-        ImageLoader.getInstance().displayImage(UrlConfig.HEAD+vcj.getU_head(), holder.head,
+        ImageLoader.getInstance().displayImage(UrlConfig.HEAD+vlj.getU_headurl(), holder.head,
                 ImageLoadOptions.getOptions());
-        return v;
 
+        return v;
     }
 
     public class ViewHolder{
 
-        TextView name,comment,content,time;
+        TextView name,content,time;
         ImageViewUtil head;
         ImageView video_img;
 
     }
+
 
 
 }
