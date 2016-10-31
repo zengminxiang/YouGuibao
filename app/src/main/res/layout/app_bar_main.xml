@@ -55,22 +55,23 @@
             fab:fab_size="mini"
             fab:fab_icon="@drawable/ic_location_on_black_24dp"
             fab:fab_title="附件"/>
-        <com.getbase.floatingactionbutton.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/fab_2"
-            fab:fab_colorNormal="@color/colorAccent"
-            fab:fab_size="mini"
-            fab:fab_icon="@drawable/ic_accessibility_24dp"
-            fab:fab_title="热门"/>
-        <com.getbase.floatingactionbutton.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/fab_3"
-            fab:fab_colorNormal="@color/colorAccent"
-            fab:fab_size="mini"
-            fab:fab_icon="@drawable/ic_accessibility_24dp"
-            fab:fab_title="新手"/>
+
+        <!--<com.getbase.floatingactionbutton.FloatingActionButton-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/fab_2"-->
+            <!--fab:fab_colorNormal="@color/colorAccent"-->
+            <!--fab:fab_size="mini"-->
+            <!--fab:fab_icon="@drawable/ic_accessibility_24dp"-->
+            <!--fab:fab_title="热门"/>-->
+        <!--<com.getbase.floatingactionbutton.FloatingActionButton-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/fab_3"-->
+            <!--fab:fab_colorNormal="@color/colorAccent"-->
+            <!--fab:fab_size="mini"-->
+            <!--fab:fab_icon="@drawable/ic_accessibility_24dp"-->
+            <!--fab:fab_title="新手"/>-->
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
 </android.support.design.widget.CoordinatorLayout>

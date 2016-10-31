@@ -26,6 +26,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+import com.zhy.autolayout.config.AutoLayoutConifg;
 import com.zmx.youguibao.qupai.bean.Contant;
 
 import cn.jpush.android.api.JPushInterface;
@@ -58,6 +59,8 @@ public class MyApplication extends Application {
         //初始化百度地图
         SDKInitializer.initialize(getApplicationContext());
 
+        //屏幕适配
+        AutoLayoutConifg.getInstance().useDeviceSize();
         //初始化极光推送
         JPushInterface.setDebugMode(true);
         JPushInterface.init(this);

@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -19,14 +20,17 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.zhy.autolayout.AutoLayoutActivity;
 import com.zmx.youguibao.utils.Utils;
+
+import java.lang.reflect.Field;
 
 /**
  * 作者：胖胖祥
  * 时间：2016/8/23 0023 下午 5:36
  * 功能模块：自定义activity
  */
-public abstract class BaseActivity extends FragmentActivity implements View.OnClickListener {
+public abstract class BaseActivity extends AutoLayoutActivity implements View.OnClickListener {
 
     protected Activity mActivity;
 
@@ -56,7 +60,6 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnCl
             ((FrameLayout) findViewById(R.id.frame_content)).addView(vContent);
 
         }
-        //加载头部文件
         layouts = (RelativeLayout) findViewById(R.id.main_title_rl);
         title = (TextView) findViewById(R.id.title);
         back = findViewById(R.id.back);
@@ -181,5 +184,6 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnCl
     public void toast(String content, int duration) {
         Utils.toast(content, duration);
     }
+
 
 }

@@ -1,78 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
+<com.zmx.youguibao.utils.view.AutoCardView
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
+    android:layout_margin="20px"
     android:id="@+id/cv_item"
     android:foreground="?android:attr/selectableItemBackground"
-    card_view:cardCornerRadius="4dp"
-    card_view:cardElevation="4dp"
+    card_view:cardCornerRadius="8px"
+    card_view:cardElevation="8px"
     >
 
-    <com.zhy.android.percent.support.PercentRelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:id="@+id/layout"
-        android:padding="10dp"
+        android:padding="20px"
         android:layout_height="match_parent"
         >
 
         <com.zmx.youguibao.utils.view.ImageViewUtil
             android:id="@+id/user_head"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:scaleType="fitXY"
-            app:layout_heightPercent="15%w"
-            app:layout_marginTopPercent="0%w"
-            app:layout_widthPercent="15%w"/>
+            android:layout_width="80px"
+            android:layout_height="80px"
+            android:scaleType="fitXY"/>
 
         <TextView
             android:id="@+id/user_name"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_textSizePercent="4.5%w"
-            android:layout_toRightOf="@+id/user_head"
-            app:layout_heightPercent="7%w"
-            app:layout_widthPercent="15%w"
-            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20px"
             android:text="曾敏祥"
+            android:layout_toRightOf="@+id/user_head"
             />
 
         <TextView
             android:id="@+id/user_context"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_heightPercent="8%w"
-            app:layout_widthPercent="100%w"
-            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="70px"
+            android:layout_marginLeft="20px"
+            android:layout_marginTop="5px"
             android:lines="2"
             android:ellipsize="end"
-            app:layout_textSizePercent="3%w"
+            android:textSize="24px"
             android:layout_below="@+id/user_name"
             android:layout_toRightOf="@+id/user_head"
             android:text="大家好，刚来两天的小剃刀，我的环境不知道怎么样？大家给我看看"
             />
 
-        <com.zhy.android.percent.support.PercentRelativeLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="5dp"
-            android:layout_below="@+id/user_head"
+            android:padding="5px"
+            android:layout_below="@+id/user_context"
             android:id="@+id/layout_a"
             >
 
             <ImageView
             android:id="@+id/video_image"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="400px"
+            android:layout_marginTop="5px"
             android:background="@mipmap/filter_preview_lomo"
-            app:layout_heightPercent="60%w"
-            app:layout_widthPercent="100%w"
             android:scaleType="fitXY"
             />
 
@@ -83,7 +72,7 @@
                 android:layout_centerInParent="true"
                 />
 
-        </com.zhy.android.percent.support.PercentRelativeLayout>
+        </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/umeng_comm_feed_action_layout"
@@ -92,20 +81,20 @@
             android:layout_toRightOf="@+id/user_feed_head"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/layout_a"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginRight="40px"
+            android:layout_marginTop="40px"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/user_time"
                 android:layout_width="wrap_content"
-                android:layout_height="20dp"
+                android:layout_height="40px"
                 android:layout_centerHorizontal="true"
-                android:layout_marginRight="10dp"
+                android:layout_marginRight="20px"
                 android:layout_weight="1"
                 android:ellipsize="end"
                 android:gravity="center_vertical"
-                android:paddingRight="10dp"
+                android:paddingRight="20px"
                 android:singleLine="true"
                 android:textColor="#bbbbbb"
                 android:text="2016-05-12 06:30:12"
@@ -115,17 +104,17 @@
                 android:id="@+id/umeng_comm_like_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
+                android:layout_marginLeft="8px"
+                android:layout_marginRight="8px"
                 android:layout_weight="1"
                 android:gravity="center">
 
                 <TextView
                     android:id="@+id/like_tv"
                     android:layout_width="wrap_content"
-                    android:layout_height="20dp"
+                    android:layout_height="40px"
                     android:drawableLeft="@mipmap/waterflow_icon_like_normal"
-                    android:drawablePadding="4dp"
+                    android:drawablePadding="8px"
                     android:ellipsize="end"
                     android:gravity="center"
                     android:maxLength="6"
@@ -139,16 +128,16 @@
                 android:id="@+id/umeng_comm_comment_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
+                android:layout_marginLeft="8px"
                 android:layout_weight="1"
                 android:gravity="center">
 
                 <TextView
                     android:id="@+id/comment_tv"
                     android:layout_width="wrap_content"
-                    android:layout_height="20dp"
+                    android:layout_height="40px"
                     android:drawableLeft="@mipmap/tiezipinglunh"
-                    android:drawablePadding="4dp"
+                    android:drawablePadding="8px"
                     android:ellipsize="end"
                     android:gravity="center"
                     android:maxLength="6"
@@ -160,6 +149,6 @@
 
         </LinearLayout>
 
-        </com.zhy.android.percent.support.PercentRelativeLayout>
+        </RelativeLayout>
 
-</android.support.v7.widget.CardView>
+</com.zmx.youguibao.utils.view.AutoCardView>

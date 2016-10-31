@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.zhy.autolayout.utils.AutoUtils;
 import com.zmx.youguibao.R;
 import com.zmx.youguibao.mvp.bean.ReplyCommentJson;
 import com.zmx.youguibao.mvp.bean.VideoCommentJson;
@@ -78,6 +79,8 @@ public class CommentAdapter extends BaseAdapter{
             holder.comment_more = (TextView) v.findViewById(R.id.comment_more);
             holder.comment_button = (ImageView) v.findViewById(R.id.comment_button);
             v.setTag(holder);
+            //对于listview，注意添加这一行，即可在item上使用高度
+            AutoUtils.autoSize(v);
 
         }else{
 

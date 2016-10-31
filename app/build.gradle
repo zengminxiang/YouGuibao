@@ -13,7 +13,9 @@ apply plugin: 'org.greenrobot.greendao'
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
-
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
     defaultConfig {
 
         applicationId "com.zmx.youguibao"
@@ -84,6 +86,7 @@ dependencies {
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     compile 'com.google.code.findbugs:jsr305:3.0.0'
     compile project(':Qupaisdk-release')
+    compile 'com.zhy:autolayout:1.4.5'//屏幕适配
     compile 'com.zhy:percent-support-extends:1.0.1'
     //百分比的布局
     compile 'com.mcxiaoke.volley:library:1.0.19'

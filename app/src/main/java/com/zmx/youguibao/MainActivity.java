@@ -32,6 +32,7 @@ import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.jauker.widget.BadgeView;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.zhy.autolayout.AutoLayoutActivity;
 import com.zmx.youguibao.JPush.JPushReceiver;
 import com.zmx.youguibao.fragment.FindFragment;
 import com.zmx.youguibao.fragment.FollowFragment;
@@ -55,7 +56,7 @@ import java.util.List;
 
 import greenDao.MessageCountPojoDao;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends AutoLayoutActivity
         implements NavigationView.OnNavigationItemSelectedListener,View.OnClickListener,JPushReceiver.ServerMessage {
 
     private Context context = this;
