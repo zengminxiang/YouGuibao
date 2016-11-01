@@ -10,7 +10,11 @@ import com.zmx.youguibao.BaseFragment;
 import com.zmx.youguibao.R;
 
 /**
- * Created by Administrator on 2016/10/14 0014.
+ *
+ * 开发者：胖胖祥
+ * 时间：2016/11/1 16:08
+ * 功能模块：关注的未读消息
+ *
  */
 public class FollowMessageFragment  extends BaseFragment {
 

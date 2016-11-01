@@ -11,6 +11,7 @@ import com.zmx.youguibao.mvp.bean.VideoLikeJson;
 import com.zmx.youguibao.mvp.bean.VideoListJson;
 import com.zmx.youguibao.mvp.model.IDataRequestListener;
 import com.zmx.youguibao.mvp.model.UploadVideoModel;
+import com.zmx.youguibao.mvp.view.FollowFragmentView;
 import com.zmx.youguibao.mvp.view.ReplyOneCommentView;
 import com.zmx.youguibao.mvp.view.UploadVideoView;
 import com.zmx.youguibao.mvp.view.VideoDetailsView;
@@ -35,6 +36,7 @@ public class UploadVideoPresenter {
     private VideoListView videolist;
     private VideoDetailsView detailsView;
     private ReplyOneCommentView replyOneCommentView;
+    private FollowFragmentView ffv;
 
     private Context context;
 
@@ -77,6 +79,7 @@ public class UploadVideoPresenter {
 
     }
 
+    //回复
     public UploadVideoPresenter(ReplyOneCommentView replyOneCommentView,Context context){
 
         this.context = context;
@@ -84,6 +87,16 @@ public class UploadVideoPresenter {
         model = new UploadVideoModel();
 
     }
+
+    //查询关注的用户的视频列表
+    public UploadVideoPresenter(FollowFragmentView ffv,Context context){
+
+        this.context = context;
+        this.ffv = ffv;
+        model = new UploadVideoModel();
+
+    }
+
 
     /**
      * 上传视频
@@ -149,6 +162,46 @@ public class UploadVideoPresenter {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
+            }
+        });
+
+    }
+
+    //查询所有关注用户的视频
+    public void AllFollowVideo(String tag, String pagenow, String uid){
+
+        Log.e("进来1","进来1");
+
+        model.QueryAllFollowVideo(tag, pagenow, uid, new IDataRequestListener() {
+            @Override
+            public void loadSuccess(Object object) {
+
+                try {
+
+                    String json = new JSONObject(object.toString()).getString("video");
+                    String pagenows = new JSONObject(object.toString()).getString("sum");
+
+                    List<VideoListJson> lists = new ArrayList<VideoListJson>();
+                    VideoListJson video;
+                    Gson gson;
+
+                    JSONArray array = new JSONArray(json);
+                    for(int i=0;i<array.length();i++){
+
+                        JSONObject jsonObject = array.getJSONObject(i);
+                        gson = new Gson();
+                        video = gson.fromJson(jsonObject.toString(),VideoListJson.class);
+                        lists.add(video);
+
+                    }
+
+                    ffv.AllFollowVideo(lists,pagenows);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
 
             }
         });

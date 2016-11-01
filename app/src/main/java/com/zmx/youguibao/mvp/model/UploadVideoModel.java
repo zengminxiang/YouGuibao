@@ -1,5 +1,7 @@
 package com.zmx.youguibao.mvp.model;
 
+import android.util.Log;
+
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -26,6 +28,13 @@ public class UploadVideoModel implements IUploadVideoModel {
     public void QueryAllVideo(String tag,String pagenow,IDataRequestListener listener){
 
         IQueryAllVideo(tag,pagenow,listener);
+
+    }
+
+    //分页查询关注用户的视频
+    public void QueryAllFollowVideo(String tag,String pagenow,String uid,IDataRequestListener listener){
+
+        IQueryAllFollowVideo(tag,pagenow,uid,listener);
 
     }
 
@@ -151,6 +160,29 @@ public class UploadVideoModel implements IUploadVideoModel {
         MyApplication.getHttpQueues().add(reqB);
         reqB.setShouldCache(true); // 控制是否缓存
 
+
+    }
+
+    @Override
+    public void IQueryAllFollowVideo(String tag, String pagenow, String uid, final IDataRequestListener listener) {
+
+        JsonObjectRequest reqL = new JsonObjectRequest(Request.Method.GET, UrlConfig.QueryAllFollowVideo(tag,pagenow,uid), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+
+                listener.loadSuccess(jsonObject.toString());
+                Log.e("进来1","进来1"+jsonObject.toString());
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+            }
+        });
+
+        reqL.setTag("reqL");
+        MyApplication.getHttpQueues().add(reqL);
+        reqL.setShouldCache(true); // 控制是否缓存
 
     }
 

@@ -17,29 +17,29 @@
     <RelativeLayout
         android:id="@+id/rlTitle"
         android:layout_width="match_parent"
-        android:layout_height="65dp"
+        android:layout_height="130px"
         android:background="#FF9966">
 
         <RelativeLayout
             android:id="@+id/relayout"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="112px"
             android:background="#FF9966">
 
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="10px"
                 android:background="@null" />
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
+                android:layout_height="112px"
                 android:gravity="center"
                 android:text="个人资料"
                 android:textColor="#ffffff"
-                android:textSize="20sp" />
+                android:textSize="40px" />
         </RelativeLayout>
     </RelativeLayout>
 

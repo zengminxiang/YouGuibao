@@ -1,76 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.zmx.youguibao.utils.view.AutoCardView
+<com.zmx.youguibao.utils.view.AutoCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cv_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="20px"
-    android:id="@+id/cv_item"
     android:foreground="?android:attr/selectableItemBackground"
     card_view:cardCornerRadius="8px"
-    card_view:cardElevation="8px"
-    >
+    card_view:cardElevation="8px">
 
     <RelativeLayout
-        android:layout_width="match_parent"
         android:id="@+id/layout"
-        android:padding="20px"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        >
-
-        <com.zmx.youguibao.utils.view.ImageViewUtil
-            android:id="@+id/user_head"
-            android:layout_width="80px"
-            android:layout_height="80px"
-            android:scaleType="fitXY"/>
-
-        <TextView
-            android:id="@+id/user_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20px"
-            android:text="曾敏祥"
-            android:layout_toRightOf="@+id/user_head"
-            />
-
-        <TextView
-            android:id="@+id/user_context"
-            android:layout_width="wrap_content"
-            android:layout_height="70px"
-            android:layout_marginLeft="20px"
-            android:layout_marginTop="5px"
-            android:lines="2"
-            android:ellipsize="end"
-            android:textSize="24px"
-            android:layout_below="@+id/user_name"
-            android:layout_toRightOf="@+id/user_head"
-            android:text="大家好，刚来两天的小剃刀，我的环境不知道怎么样？大家给我看看"
-            />
+        android:padding="20px">
 
         <RelativeLayout
+            android:id="@+id/message_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.zmx.youguibao.utils.view.ImageViewUtil
+                android:id="@+id/user_head"
+                android:layout_width="80px"
+                android:layout_height="80px"
+                android:scaleType="fitXY" />
+
+            <TextView
+                android:id="@+id/user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20px"
+                android:textSize="34px"
+                android:layout_toRightOf="@+id/user_head"
+                android:text="曾敏祥" />
+
+            <TextView
+                android:id="@+id/user_context"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/user_name"
+                android:layout_marginLeft="20px"
+                android:layout_marginTop="10px"
+                android:layout_toRightOf="@+id/user_head"
+                android:ellipsize="end"
+                android:lines="2"
+                android:text="大家好，刚来两天的小剃刀，我的环境不知道怎么样？大家给我看看"
+                android:textSize="24px" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/layout_a"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/message_layout"
             android:orientation="horizontal"
-            android:padding="5px"
-            android:layout_below="@+id/user_context"
-            android:id="@+id/layout_a"
-            >
+            android:padding="5px">
 
             <ImageView
-            android:id="@+id/video_image"
-            android:layout_width="match_parent"
-            android:layout_height="400px"
-            android:layout_marginTop="5px"
-            android:background="@mipmap/filter_preview_lomo"
-            android:scaleType="fitXY"
-            />
+                android:id="@+id/video_image"
+                android:layout_width="match_parent"
+                android:layout_height="400px"
+                android:background="@mipmap/filter_preview_lomo"
+                android:scaleType="fitXY" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/btn_icon_play_video_n"
                 android:layout_centerInParent="true"
-                />
+                android:src="@mipmap/btn_icon_play_video_n" />
 
         </RelativeLayout>
 
@@ -78,11 +76,11 @@
             android:id="@+id/umeng_comm_feed_action_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/user_feed_head"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/layout_a"
             android:layout_marginRight="40px"
             android:layout_marginTop="40px"
+            android:layout_toRightOf="@+id/user_feed_head"
             android:orientation="horizontal">
 
             <TextView
@@ -96,8 +94,8 @@
                 android:gravity="center_vertical"
                 android:paddingRight="20px"
                 android:singleLine="true"
-                android:textColor="#bbbbbb"
                 android:text="2016-05-12 06:30:12"
+                android:textColor="#bbbbbb"
                 android:textSize="10sp" />
 
             <LinearLayout
@@ -149,6 +147,6 @@
 
         </LinearLayout>
 
-        </RelativeLayout>
+    </RelativeLayout>
 
 </com.zmx.youguibao.utils.view.AutoCardView>

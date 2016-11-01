@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/nav_header_height"
+    android:layout_height="500px"
     android:orientation="vertical"
     android:gravity="center"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <com.zmx.youguibao.utils.view.ImageViewUtil
         android:id="@+id/nav_head"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_centerHorizontal="true"
-        android:src="@android:drawable/sym_def_app_icon" />
+        android:layout_width="160px"
+        android:layout_height="160px"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:id="@+id/nav_name"
@@ -19,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/nav_head"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10px"
         android:text="点击头像登录......"
         android:textSize="18sp"
         android:textColor="@color/black_semi_transparent"
@@ -29,7 +28,7 @@
         android:layout_below="@+id/nav_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20px"
         android:orientation="horizontal"
         >
 

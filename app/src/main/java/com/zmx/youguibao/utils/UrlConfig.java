@@ -71,6 +71,25 @@ public class UrlConfig {
         return CombinationUrl(UPLOADVIDEO,params);
     }
 
+//    http://localhost:8080/Guiyoubao/ViedoServlet?tag=queryFollow&pagenow=1&uid=1
+
+    /**
+     * 查询关注的用户发表的说说
+     * @param tag
+     * @param pagenow
+     * @param uid
+     * @return
+     */
+    public static String QueryAllFollowVideo(String tag,String pagenow,String uid){
+
+        params = new HashMap<>();
+        params.put("tag",tag);
+        params.put("pagenow", pagenow);
+        params.put("uid", uid);
+        return CombinationUrl(UPLOADVIDEO,params);
+
+    }
+
 
     /**
      * 评论

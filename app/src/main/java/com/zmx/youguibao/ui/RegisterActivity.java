@@ -2,7 +2,10 @@ package com.zmx.youguibao.ui;
 
 import android.app.Dialog;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View.OnClickListener;
@@ -11,18 +14,25 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.view.WindowManager.LayoutParams;
 
 import com.zmx.youguibao.BaseActivity;
 import com.zmx.youguibao.R;
+import com.zmx.youguibao.utils.AndroidBug5497Workaround;
 import com.zmx.youguibao.utils.view.ImageViewUtil;
 import com.zmx.youguibao.utils.view.ObservableScrollView;
 import com.zmx.youguibao.utils.view.StatusBarUtil;
 
 import android.view.View;
+
+import java.lang.reflect.Field;
 
 /**
  * 作者：胖胖祥
@@ -37,12 +47,17 @@ public class RegisterActivity extends BaseActivity implements ObservableScrollVi
     private Dialog sex_dialog, photo_dialog;//弹出框
     private ImageButton secrecy, girl, boy;
     private ImageViewUtil user_head;
+    private EditText reg_phone;
+
+    private View positionView;
 
     //标题栏变化
     private View layoutHead;
     private ObservableScrollView scrollView;
     private ImageView imageView;
     private int height ;
+
+    private String phone;//手机号码
 
     @Override
     protected int getLayoutId() {
@@ -52,14 +67,37 @@ public class RegisterActivity extends BaseActivity implements ObservableScrollVi
     @Override
     protected void initViews() {
 
+        // 1. 沉浸式状态栏
+        positionView = findViewById(R.id.position_view);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Window window = getWindow();
+            window.setFlags(
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+            int statusBarHeight = getStatusBarHeight();
+            ViewGroup.LayoutParams lp = positionView.getLayoutParams();
+            lp.height = statusBarHeight;
+            positionView.setLayoutParams(lp);
+
+        }
+
+        AndroidBug5497Workaround.assistActivity(this);
+
         setTitleGone();
+        phone = getIntent().getStringExtra("phone");
+        Log.e("phone","手机号"+phone);
         edit_sex = (TextView) findViewById(R.id.edit_sex);
         edit_sex.setOnClickListener(this);
         user_head = (ImageViewUtil) findViewById(R.id.user_head);
         user_head.setOnClickListener(this);
+        reg_phone = (EditText) findViewById(R.id.reg_phone);
+        reg_phone.setText(phone);
 
         scrollView = (ObservableScrollView) findViewById(R.id.scrollview);
-        layoutHead = findViewById(R.id.view_head);
+
+        layoutHead = findViewById(R.id.view_title);
+
         imageView = (ImageView) findViewById(R.id.imageView1);
         layoutHead.setBackgroundColor(Color.argb(0, 0xfd, 0x91, 0x5b));
         //获取顶部图片高度后，设置滚动监听
@@ -70,11 +108,9 @@ public class RegisterActivity extends BaseActivity implements ObservableScrollVi
                 imageView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                 height =   imageView.getHeight();
                 imageView.getWidth();
-
                 scrollView.setScrollViewListener(RegisterActivity.this);
             }
         });
-
 
     }
 
@@ -159,6 +195,7 @@ public class RegisterActivity extends BaseActivity implements ObservableScrollVi
                 break;
 
             case R.id.boy:
+
                 edit_sex.setText("男");
                 Drawable boy_image = getResources().getDrawable(R.mipmap.profile_avatar_genderbadge_male);
                 boy_image.setBounds(0, 0, boy_image.getMinimumWidth(), boy_image.getMinimumHeight());
@@ -209,5 +246,36 @@ public class RegisterActivity extends BaseActivity implements ObservableScrollVi
             layoutHead.setBackgroundColor(Color.argb((int) alpha, 0xfd, 0x91, 0x5b));
         }
 
+    }
+
+
+    /**
+     * 调整沉浸式菜单的title
+     */
+    protected void dealStatusBar(View view) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            int statusBarHeight = getStatusBarHeight();
+            ViewGroup.LayoutParams lp = view.getLayoutParams();
+            lp.height = statusBarHeight;
+            view.setLayoutParams(lp);
+        }
+    }
+
+    private int getStatusBarHeight() {
+
+        Class<?> c = null;
+        Object obj = null;
+        Field field = null;
+        int x = 0, statusBarHeight = 0;
+        try {
+            c = Class.forName("com.android.internal.R$dimen");
+            obj = c.newInstance();
+            field = c.getField("status_bar_height");
+            x = Integer.parseInt(field.get(obj).toString());
+            statusBarHeight = getResources().getDimensionPixelSize(x);
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
+        return statusBarHeight;
     }
 }

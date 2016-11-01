@@ -508,6 +508,7 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
     @Override
     public void QueryComment(List<VideoCommentJson> lists, String pagenow) {
 
+        Log.e("pagenowsss","pagenowssss"+pagenow);
         this.pagenow = Integer.parseInt(pagenow);
 
         for (VideoCommentJson v : lists) {
@@ -605,6 +606,7 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
     @Override
     public void VSelectLike(List<VideoLikeJson> likeJson, String pagenow) {
 
+        Log.e("pagenow","pagenow"+pagenow);
         this.likePagenow = Integer.parseInt(pagenow);
         likelists.clear();
         for (VideoLikeJson j : likeJson) {

@@ -28,6 +28,15 @@ public interface IUploadVideoModel {
     void IQueryAllVideo(String tag,String pagenow,IDataRequestListener listener);
 
     /**
+     * 分页查询关注用户的视频
+     * @param tag
+     * @param pagenow
+     * @param uid
+     * @param listener
+     */
+    void IQueryAllFollowVideo(String tag,String pagenow,String uid,IDataRequestListener listener);
+
+    /**
      * 分页查询视频评论
      * @param tag 标签
      * @param pagenow 页码

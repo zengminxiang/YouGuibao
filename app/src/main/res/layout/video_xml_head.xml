@@ -7,7 +7,7 @@
         <RelativeLayout
             android:id="@+id/layout_a"
             android:layout_width="match_parent"
-            android:layout_height="350dp"
+            android:layout_height="600px"
             >
 
             <FrameLayout
@@ -43,14 +43,14 @@
             android:id="@+id/layout_b"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp">
+            android:layout_marginTop="10px">
 
             <TextView
                 android:id="@+id/context"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:lineSpacingExtra="5dp"
-                android:layout_marginLeft="10dp"
+                android:lineSpacingExtra="10px"
+                android:layout_marginLeft="20px"
                 android:text="这里是点赞列表" />
 
         </RelativeLayout>
@@ -58,13 +58,13 @@
         <RelativeLayout
             android:id="@+id/layout_c"
             android:layout_width="match_parent"
-            android:layout_height="40dp">
+            android:layout_height="80px">
 
             <TextView
                 android:id="@+id/more_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="20px"
                 android:layout_alignParentRight="true"
                 android:visibility="gone"
                 android:background="@mipmap/wallet_base_right_arrow"
@@ -75,30 +75,30 @@
                 android:layout_toLeftOf="@+id/more_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:horizontalSpacing="3dp"
+                android:horizontalSpacing="6px"
                 android:numColumns="8"
                 android:scrollbars="none"
-                android:layout_marginLeft="10dp"
-                android:verticalSpacing="5dp" >
+                android:layout_marginLeft="20px"
+                android:verticalSpacing="10px" >
             </GridView>
 
         </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="25dp"
-            android:layout_marginTop="10dp"
+            android:layout_height="50px"
+            android:layout_marginTop="20px"
             >
 
             <TextView
                 android:id="@+id/address"
                 android:layout_width="wrap_content"
-                android:layout_height="20dp"
+                android:layout_height="40px"
                 android:drawableLeft="@mipmap/share_icon_position_normal"
-                android:drawablePadding="4dp"
+                android:drawablePadding="8px"
                 android:ellipsize="end"
                 android:gravity="center"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="20px"
                 android:singleLine="true"
                 android:text="广州市她他会威尼"
                 android:textSize="11sp" />
@@ -107,14 +107,14 @@
             <TextView
                 android:id="@+id/time"
                 android:layout_width="wrap_content"
-                android:layout_height="20dp"
+                android:layout_height="40px"
                 android:layout_centerHorizontal="true"
-                android:layout_marginRight="10dp"
+                android:layout_marginRight="20px"
                 android:layout_alignParentRight="true"
                 android:layout_weight="1"
                 android:ellipsize="end"
                 android:gravity="center_vertical"
-                android:paddingRight="10dp"
+                android:paddingRight="20px"
                 android:singleLine="true"
                 android:textColor="#bbbbbb"
                 android:text="2016-05-12 06:30:12"
@@ -123,7 +123,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="20px"
                 android:layout_alignParentBottom="true"
                 android:background="@color/bage" />
 

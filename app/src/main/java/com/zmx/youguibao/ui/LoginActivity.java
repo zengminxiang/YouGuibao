@@ -15,9 +15,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.zhy.android.percent.support.PercentRelativeLayout;
 import com.zmx.youguibao.BaseActivity;
 import com.zmx.youguibao.R;
 import com.zmx.youguibao.SharePreferenceUtil;
@@ -26,6 +26,7 @@ import com.zmx.youguibao.mvp.presenter.UserPresenter;
 import com.zmx.youguibao.mvp.view.LoginView;
 import com.zmx.youguibao.qupai.AuthTest;
 import com.zmx.youguibao.qupai.bean.Contant;
+import com.zmx.youguibao.utils.Utils;
 import com.zmx.youguibao.utils.view.StatusBarUtil;
 
 import java.util.Set;
@@ -42,10 +43,10 @@ public class LoginActivity extends BaseActivity implements LoginView{
 
     private ImageView register_icon,login_icon,close;
     private LinearLayout layout_b,layout_c;
-    private EditText edit_pwd,phone;
+    private EditText edit_pwd,phone,reg_phone;
     private CharSequence temp;//监听前的文本
-    private TextView forget_pwd;//密码框
-    private PercentRelativeLayout layout;
+    private TextView forget_pwd,next_reg;//密码框
+    private RelativeLayout layout;
 
     private UserPresenter userPresenter;
     // 加载
@@ -64,7 +65,7 @@ public class LoginActivity extends BaseActivity implements LoginView{
         setTitleGone();
         overridePendingTransition(R.anim.push_up_in,R.anim.push_up_out);
         userPresenter = new UserPresenter(this,this);
-        layout = (PercentRelativeLayout) findViewById(R.id.layout);
+        layout = (RelativeLayout) findViewById(R.id.layout);
         register_icon = (ImageView) findViewById(R.id.register_icon);
         login_icon = (ImageView) findViewById(R.id.login_icon);
         layout_b = (LinearLayout) findViewById(R.id.layout_b);
@@ -75,6 +76,9 @@ public class LoginActivity extends BaseActivity implements LoginView{
         forget_pwd = (TextView) findViewById(R.id.forget_pwd);
         forget_pwd.setOnClickListener(this);
         edit_pwd = (EditText) findViewById(R.id.edit_pwd);
+        next_reg = (TextView) findViewById(R.id.next_reg);//下一步
+        reg_phone = (EditText) findViewById(R.id.reg_phone);
+        next_reg.setOnClickListener(this);
         StatusBarUtil.setTransparentForImageView(this,close);//状态栏一体化
 
         //监听是否输入密码
@@ -127,6 +131,12 @@ public class LoginActivity extends BaseActivity implements LoginView{
 
                     }
 
+                    if(!Utils.isChinaPhoneLegal(phone.getText().toString())){
+                        toast("手机号码不正确");
+                        return;
+
+                    }
+
                     progressDialog = ProgressDialog.show(mActivity, "",
                             "正在登录...", true);
 
@@ -145,6 +155,27 @@ public class LoginActivity extends BaseActivity implements LoginView{
                 inputmanger.hideSoftInputFromWindow(v.getWindowToken(), 0);
                 onBackPressed();
 
+                break;
+
+            case R.id.next_reg:
+
+                if(TextUtils.isEmpty(reg_phone.getText().toString())){
+
+                    toast("请输入手机号码");
+                    return;
+
+                }
+
+                if(!Utils.isChinaPhoneLegal(reg_phone.getText().toString())){
+
+                    toast("手机号码不正确");
+                    return;
+
+                }
+
+                Bundle bundle = new Bundle();
+                bundle.putString("phone",reg_phone.getText().toString());
+                startActivity(RegisterActivity.class,bundle);
                 break;
 
         }

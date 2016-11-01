@@ -11,7 +11,7 @@
         <ImageView
             android:id="@+id/background_img"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="500px"
             android:contentDescription="@null"
             android:scaleType="fitXY"
             android:src="@mipmap/filter_preview_lomo" />
@@ -25,15 +25,15 @@
             <RelativeLayout
                 android:id="@+id/scroll_view_head"
                 android:layout_width="match_parent"
-                android:layout_height="112dp"
-                android:layout_marginTop="180dp"
+                android:layout_height="224px"
+                android:layout_marginTop="360px"
                 android:background="@color/transparent"
                 android:orientation="vertical">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="85dp"
-                    android:layout_marginTop="27dp"
+                    android:layout_height="170px"
+                    android:layout_marginTop="54px"
                     android:background="@drawable/card_avatar_bar">
 
                     <TextView
@@ -41,51 +41,51 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        android:layout_marginRight="21dp"
-                        android:layout_marginTop="6dp"
+                        android:layout_marginRight="42px"
+                        android:layout_marginTop="12px"
                         android:background="@drawable/selector_btn"
                         android:drawableLeft="@drawable/add"
-                        android:drawablePadding="3dp"
+                        android:drawablePadding="6px"
                         android:gravity="center_vertical"
-                        android:paddingBottom="5dp"
-                        android:paddingLeft="8dp"
-                        android:paddingRight="8dp"
-                        android:paddingTop="5dp"
+                        android:paddingBottom="10px"
+                        android:paddingLeft="16px"
+                        android:paddingRight="16px"
+                        android:paddingTop="10px"
                         android:text="@string/add_attention"
                         android:textColor="#57AF4E"
-                        android:textSize="13sp" />
+                        android:textSize="26px" />
 
                     <TextView
                         android:id="@+id/fans"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="103dp"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginLeft="206px"
+                        android:layout_marginTop="8px"
                         android:ellipsize="end"
                         android:singleLine="true"
                         android:text="粉丝：30w"
                         android:textColor="#A1A1A1"
-                        android:textSize="12sp" />
+                        android:textSize="24px" />
 
                     <TextView
                         android:id="@+id/follows"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/fans"
-                        android:layout_marginLeft="103dp"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginLeft="206px"
+                        android:layout_marginTop="9px"
                         android:ellipsize="end"
                         android:singleLine="true"
                         android:text="关注：29"
                         android:textColor="#A1A1A1"
-                        android:textSize="12sp" />
+                        android:textSize="24px" />
                 </RelativeLayout>
 
                 <ImageView
                     android:id="@+id/user_avatar"
-                    android:layout_width="68dp"
-                    android:layout_height="68dp"
-                    android:layout_marginLeft="21dp"
+                    android:layout_width="136px"
+                    android:layout_height="136px"
+                    android:layout_marginLeft="42px"
                     android:background="@android:color/white"
                     android:contentDescription="@null"
                     android:scaleType="fitXY"
@@ -96,7 +96,7 @@
                     android:id="@+id/user_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="13dp"
+                    android:layout_marginLeft="26px"
                     android:layout_toRightOf="@id/user_avatar"
                     android:ellipsize="end"
                     android:shadowColor="@android:color/black"
@@ -106,28 +106,28 @@
                     android:singleLine="true"
                     android:text="胖胖祥"
                     android:textColor="@android:color/white"
-                    android:textSize="20sp" />
+                    android:textSize="40px" />
 
                 <FrameLayout
                     android:id="@+id/user_divider_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/user_avatar"
-                    android:layout_marginLeft="21dp"
-                    android:layout_marginRight="21dp"
-                    android:layout_marginTop="4dp">
+                    android:layout_marginLeft="42px"
+                    android:layout_marginRight="42px"
+                    android:layout_marginTop="8px">
 
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="1px"
-                        android:layout_marginTop="5dp"
+                        android:layout_marginTop="10px"
                         android:background="#DFDFDF"
                         android:contentDescription="@null" />
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="29dp"
+                        android:layout_marginLeft="58px"
                         android:contentDescription="@null"
                         android:src="@drawable/arrow_up" />
                 </FrameLayout>
@@ -137,14 +137,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/user_divider_layout"
-                    android:layout_marginLeft="21dp"
-                    android:layout_marginRight="21dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="42px"
+                    android:layout_marginRight="42px"
+                    android:layout_marginTop="16px"
                     android:ellipsize="end"
                     android:singleLine="true"
                     android:text="@string/user_des"
                     android:textColor="#B1B1B1"
-                    android:textSize="12sp" />
+                    android:textSize="24px" />
 
             </RelativeLayout>
 
@@ -154,18 +154,18 @@
                 android:layout_marginTop="-1dp"
                 android:background="#F7F4F0"
                 android:orientation="vertical"
-                android:paddingBottom="8dp">
+                android:paddingBottom="16px">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="13dp"
-                    android:layout_marginTop="13dp"
+                    android:layout_marginLeft="26px"
+                    android:layout_marginTop="26px"
                     android:ellipsize="end"
                     android:singleLine="true"
                     android:text="@string/user_recommend_tip"
                     android:textColor="#A1A1A1"
-                    android:textSize="12sp" />
+                    android:textSize="24px" />
 
             </LinearLayout>
         </LinearLayout>

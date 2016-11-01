@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.zhy.autolayout.utils.AutoUtils;
 import com.zmx.youguibao.R;
 import com.zmx.youguibao.mvp.bean.VideoListJson;
 import com.zmx.youguibao.utils.UrlConfig;
@@ -43,6 +44,7 @@ public class VideoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         public NormalViewHolder(View itemView) {
             super(itemView);
+            AutoUtils.autoSize(itemView);
             name = (TextView) itemView.findViewById(R.id.user_name);
             context = (TextView) itemView.findViewById(R.id.user_context);
             time = (TextView) itemView.findViewById(R.id.user_time);

@@ -1,16 +1,27 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:background="@mipmap/login_bg_cover"
-    android:layout_height="50dp"
-    android:id="@+id/view_head"
+    android:layout_height="wrap_content"
+    android:background="@color/bage"
+    android:id="@+id/view_title"
     >
+    <!--沉浸式activity，这个view是用来占位的-->
+    <View
+        android:id="@+id/position_view"
+        android:layout_width="30px"
+        android:layout_height="30px" />
+
+    <RelativeLayout
+        android:layout_below="@+id/position_view"
+        android:layout_width="match_parent"
+        android:layout_marginTop="5px"
+        android:layout_height="100px">
 
     <TextView
         android:id="@+id/tvHead"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginRight="65dp"
-        android:layout_marginLeft="65dp"
+        android:layout_marginRight="130px"
+        android:layout_marginLeft="130px"
         android:gravity="center"
         android:textColor="#fff"
         android:textSize="18sp"
@@ -20,10 +31,10 @@
 
     <ImageView
         android:id="@+id/ibBack"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="60px"
+        android:layout_height="60px"
         android:layout_centerVertical="true"
-        android:padding="8dp"
+        android:padding="16px"
         android:clickable="true"
         android:scaleType="fitXY"
         android:background="@mipmap/nav_btn_back_white_normal" />
@@ -31,13 +42,13 @@
 
     <ImageView
         android:id="@+id/head_rightIv"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:padding="10dp"
+        android:layout_width="60px"
+        android:layout_height="60px"
+        android:padding="20px"
         android:scaleType="fitXY"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:background="@mipmap/nav_btn_done_white_normal"
         android:clickable="true" />
-
+    </RelativeLayout>
 </RelativeLayout>
