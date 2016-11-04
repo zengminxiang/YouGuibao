@@ -8,7 +8,7 @@ import java.util.List;
  *
  * 开发者：胖胖祥
  * 时间：2016/11/1 16:09
- * 功能模块：发现的视频
+ * 功能模块：关注的视频
  *
  */
 public interface FollowFragmentView {

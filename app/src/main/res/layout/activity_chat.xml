@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.zmx.youguibao.ui.ChatActivity">
+
+    <ListView
+        android:id="@+id/listview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:cacheColorHint="#00000000"
+        android:divider="#00000000"
+        android:fadingEdge="none"
+        android:listSelector="#00000000"
+        android:transcriptMode="alwaysScroll" >
+    </ListView>
+
+    <RelativeLayout
+        android:id="@+id/rela2"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:background="#E8F2FE" >
+
+        <EditText
+            android:id="@+id/context"
+            android:layout_width="50dp"
+            android:layout_height="40dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_toLeftOf="@+id/send"
+            android:background="@drawable/chat_edittext" >
+
+            <requestFocus />
+        </EditText>
+
+        <Button
+            android:id="@+id/send"
+            android:layout_width="70dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:background="@mipmap/button"
+            android:text="发送" />
+    </RelativeLayout>
+
+
+</RelativeLayout>

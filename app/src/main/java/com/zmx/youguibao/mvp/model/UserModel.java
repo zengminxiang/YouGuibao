@@ -39,9 +39,19 @@ public class UserModel implements IUserModel{
         IQueryMessageComment(tag,pagenow,vuid,listener);
     }
 
+    //查询某个用户的所所有点赞信息
     public void QueryZanComment(String tag, String pagenow, String vuid,IDataRequestListener listener){
         IQueryZanComment(tag,pagenow,vuid,listener);
     }
+
+    //查询某个用户所有关注消息
+    public void QueryFollowComment(String tag, String pagenow, String buid, final IDataRequestListener listener){
+
+        IQueryFollowComment(tag,pagenow,buid,listener);
+
+    }
+
+
 
     @Override
     public void ILogin(String tag,String name, String pwd,final IDataRequestListener listener) {
@@ -177,6 +187,39 @@ public class UserModel implements IUserModel{
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         MyApplication.getHttpQueues().add(reqE);
         reqE.setShouldCache(true); // 控制是否缓存
+
+    }
+
+    /**
+     * 查询未读关注消息
+     * @param tag
+     * @param pagenow
+     * @param buid
+     * @param listener
+     */
+    @Override
+    public void IQueryFollowComment(String tag, String pagenow, String buid, final IDataRequestListener listener) {
+
+        JsonObjectRequest reqF = new JsonObjectRequest(Request.Method.GET, UrlConfig.QueryFollowComment(tag,pagenow,buid), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+
+                listener.loadSuccess(jsonObject.toString());
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+            }
+        });
+
+        reqF.setTag("reqF");// 设置重连策略
+        reqF.setRetryPolicy(new DefaultRetryPolicy(10*1000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        MyApplication.getHttpQueues().add(reqF);
+        reqF.setShouldCache(true); // 控制是否缓存
 
     }
 }

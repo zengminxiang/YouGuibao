@@ -20,6 +20,7 @@ import com.zmx.youguibao.MyApplication;
 import com.zmx.youguibao.R;
 import com.zmx.youguibao.SharePreferenceUtil;
 import com.zmx.youguibao.adapter.MessageCommentAdapter;
+import com.zmx.youguibao.dao.MessageDao;
 import com.zmx.youguibao.mvp.bean.MessageCountPojo;
 import com.zmx.youguibao.mvp.bean.VideoCommentJson;
 import com.zmx.youguibao.mvp.presenter.UserPresenter;
@@ -49,7 +50,7 @@ public class CommentMessageFragment extends BaseFragment implements MessageView{
     private int pagenow;//总页数
     private int load_tag = 0;//上拉或者下拉标示、
 
-    private MessageCountPojoDao dao = MyApplication.getInstance().getDaoSession().getMessageCountPojoDao();
+    private MessageDao dao = new MessageDao();
 
     @Nullable
     @Override
@@ -63,7 +64,7 @@ public class CommentMessageFragment extends BaseFragment implements MessageView{
     @Override
     protected void initView() {
 
-        UpdateMessageCount();//重置未读消息
+        dao.UpdateMessageCount(2);//重置未读消息
         up = new UserPresenter(this.getActivity(),this);
         mListView = (ListView) this.findViewById(R.id.test_list_view);
         adapter = new MessageCommentAdapter(mActivity,listss);
@@ -174,39 +175,6 @@ public class CommentMessageFragment extends BaseFragment implements MessageView{
             mPtrFrame.loadMoreComplete(true);
 
         }
-
-    }
-
-    //修改存储未读信息的个数为0条
-    public void UpdateMessageCount(){
-
-        MessageCountPojo count = SelectMessageCount(2);
-        count.setCount(0);
-        dao.update(count);//重新更新未读消息写入到数据库
-
-    }
-
-    /**
-     * 查询信息
-     *
-     * @param type 消息的类型
-     */
-    public MessageCountPojo SelectMessageCount(int type) {
-
-        MessageCountPojo count = null;
-
-        List<MessageCountPojo> lmcps = dao.queryBuilder()
-                .where(MessageCountPojoDao.Properties.Type.eq(type))
-                .orderAsc(MessageCountPojoDao.Properties.Type)
-                .list();
-
-        for (MessageCountPojo m : lmcps) {
-
-            count = m;
-
-        }
-
-        return count;
 
     }
 

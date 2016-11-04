@@ -74,6 +74,7 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
     private ImageViewUtil userhead;//发表视频用户的头像
 
     private boolean WheterLogin = false;//判断是否登录
+    private boolean isFollow = false;//判断是否关注了
     private String VideoID;//发表视频用户id
 
     //这是更新操作
@@ -106,6 +107,7 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
 
     private Dialog dialog;//操作按钮弹出框
     private View dialog_operation;//操作的view
+    private TextView dialog_delete,dialog_cancel,dialog_report,dialog_c_follow;//弹出框的：删除、取消、举报、取消关注
 
     private final int ONE = 1;//视频播放
     private final int TWO = 2;//下拉刷新新
@@ -121,8 +123,18 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
 
                 case ONE:
 
+                    FrameLayout frameLayout = (FrameLayout) videoItemView.getParent();
                     videoItemView.release();
-                    showview.setVisibility(View.VISIBLE);
+                    if (frameLayout != null && frameLayout.getChildCount() > 0) {
+                        frameLayout.removeAllViews();
+                        View itemView = (View) frameLayout.getParent();
+
+                        if (itemView != null) {
+
+                            itemView.findViewById(R.id.showview).setVisibility(View.VISIBLE);
+                        }
+                    }
+
 
                     break;
 
@@ -158,7 +170,9 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
                     break;
 
                 case FROU:
+
                     follow.setVisibility(View.GONE);
+
                     break;
 
             }
@@ -343,7 +357,7 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
 
         if (!SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id, "").equals("")) {
 
-            showChoiceSex();
+            showOperation();
 
         } else {
 
@@ -438,11 +452,19 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
 
                 break;
 
+            //点击头像
             case R.id.user_head:
 
                 Intent intent = new Intent(this, PersonalCenterActivity.class);
                 intent.putExtra("uid", VideoID);
                 startActivity(intent);
+
+                break;
+
+            //操作的取消
+            case R.id.dialog_cancel:
+
+                dialog.dismiss();
 
                 break;
 
@@ -616,6 +638,7 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
 
     }
 
+    //查询是否关注了
     @Override
     public void VSelectFollow(String state) {
 
@@ -623,6 +646,7 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
 
         if (state.equals("200")) {
             handler.sendEmptyMessage(FROU);
+            isFollow = true;
         }
 
     }
@@ -639,13 +663,34 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
     }
 
     /**
-     * 弹出选择性别框
+     * 弹出操作的按钮
      */
-    public void showChoiceSex() {
+    public void showOperation() {
 
         dialog = new Dialog(this, R.style.ActionSheetDialogStyle);
         //填充对话框的布局
         dialog_operation = LayoutInflater.from(this).inflate(R.layout.dialog_operation, null);
+
+        dialog_delete = (TextView) dialog_operation.findViewById(R.id.dialog_delete);
+        dialog_delete.setOnClickListener(this);
+        dialog_cancel = (TextView) dialog_operation.findViewById(R.id.dialog_cancel);
+        dialog_cancel.setOnClickListener(this);
+        dialog_report = (TextView) dialog_operation.findViewById(R.id.dialog_report);
+        dialog_report.setOnClickListener(this);
+        dialog_c_follow = (TextView) dialog_operation.findViewById(R.id.dialog_c_follow);
+        dialog_c_follow.setOnClickListener(this);
+
+        //是否关注了当前用户，显示取消关注按钮
+        if(isFollow){
+            dialog_c_follow.setVisibility(View.VISIBLE);//显示取消关注
+        }
+
+        //判断是否是自己发表的视频
+        if (SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id, "").equals(VideoID)) {
+            dialog_delete.setVisibility(View.VISIBLE);//显示删除
+        }else{
+            dialog_report.setVisibility(View.VISIBLE);//显示举报
+        }
 
         //将布局设置给Dialog
         dialog.setContentView(dialog_operation);
@@ -688,7 +733,13 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(broadcastReceiver);
+        unregisterReceiver(broadcastReceiver);//销毁广播
+
+        videoItemView.stop();
+        videoItemView.release();
+        videoItemView.onDestroy();
+        videoItemView=null;
+
     }
 
 

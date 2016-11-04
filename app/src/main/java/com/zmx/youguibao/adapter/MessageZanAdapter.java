@@ -22,12 +22,12 @@ import java.util.List;
  *时间：2016/10/17 0017 上午 10:17
  *功能模块：点赞的消息通知
  */
-public class ZanMessageAdapter extends BaseAdapter{
+public class MessageZanAdapter extends BaseAdapter{
 
     private Context context;
     private List<VideoLikeJson> lists;
 
-    public ZanMessageAdapter(Context context,List<VideoLikeJson> lists){
+    public MessageZanAdapter(Context context, List<VideoLikeJson> lists){
 
         this.context = context;
         this.lists = lists;

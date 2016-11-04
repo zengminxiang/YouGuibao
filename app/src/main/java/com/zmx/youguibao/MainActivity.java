@@ -34,11 +34,15 @@ import com.jauker.widget.BadgeView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zhy.autolayout.AutoLayoutActivity;
 import com.zmx.youguibao.JPush.JPushReceiver;
+import com.zmx.youguibao.dao.ChatListMessageDao;
+import com.zmx.youguibao.dao.MessageDao;
 import com.zmx.youguibao.fragment.FindFragment;
 import com.zmx.youguibao.fragment.FollowFragment;
+import com.zmx.youguibao.mvp.bean.ChatMessagePojo;
 import com.zmx.youguibao.mvp.bean.MessageCountPojo;
 import com.zmx.youguibao.qupai.util.RecordResult;
 import com.zmx.youguibao.qupai.util.RequestCode;
+import com.zmx.youguibao.ui.CharListActivity;
 import com.zmx.youguibao.ui.FeedbackActivity;
 import com.zmx.youguibao.ui.LoginActivity;
 import com.zmx.youguibao.ui.MessageActivity;
@@ -82,13 +86,15 @@ public class MainActivity extends AutoLayoutActivity
     private NavigationView mNavigationView;//左侧头部
     private View headerLayout;//左侧头部
     private ImageViewUtil head;//左侧头像
-    private RelativeLayout message_layout;//消息
+    private RelativeLayout message_layout,chat_layout;//消息
     private TextView name;//左侧名称
     private BadgeView badgeView;//消息提示红点
     private int commentMessageCount;//评论点赞关注未读消息的数量
     private int noticeCount;//公告消息未读数
     private int chatCount;//聊天未读数
-    private MessageCountPojoDao dao = MyApplication.getInstance().getDaoSession().getMessageCountPojoDao();
+
+    private MessageDao dao = new MessageDao();
+    private ChatListMessageDao chatDao = new ChatListMessageDao();
 
 
     @Override
@@ -124,6 +130,9 @@ public class MainActivity extends AutoLayoutActivity
         head.setOnClickListener(this);
         message_layout = (RelativeLayout) headerLayout.findViewById(R.id.message_layout);
         message_layout.setOnClickListener(this);
+        chat_layout = (RelativeLayout) headerLayout.findViewById(R.id.chat_layout);
+        chat_layout.setOnClickListener(this);
+
         badgeView = new BadgeView(this);
         badgeView.setTargetView(message_layout);
         //设置相对位置
@@ -234,6 +243,26 @@ public class MainActivity extends AutoLayoutActivity
 
         if (id == R.id.nav_camera) {
 
+            ChatMessagePojo chat = new ChatMessagePojo();
+            chat.setUser_id("2");
+            chat.setContent("你好啊");
+            chat.setUser_name("曾敏祥");
+            chat.setLogin_id("1");
+            chat.setUser_head("hesad.png");
+            chat.setTime("2016-01-02");
+            chatDao.addChatList(chat);
+
+
+            ChatMessagePojo chat1 = new ChatMessagePojo();
+            chat1.setUser_id("3");
+            chat1.setContent("不好好啊");
+            chat1.setUser_name("曾小祥");
+            chat1.setLogin_id("1");
+            chat1.setUser_head("hesad.png");
+            chat1.setTime("2016-01-02");
+            chatDao.addChatList(chat1);
+
+
 
         } else if (id == R.id.nav_gallery) {
 
@@ -337,6 +366,11 @@ public class MainActivity extends AutoLayoutActivity
 
                 break;
 
+            case R.id.chat_layout:
+                Intent intents = new Intent(this, CharListActivity.class);
+                startActivity(intents);
+                break;
+
         }
 
     }
@@ -364,9 +398,9 @@ public class MainActivity extends AutoLayoutActivity
                     ImageLoadOptions.getOptions());
             name.setText(SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_name,""));
 
-            commentMessageCount = SelectMessageCount(2)+SelectMessageCount(3)+SelectMessageCount(4);//查询评论相关消息未读数
-            noticeCount = SelectMessageCount(1);//查询
-            chatCount = SelectMessageCount(5);//查询聊天未读数
+            commentMessageCount = dao.SelectMessageCount(2)+dao.SelectMessageCount(3)+dao.SelectMessageCount(4);//查询评论相关消息未读数
+            noticeCount = dao.SelectMessageCount(1);//查询
+            chatCount = dao.SelectMessageCount(5);//查询聊天未读数
             //设置显示未读消息条数
             badgeView.setBadgeCount(commentMessageCount);
 
@@ -376,56 +410,6 @@ public class MainActivity extends AutoLayoutActivity
             name.setText("点击头像登录...");
 
         }
-
-    }
-
-    /**
-     * 查询本地缓存了多少条未读消息
-     * @param type  消息的类型
-     */
-    public int SelectMessageCount(int type){
-
-        int counts = 0;
-        MessageCountPojo count = null;
-        List<MessageCountPojo> lmcps = MyApplication.getInstance().getDaoSession().getMessageCountPojoDao().queryBuilder()
-                .where(MessageCountPojoDao.Properties.Type.eq(type))
-                .orderAsc(MessageCountPojoDao.Properties.Type)
-                .list();
-
-        for(MessageCountPojo m:lmcps){
-
-            Log.e("未读消息","： "+m.getCount());
-            count = m;
-
-        }
-
-        if(count == null){
-
-            Log.e("ssssssss","sss"+type);
-            insertCount(type,0);//查询是否有未读消息类型了，没有的话就添加进去
-
-        }else {
-
-            counts = count.getCount();
-
-        }
-
-        return counts;
-
-    }
-
-    /**
-     * 插入数据
-     * @param type
-     * @param count
-     *
-     */
-    public void insertCount(int type,int count){
-
-        MessageCountPojo mcp = new MessageCountPojo();
-        mcp.setCount(count);
-        mcp.setType(type);
-        dao.insert(mcp);
 
     }
 
@@ -457,9 +441,9 @@ public class MainActivity extends AutoLayoutActivity
         //查询未读消息，在登录的状态执行
         if(!SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,"").equals("")){
 
-           commentMessageCount = SelectMessageCount(2)+SelectMessageCount(3)+SelectMessageCount(4);//查询评论相关消息未读数
-            noticeCount = SelectMessageCount(1);//查询
-            chatCount = SelectMessageCount(5);//查询聊天未读数
+           commentMessageCount = dao.SelectMessageCount(2)+dao.SelectMessageCount(3)+dao.SelectMessageCount(4);//查询评论相关消息未读数
+            noticeCount = dao.SelectMessageCount(1);//查询
+            chatCount = dao.SelectMessageCount(5);//查询聊天未读数
             //设置显示未读消息条数
             badgeView.setBadgeCount(commentMessageCount);
 

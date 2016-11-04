@@ -57,6 +57,7 @@ public class VideoPlayView extends RelativeLayout implements MediaPlayer.OnInfoL
         mVideoView.setOnCompletionListener(new IMediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(IMediaPlayer mp) {
+
                 view.setVisibility(View.GONE);
                 if (mediaController.getScreenOrientation((Activity) mContext)
                         == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {

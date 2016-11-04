@@ -48,4 +48,13 @@ public interface IUserModel {
      */
     void IQueryZanComment(String tag,String pagenow,String vuid,IDataRequestListener listener);
 
+    /**
+     * 查询某个用户关注未读消息
+     * @param tag
+     * @param pagenow
+     * @param buid
+     * @param listener
+     */
+    void IQueryFollowComment(String tag,String pagenow,String buid,IDataRequestListener listener);
+
 }

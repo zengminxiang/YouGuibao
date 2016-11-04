@@ -168,6 +168,23 @@ public class UrlConfig {
     }
 
     /**
+     * 查询未读的关注消息
+     * @param tag
+     * @param pagenow
+     * @param buid
+     * @return
+     */
+    public static String QueryFollowComment(String tag,String pagenow,String buid){
+
+        params = new HashMap<>();
+        params.put("tag",tag);
+        params.put("buid", buid);
+        params.put("pagenow", pagenow);
+        return CombinationUrl(UPLOADVIDEO,params);
+
+    }
+
+    /**
      * 查询某条评论
      * @param tag
      * @param vcid  评论id
@@ -344,7 +361,6 @@ public class UrlConfig {
     }
 
 //    http://localhost:8080/Guiyoubao/UserServlet?tag=UserVideos&pagenow=1&uid=2
-
     /**
      * 查询某个用户发的视频
      * @param tag
@@ -358,6 +374,28 @@ public class UrlConfig {
         params.put("tag",tag);
         params.put("uid", uid);
         params.put("pagenow",pagenow);
+        return CombinationUrl(USER,params);
+
+    }
+
+    /**
+     * 发送消息
+     * @param user_id
+     * @param login_id
+     * @param login_name
+     * @param login_head
+     * @param content
+     * @return
+     */
+    public static String SendMessage(String tag,String user_id,String login_id,String login_name,String login_head,String content){
+
+        params = new HashMap<>();
+        params.put("tag",tag);
+        params.put("user_id",user_id);
+        params.put("login_id", login_id);
+        params.put("login_name",login_name);
+        params.put("login_head",login_head);
+        params.put("content",content);
         return CombinationUrl(USER,params);
 
     }

@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +18,9 @@ import com.zmx.youguibao.BaseFragment;
 import com.zmx.youguibao.MyApplication;
 import com.zmx.youguibao.R;
 import com.zmx.youguibao.SharePreferenceUtil;
-import com.zmx.youguibao.adapter.MessageCommentAdapter;
-import com.zmx.youguibao.adapter.ZanMessageAdapter;
+import com.zmx.youguibao.adapter.MessageZanAdapter;
+import com.zmx.youguibao.dao.MessageDao;
 import com.zmx.youguibao.mvp.bean.MessageCountPojo;
-import com.zmx.youguibao.mvp.bean.VideoCommentJson;
 import com.zmx.youguibao.mvp.bean.VideoLikeJson;
 import com.zmx.youguibao.mvp.presenter.UserPresenter;
 import com.zmx.youguibao.mvp.view.MessageZanView;
@@ -44,14 +42,14 @@ public class ZanMessageFragment extends BaseFragment implements MessageZanView{
     //评论区
     private PtrClassicFrameLayout mPtrFrame;
     private ListView mListView;
-    private ZanMessageAdapter adapter;
+    private MessageZanAdapter adapter;
     private List<VideoLikeJson> listss = new ArrayList<>();
 
     private int page = 1;//当前页数
     private int pagenow;//总页数
     private int load_tag = 0;//上拉或者下拉标示、
 
-    private MessageCountPojoDao dao = MyApplication.getInstance().getDaoSession().getMessageCountPojoDao();
+    private MessageDao dao = new MessageDao();
 
     @Nullable
     @Override
@@ -66,9 +64,9 @@ public class ZanMessageFragment extends BaseFragment implements MessageZanView{
     protected void initView() {
 
         up = new UserPresenter(this.getContext(),this);
-        UpdateMessageCount();//重置未读消息
+        dao.UpdateMessageCount(3);//重置未读消息
         mListView = (ListView) this.findViewById(R.id.test_list_view);
-        adapter = new ZanMessageAdapter(mActivity,listss);
+        adapter = new MessageZanAdapter(mActivity,listss);
         mListView.setAdapter(adapter);
         mPtrFrame = (PtrClassicFrameLayout) this.findViewById(R.id.test_list_view_frame);
 
@@ -181,39 +179,6 @@ public class ZanMessageFragment extends BaseFragment implements MessageZanView{
             mPtrFrame.loadMoreComplete(true);
 
         }
-
-    }
-
-    //修改存储未读信息的个数为0条
-    public void UpdateMessageCount(){
-
-        MessageCountPojo count = SelectMessageCount(3);
-        count.setCount(0);
-        dao.update(count);//重新更新未读消息写入到数据库
-
-    }
-
-    /**
-     * 查询信息
-     *
-     * @param type 消息的类型
-     */
-    public MessageCountPojo SelectMessageCount(int type) {
-
-        MessageCountPojo count = null;
-
-        List<MessageCountPojo> lmcps = dao.queryBuilder()
-                .where(MessageCountPojoDao.Properties.Type.eq(type))
-                .orderAsc(MessageCountPojoDao.Properties.Type)
-                .list();
-
-        for (MessageCountPojo m : lmcps) {
-
-            count = m;
-
-        }
-
-        return count;
 
     }
 

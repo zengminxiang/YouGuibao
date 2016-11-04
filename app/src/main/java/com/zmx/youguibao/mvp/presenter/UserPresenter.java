@@ -5,6 +5,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.zmx.youguibao.mvp.bean.FollowUserPojo;
 import com.zmx.youguibao.mvp.bean.PersonalCenterPojo;
 import com.zmx.youguibao.mvp.bean.ReplyCommentJson;
 import com.zmx.youguibao.mvp.bean.UserJson;
@@ -14,6 +15,7 @@ import com.zmx.youguibao.mvp.bean.VideoListJson;
 import com.zmx.youguibao.mvp.model.IDataRequestListener;
 import com.zmx.youguibao.mvp.model.UserModel;
 import com.zmx.youguibao.mvp.view.LoginView;
+import com.zmx.youguibao.mvp.view.MessageFollowsView;
 import com.zmx.youguibao.mvp.view.MessageView;
 import com.zmx.youguibao.mvp.view.MessageZanView;
 import com.zmx.youguibao.mvp.view.PersonalCenterView;
@@ -38,6 +40,7 @@ public class UserPresenter{
     PersonalCenterView pcv;
     MessageView mv;
     MessageZanView mzv;
+    MessageFollowsView mfv;
 
     public UserPresenter(Context context, LoginView login){
 
@@ -59,6 +62,11 @@ public class UserPresenter{
 
     public UserPresenter(Context context, MessageZanView mzv){
         this.mzv = mzv;
+        model = new UserModel();
+    }
+
+    public UserPresenter(Context context, MessageFollowsView mfv){
+        this.mfv = mfv;
         model = new UserModel();
     }
 
@@ -214,6 +222,7 @@ public class UserPresenter{
 
     }
 
+    //查询未读关注消息
     public void SelectZanMessage(String tag, String pagenow, String vuid){
 
         model.QueryZanComment(tag, pagenow, vuid, new IDataRequestListener() {
@@ -244,6 +253,44 @@ public class UserPresenter{
 
             }
         });
+
+    }
+
+    //查询未读关注消息
+    public void SelectFollowsMessage(String tag, String pagenow, String buid){
+
+        model.QueryFollowComment(tag, pagenow, buid, new IDataRequestListener() {
+            @Override
+            public void loadSuccess(Object object) {
+
+                try {
+
+                    String json = new JSONObject(object.toString()).getString("follows");
+                    String pagenows = new JSONObject(object.toString()).getString("sum");
+
+                    List<FollowUserPojo> lists = new ArrayList<>();
+                    JSONArray array = new JSONArray(json);
+                    Gson gson = new Gson();
+
+                    for(int i=0;i<array.length();i++) {
+
+                        JSONObject like = array.getJSONObject(i);
+                        FollowUserPojo fup = gson.fromJson(like.toString(),FollowUserPojo.class);
+                        lists.add(fup);
+
+                    }
+
+                   mfv.SelectMessageComment(lists,pagenows);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+
+            }
+        });
+
 
     }
 
