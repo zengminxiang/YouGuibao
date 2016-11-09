@@ -75,7 +75,7 @@ public class ChatActivity extends BaseActivity implements JPushReceiver.ServerCh
         send.setOnClickListener(this);
         listView = (ListView) findViewById(R.id.listview);
         list = chatDao.SelectAllChat(SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id, ""),user_id);
-        Log.e("list","list"+list.size());
+
         info();
 
     }

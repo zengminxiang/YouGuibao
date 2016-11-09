@@ -224,7 +224,7 @@ public class UploadVideoPresenter {
                     String json = new JSONObject(object.toString()).getString("comments");
                     String pagenows = new JSONObject(object.toString()).getString("sum");
 
-                    Log.e("lists","lists"+json);
+                    Log.e("object","object"+object.toString());
                     List<VideoCommentJson> lists = new ArrayList<VideoCommentJson>();
 
                     JSONArray array = new JSONArray(json);

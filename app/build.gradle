@@ -87,10 +87,8 @@ dependencies {
     compile 'com.google.code.findbugs:jsr305:3.0.0'
     compile project(':Qupaisdk-release')
     compile 'com.zhy:autolayout:1.4.5'//屏幕适配
-    compile 'com.zhy:percent-support-extends:1.0.1'
-    //百分比的布局
-    compile 'com.mcxiaoke.volley:library:1.0.19'
-    //下拉刷新框架
+    compile 'com.mcxiaoke.volley:library:1.0.19'  //下拉刷新框架
+
     compile 'com.chanven.lib:cptr:1.1.0'
     //播放器
     compile 'com.google.code.gson:gson:2.6.2'

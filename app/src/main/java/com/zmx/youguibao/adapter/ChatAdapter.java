@@ -1,10 +1,12 @@
 package com.zmx.youguibao.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -60,9 +62,14 @@ public class ChatAdapter extends BaseAdapter{
 
         ChatPojo cp = lists.get(position);
 
-        if (cp.getType() == "0") {
+        Log.e("adapter的类型：",cp.getType());
+
+        if (cp.getType() == "0" || cp.getType().equals("0")) {
+
             return 0;
+
         }
+
         return 1;
     }
 
@@ -78,14 +85,17 @@ public class ChatAdapter extends BaseAdapter{
         ChatPojo chat = lists.get(position);
         ViewHolder holder = null;
 
+        Log.e("类型：","类型："+chat.getType());
+
         if (v == null) {
 
             holder = new ViewHolder();
 
+            Log.e("getItemView","getItemViewType(position)="+getItemViewType(position));
+
             if (getItemViewType(position) == 0) {
 
                 v = inflater.inflate(R.layout.chat_user, null);
-                holder.time = (TextView) v.findViewById(R.id.u_time);
                 holder.mMsg = (TextView) v.findViewById(R.id.u_msg);
                 holder.head = (ImageViewUtil) v
                         .findViewById(R.id.u_head);
@@ -94,7 +104,6 @@ public class ChatAdapter extends BaseAdapter{
             } else {
 
                 v = inflater.inflate(R.layout.chat_login, null);
-                holder.time = (TextView) v.findViewById(R.id.l_time);
                 holder.mMsg = (TextView) v.findViewById(R.id.l_msg);
                 holder.head = (ImageViewUtil) v
                         .findViewById(R.id.l_head);
@@ -108,17 +117,33 @@ public class ChatAdapter extends BaseAdapter{
 
         // 设置数据
         // 设置时间格式
-        holder.time.setText(chat.getTime());
         holder.mMsg.setText(chat.getMsg());
+
+        //处理刷新数据后闪屏问题
+        holder.head.setScaleType(ImageView.ScaleType.CENTER_CROP);
         if (getItemViewType(position) == 0) {
 
-            ImageLoader.getInstance().displayImage(UrlConfig.HEAD+chat.getUser_head(), holder.head,
-                    ImageLoadOptions.getOptions());
+            if(!lists.get(position).getUser_head().equals(holder.head.getTag())) {
+
+                holder.head.setTag(lists.get(position).getUser_head());
+
+                ImageLoader.getInstance().displayImage(UrlConfig.HEAD+chat.getUser_head(), holder.head,
+                        ImageLoadOptions.getOptions());
+
+            }
+
 
         } else {
 
-            ImageLoader.getInstance().displayImage(UrlConfig.HEAD+ SharePreferenceUtil.getInstance(context).getString(SharePreferenceUtil.u_headurl,""), holder.head,
-                    ImageLoadOptions.getOptions());
+            if(!lists.get(position).getUser_head().equals(holder.head.getTag())) {
+
+                holder.head.setTag(lists.get(position).getUser_head());
+
+                ImageLoader.getInstance().displayImage(UrlConfig.HEAD+ SharePreferenceUtil.getInstance(context).getString(SharePreferenceUtil.u_headurl,""), holder.head,
+                        ImageLoadOptions.getOptions());
+
+            }
+
 
         }
 
@@ -127,7 +152,6 @@ public class ChatAdapter extends BaseAdapter{
 
     private final class ViewHolder {
 
-        TextView time;
         TextView mMsg;
         ImageViewUtil head;
 

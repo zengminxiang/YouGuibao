@@ -5,9 +5,7 @@
     android:id="@+id/cv_item"
     >
 
-    <com.zhy.android.percent.support.PercentRelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:id="@+id/layout"
         android:padding="5dp"
@@ -17,19 +15,16 @@
 
         <RelativeLayout
             android:id="@+id/user_head"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_heightPercent="15%w"
-            app:layout_marginTopPercent="0%w"
+            android:layout_width="100px"
+            android:layout_height="100px"
             android:gravity="center"
-            app:layout_widthPercent="15%w"
             >
 
             <TextView
                 android:id="@+id/day"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="28sp"
+                android:textSize="50px"
                 android:text="30"
                 />
 
@@ -38,7 +33,7 @@
                 android:layout_below="@+id/day"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="11sp"
+                android:textSize="22px"
                 android:text="九月"
                 />
 
@@ -46,48 +41,42 @@
 
         <TextView
             android:id="@+id/user_name"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_textSizePercent="4.5%w"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/user_head"
-            app:layout_heightPercent="7%w"
-            app:layout_widthPercent="30%w"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="20px"
             android:text="发表了说说"
             />
 
         <TextView
             android:id="@+id/user_context"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_heightPercent="8%w"
-            app:layout_widthPercent="100%w"
-            android:layout_marginLeft="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20px"
             android:lines="2"
             android:ellipsize="end"
-            app:layout_textSizePercent="3%w"
+            android:textSize="20px"
+            android:layout_marginTop="10px"
             android:layout_below="@+id/user_name"
             android:layout_toRightOf="@+id/user_head"
             android:text="大家好，刚来两天的小剃刀，我的环境不知道怎么样？大家给我看看"
             />
 
-        <com.zhy.android.percent.support.PercentRelativeLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="5dp"
+            android:padding="10px"
             android:layout_below="@+id/user_head"
             android:id="@+id/layout_a"
             >
 
             <ImageView
                 android:id="@+id/video_image"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="500px"
+                android:layout_marginTop="10px"
                 android:background="@mipmap/filter_preview_lomo"
-                app:layout_heightPercent="60%w"
-                app:layout_widthPercent="100%w"
                 android:scaleType="fitXY"
                 />
 
@@ -98,7 +87,7 @@
                 android:layout_centerInParent="true"
                 />
 
-        </com.zhy.android.percent.support.PercentRelativeLayout>
+        </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/umeng_comm_feed_action_layout"
@@ -107,8 +96,8 @@
             android:layout_toRightOf="@+id/user_feed_head"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/layout_a"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginRight="40px"
+            android:layout_marginTop="40px"
             android:orientation="horizontal">
 
 
@@ -116,17 +105,17 @@
                 android:id="@+id/umeng_comm_like_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
+                android:layout_marginLeft="8px"
+                android:layout_marginRight="8px"
                 android:layout_weight="1"
                 android:gravity="center">
 
                 <TextView
                     android:id="@+id/like_tv"
                     android:layout_width="wrap_content"
-                    android:layout_height="20dp"
+                    android:layout_height="40px"
                     android:drawableLeft="@mipmap/waterflow_icon_like_normal"
-                    android:drawablePadding="4dp"
+                    android:drawablePadding="8px"
                     android:ellipsize="end"
                     android:gravity="center"
                     android:maxLength="6"
@@ -140,16 +129,16 @@
                 android:id="@+id/umeng_comm_comment_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
+                android:layout_marginLeft="8px"
                 android:layout_weight="1"
                 android:gravity="center">
 
                 <TextView
                     android:id="@+id/comment_tv"
                     android:layout_width="wrap_content"
-                    android:layout_height="20dp"
+                    android:layout_height="40px"
                     android:drawableLeft="@mipmap/tiezipinglunh"
-                    android:drawablePadding="4dp"
+                    android:drawablePadding="8px"
                     android:ellipsize="end"
                     android:gravity="center"
                     android:maxLength="6"
@@ -162,12 +151,12 @@
         </LinearLayout>
         <View
             android:layout_width="match_parent"
-            android:layout_height="0.5dp"
+            android:layout_height="1px"
             android:background="@color/bage"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="10px"
             android:layout_below="@+id/umeng_comm_feed_action_layout"
             ></View>
-    </com.zhy.android.percent.support.PercentRelativeLayout>
+    </RelativeLayout>
 
 
 

@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zmx.youguibao.BaseActivity;
 import com.zmx.youguibao.R;
+import com.zmx.youguibao.SharePreferenceUtil;
 import com.zmx.youguibao.adapter.UserVideoAdapter;
 import com.zmx.youguibao.mvp.bean.PersonalCenterPojo;
 import com.zmx.youguibao.mvp.bean.VideoListJson;
@@ -44,15 +45,17 @@ public class PersonalCenterActivity extends BaseActivity implements AbsListView.
     private int lastVisibileItem;
     private RelativeLayout rlTitle, relayout;//头部局
     private ImageView user_avatar;//头像
-    private TextView user_name, fans, follows, user_des, message;//姓名，粉丝，关注，简介
+    private TextView user_name, fans, follows, user_des, message, attention_user;//姓名，粉丝，关注，简介,关注
 
     private ListView lvTitleFade;
-    //    private PtrClassicFrameLayout ptrClassicFrameLayout;
     private View listView_footer;
     private UserVideoAdapter adapter;
     private List<VideoListJson> list = new ArrayList<>();
     private int pagenow;//总页数
     private int pagesize = 1;//当前页
+
+    private boolean isFollow = false;//判断是否关注了,默认是未关注
+    private int followType = 0;//对关注按钮的点击事件判断，1为进入修改个人资料界面，2为取消关注，3为添加关注
 
     private String uid;//要查询用户的id
 
@@ -88,11 +91,13 @@ public class PersonalCenterActivity extends BaseActivity implements AbsListView.
         //滑动监听，注意implements OnScrollListener
         lvTitleFade.setOnScrollListener(this);
         View headview = LayoutInflater.from(this).inflate(R.layout.personal_center_title, null);
+        attention_user = (TextView) headview.findViewById(R.id.attention_user);
+        attention_user.setOnClickListener(this);
         listView_footer = LayoutInflater.from(this).inflate(R.layout.listview_footer, null);
         login_load = (ProgressBar) listView_footer.findViewById(R.id.login_load);
         load_text = (TextView) listView_footer.findViewById(R.id.load_text);
         no_date = (TextView) listView_footer.findViewById(R.id.no_date);
-        lvTitleFade.addHeaderView(headview);
+        lvTitleFade.addHeaderView(headview, null, false);
         lvTitleFade.addFooterView(listView_footer);
 
         adapter = new UserVideoAdapter(this, list);
@@ -160,6 +165,7 @@ public class PersonalCenterActivity extends BaseActivity implements AbsListView.
             itemRecord.top = firstView.getTop();//获取距离顶部的距离
             recordSp.append(firstVisibleItem, itemRecord);//设置值
         }
+
         Log.e("dmdrs", "滑动距离：" + getScrollY());
         int ScrollY = getScrollY();
         if (ScrollY >= 0 && ScrollY <= 255) {
@@ -198,6 +204,7 @@ public class PersonalCenterActivity extends BaseActivity implements AbsListView.
 
     private final int ONE = 1;
     private final int TWO = 2;
+    private final int FROU = 3;
     private Handler handler = new Handler() {
 
         @Override
@@ -214,17 +221,28 @@ public class PersonalCenterActivity extends BaseActivity implements AbsListView.
                     fans.setText("粉丝：" + pcpojo.getFans());
                     follows.setText("关注：" + pcpojo.getFollows());
                     user_des.setText(pcpojo.getU_desc());
-
                     ImageLoader.getInstance().displayImage(UrlConfig.HEAD + pcpojo.getU_headurl(), user_avatar,
                             ImageLoadOptions.getOptions());
+
+                    //判断当前登录的用户是否查看的是自己个人资料(关注按钮变成个人资料，和隐藏聊天图标)
+                    if (SharePreferenceUtil.getInstance(mActivity).getString(SharePreferenceUtil.u_id, "").equals(pcpojo.getU_id())) {
+
+                        followType = 1;
+                        attention_user.setText("编辑个人资料");
+                        attention_user.setCompoundDrawables(null, null, null, null);
+                        message.setVisibility(View.GONE);
+
+                    } else {
+
+                        presenter.SelectFollows("SelectFollowUser", SharePreferenceUtil.getInstance(mActivity).getString(SharePreferenceUtil.u_id, ""), pcpojo.getU_id() + "");//查询是否关注
+
+                    }
 
                     break;
 
                 case TWO:
 
                     //判断是否是最后一页
-
-
                     if (pagenow == pagesize) {
 
                         isScroll = false;
@@ -235,6 +253,23 @@ public class PersonalCenterActivity extends BaseActivity implements AbsListView.
 
                     }
                     adapter.notifyDataSetChanged();
+
+                    break;
+
+                case FROU:
+
+                    if (isFollow) {
+
+                        followType = 2;
+                        attention_user.setText("取消关注");
+                        attention_user.setCompoundDrawables(null, null, null, null);
+
+                    } else {
+
+                        followType = 3;
+                        attention_user.setText("关注");
+
+                    }
 
                     break;
 
@@ -251,12 +286,38 @@ public class PersonalCenterActivity extends BaseActivity implements AbsListView.
 
             case R.id.message:
 
+
                 Bundle bundle = new Bundle();
                 bundle.putString("user_name", pcpojo.getU_name());
                 bundle.putString("user_id", pcpojo.getU_id());
                 bundle.putString("user_head", pcpojo.getU_headurl());
 
                 startActivity(ChatActivity.class, bundle);
+
+                break;
+
+            case R.id.attention_user:
+
+                switch (followType) {
+
+                    //进入修改个人资料界面
+                    case 1:
+
+                        break;
+
+                    //取消关注
+                    case 2:
+
+                        break;
+
+                    //添加关注
+                    case 3:
+
+                        presenter.AddFollows("AddFollowUser", SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id, ""), pcpojo.getU_id());
+
+                        break;
+
+                }
 
                 break;
 
@@ -281,6 +342,48 @@ public class PersonalCenterActivity extends BaseActivity implements AbsListView.
         }
 
         handler.sendEmptyMessage(TWO);
+
+    }
+
+    /**
+     * 查询是否关注了
+     *
+     * @param state
+     */
+    @Override
+    public void VSelectFollow(String state) {
+
+        if (state.equals("200")) {
+
+            isFollow = true;
+
+        }
+
+        handler.sendEmptyMessage(FROU);
+
+    }
+
+    /**
+     * 添加关注
+     *
+     * @param state
+     */
+    @Override
+    public void VAddFollow(String state) {
+
+        if (state.equals("200")) {
+
+            toast("关注成功");
+            isFollow = true;
+
+        } else {
+
+            toast("关注失败");
+            isFollow = false;
+
+        }
+
+        handler.sendEmptyMessage(FROU);
 
     }
 

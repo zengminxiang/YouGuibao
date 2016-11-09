@@ -15,9 +15,11 @@ import com.zhy.autolayout.utils.AutoUtils;
 import com.zmx.youguibao.R;
 import com.zmx.youguibao.mvp.bean.VideoListJson;
 import com.zmx.youguibao.utils.UrlConfig;
+import com.zmx.youguibao.utils.Utils;
 import com.zmx.youguibao.utils.view.ImageLoadOptions;
 import com.zmx.youguibao.utils.view.ImageViewUtil;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -68,7 +70,7 @@ public class VideoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         NormalViewHolder viewholder = (NormalViewHolder) holder;
         viewholder.name.setText(lists.get(position).getU_name());
         viewholder.context.setText(lists.get(position).getV_content());
-        viewholder.time.setText(lists.get(position).getV_time());
+        viewholder.time.setText(Utils.dateDiff(lists.get(position).getV_time(),new Date(),"yyyy-MM-dd HH:mm:ss"));
         viewholder.comment_tv.setText(lists.get(position).getCount_comment());
         viewholder.like_tv.setText(lists.get(position).getCount_like());
 
@@ -81,6 +83,7 @@ public class VideoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     ImageLoadOptions.getOptions());
 
         }
+
         ImageLoader.getInstance().displayImage(UrlConfig.HEAD+lists.get(position).getU_headurl(), viewholder.head,
                 ImageLoadOptions.getOptions());
 

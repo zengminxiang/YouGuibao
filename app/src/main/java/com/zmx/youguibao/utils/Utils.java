@@ -1,12 +1,16 @@
 package com.zmx.youguibao.utils;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.zmx.youguibao.MyApplication;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -79,5 +83,62 @@ public class Utils {
         Matcher m = p.matcher(str);
         return m.matches();
     }
+
+    /**
+     * 处理发表说说时间
+     * @param startTime
+     * @param date
+     * @param format
+     * @return
+     */
+    public static String dateDiff(String startTime, Date date, String format) {
+
+
+        //按照传入的格式生成一个simpledateformate对象
+        SimpleDateFormat sd = new SimpleDateFormat(format);
+        String endTime = sd.format(date);
+
+
+        Log.e("当前时间：","当前时间："+endTime);
+        Log.e("发表时间：","发表时间："+startTime);
+
+        long nd = 1000 * 24 * 60 * 60;//一天的毫秒数
+        long nh = 1000 * 60 * 60;//一小时的毫秒数
+        long nm = 1000 * 60;//一分钟的毫秒数
+        long ns = 1000;//一秒钟的毫秒数long diff;try {
+        //获得两个时间的毫秒时间差异
+        long diff;
+        try {
+
+            diff = sd.parse(endTime).getTime() - sd.parse(startTime).getTime();
+
+            long day = diff / nd;//计算差多少天
+            long hour = diff % nd / nh;//计算差多少小时
+            long min = diff % nd % nh / nm;//计算差多少分钟
+            long sec = diff % nd % nh % nm / ns;//计算差多少秒//输出结果
+//	    	("时间相差："+day+"天"+hour+"小时"+min+"分钟"+sec+"秒。");
+
+            if (day != 0) {
+                return day + "天前";
+            } else if (hour != 0) {
+                return hour + "小时前";
+            } else if (min != 0 && min > 10) {
+                return min + "分钟前";
+            } else if (min != 0 && min < 10) {
+                return "刚刚";
+            } else {
+
+                return "刚刚";
+            }
+
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return "0";
+
+    }
+
 
 }

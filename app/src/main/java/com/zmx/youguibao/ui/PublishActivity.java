@@ -24,13 +24,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.duanqu.qupai.bean.QupaiUploadTask;
 import com.duanqu.qupai.upload.QupaiUploadListener;
 import com.duanqu.qupai.upload.UploadService;
-import com.zhy.android.percent.support.PercentRelativeLayout;
 import com.zmx.youguibao.BaseActivity;
 import com.zmx.youguibao.R;
 import com.zmx.youguibao.SharePreferenceUtil;
@@ -42,8 +42,6 @@ import com.zmx.youguibao.qupai.bean.Contant;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.UUID;
 
 /**
@@ -58,7 +56,7 @@ public class PublishActivity extends BaseActivity implements UploadVideoView{
     private PopupWindow pw;//弹出框
     private TextView addre;//选择地址
     private EditText content;//发表的内容
-    private PercentRelativeLayout layout;
+    private RelativeLayout layout;
     private int screenWidth;
 
     private String videourl;//视频路径
@@ -90,7 +88,7 @@ public class PublishActivity extends BaseActivity implements UploadVideoView{
         Bitmap bitmap = getLoacalBitmap(videoimg);
         video_img = (ImageView) findViewById(R.id.video_img);
         video_img.setImageBitmap(bitmap);
-        layout = (PercentRelativeLayout) findViewById(R.id.layout);
+        layout = (RelativeLayout) findViewById(R.id.layout);
 
         publish = (ImageView) findViewById(R.id.publish);
         publish.setOnClickListener(this);
@@ -276,6 +274,7 @@ public class PublishActivity extends BaseActivity implements UploadVideoView{
                 presenter.Upload("publish",SharePreferenceUtil.getInstance(mActivity).getString(SharePreferenceUtil.u_id,""),address,content.getText().toString(),imageUrl,videoUrl);
             }
         });
+
         String uuid = UUID.randomUUID().toString();
         Log.e("uuid","uuid"+uuid);
         Log.e("QupaiAuth",  "accessToken" + SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.accessToken,"") +"space"+ Contant.space);

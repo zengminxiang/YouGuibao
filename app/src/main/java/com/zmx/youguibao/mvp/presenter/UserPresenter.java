@@ -291,7 +291,53 @@ public class UserPresenter{
             }
         });
 
+    }
 
+
+    //查询是否关注某个用户了
+    public void SelectFollows(String tag,String guid,String buid){
+
+        model.SelectFollow(tag, guid, buid, new IDataRequestListener() {
+            @Override
+            public void loadSuccess(Object object) {
+
+                try {
+
+                    String state = new JSONObject(object.toString()).getString("state");
+                    pcv.VSelectFollow(state);
+
+                } catch (JSONException e) {
+
+                    e.printStackTrace();
+
+                }
+
+            }
+        });
+    }
+
+    /**
+     * 添加关注
+     * @param tag
+     * @param guid
+     * @param buid
+     */
+    public void AddFollows(String tag,String guid,String buid){
+        model.AddUserFollow(tag, guid, buid, new IDataRequestListener() {
+            @Override
+            public void loadSuccess(Object object) {
+                try {
+
+                    String state = new JSONObject(object.toString()).getString("state");
+                    pcv.VAddFollow(state);
+
+                } catch (JSONException e) {
+
+                    e.printStackTrace();
+
+                }
+            }
+        });
     }
 
 }

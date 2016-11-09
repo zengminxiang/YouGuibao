@@ -47,6 +47,7 @@ public class AuthTest {
 
             @Override
             public void onAuthComplte(int responseCode, String responseMessage) {
+
                 Log.e(AUTHTAG, "onAuthComplte" + responseCode + "message" + responseMessage);
                 Contant.accessToken = responseMessage;
                 SharePreferenceUtil.getInstance(context).saveKeyObjValue(SharePreferenceUtil.accessToken,responseMessage);

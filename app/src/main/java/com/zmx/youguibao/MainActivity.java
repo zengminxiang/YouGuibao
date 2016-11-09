@@ -92,6 +92,7 @@ public class MainActivity extends AutoLayoutActivity
     private int commentMessageCount;//评论点赞关注未读消息的数量
     private int noticeCount;//公告消息未读数
     private int chatCount;//聊天未读数
+    private DrawerLayout drawer;//左侧控件
 
     private MessageDao dao = new MessageDao();
     private ChatListMessageDao chatDao = new ChatListMessageDao();
@@ -132,6 +133,8 @@ public class MainActivity extends AutoLayoutActivity
         message_layout.setOnClickListener(this);
         chat_layout = (RelativeLayout) headerLayout.findViewById(R.id.chat_layout);
         chat_layout.setOnClickListener(this);
+
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         badgeView = new BadgeView(this);
         badgeView.setTargetView(message_layout);
@@ -221,6 +224,7 @@ public class MainActivity extends AutoLayoutActivity
 
         if (id == R.id.action_pubish) {
 
+
             QupaiService qupaiService = QupaiManager
                     .getQupaiService(context);
             //引导，只显示一次，这里用SharedPreferences记录
@@ -229,7 +233,6 @@ public class MainActivity extends AutoLayoutActivity
                     "Qupai_has_video_exist_in_user_list_pref", true);
 
             qupaiService.showRecordPage(MainActivity.this, RequestCode.RECORDE_SHOW, isGuideShow);
-
 
         }
 
@@ -243,31 +246,11 @@ public class MainActivity extends AutoLayoutActivity
 
         if (id == R.id.nav_camera) {
 
-            ChatMessagePojo chat = new ChatMessagePojo();
-            chat.setUser_id("2");
-            chat.setContent("你好啊");
-            chat.setUser_name("曾敏祥");
-            chat.setLogin_id("1");
-            chat.setUser_head("hesad.png");
-            chat.setTime("2016-01-02");
-            chatDao.addChatList(chat);
-
-
-            ChatMessagePojo chat1 = new ChatMessagePojo();
-            chat1.setUser_id("3");
-            chat1.setContent("不好好啊");
-            chat1.setUser_name("曾小祥");
-            chat1.setLogin_id("1");
-            chat1.setUser_head("hesad.png");
-            chat1.setTime("2016-01-02");
-            chatDao.addChatList(chat1);
-
 
 
         } else if (id == R.id.nav_gallery) {
 
             if(!SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,"").equals("")){
-
 
 
             }else{
@@ -290,14 +273,12 @@ public class MainActivity extends AutoLayoutActivity
 
             }
 
-
         }else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
 
@@ -347,15 +328,25 @@ public class MainActivity extends AutoLayoutActivity
 
             case R.id.nav_head:
 
-                Intent intent = new Intent(this, PersonalCenterActivity.class);
-                intent.putExtra("uid",SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,""));
-                startActivity(intent);
+
+                if(!SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,"").equals("")){
+
+                    Intent intent = new Intent(this, PersonalCenterActivity.class);
+                    intent.putExtra("uid",SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,""));
+                    startActivity(intent);
+
+                }else{
+                    Intent intents = new Intent(this, LoginActivity.class);
+                    startActivity(intents);
+                }
+                drawer.closeDrawer(GravityCompat.START);
 
                 break;
 
             case R.id.message_layout:
 
                 if(!SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,"").equals("")){
+
                     Intent i = new Intent(this, MessageActivity.class);
                     startActivity(i);
 
@@ -363,12 +354,23 @@ public class MainActivity extends AutoLayoutActivity
                     Intent intents = new Intent(this, LoginActivity.class);
                     startActivity(intents);
                 }
-
+                drawer.closeDrawer(GravityCompat.START);
                 break;
 
             case R.id.chat_layout:
-                Intent intents = new Intent(this, CharListActivity.class);
-                startActivity(intents);
+
+
+                if(!SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,"").equals("")){
+
+                    Intent intents = new Intent(this, CharListActivity.class);
+                    startActivity(intents);
+
+                }else{
+                    Intent intents = new Intent(this, LoginActivity.class);
+                    startActivity(intents);
+                }
+                drawer.closeDrawer(GravityCompat.START);
+
                 break;
 
         }

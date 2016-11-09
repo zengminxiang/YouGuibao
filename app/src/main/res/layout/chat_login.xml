@@ -5,39 +5,39 @@
     android:gravity="center"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/l_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="2014年12月26日 17：49"
-        android:textSize="25px" />
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
         <com.zmx.youguibao.utils.view.ImageViewUtil
             android:id="@+id/l_head"
-            android:layout_width="120px"
-            android:layout_height="120px"
+            android:layout_width="100px"
+            android:layout_height="100px"
             android:layout_marginRight="10px"
             android:layout_alignParentRight="true"
             android:scaleType="centerCrop" />
 
-        <TextView
-            android:id="@+id/textusername"
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@+id/l_head"
-            android:text="大Q" />
+            android:layout_marginLeft="10px"
+            android:layout_marginRight="10px"
+            android:background="@drawable/balloon_outgoing_normal"
+            >
+            <TextView
+                android:id="@+id/l_msg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20px"
+                android:layout_marginBottom="20px"
+                android:paddingLeft="20px"
+                android:paddingRight="20px"
+                android:textSize="30px"
+                android:gravity="center" />
 
-        <TextView
-            android:id="@+id/l_msg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/textusername"
-            android:layout_toLeftOf="@+id/l_head"
-            android:background="@mipmap/chatto_bg_normal"/>
+        </RelativeLayout>
+
     </RelativeLayout>
 
     <View

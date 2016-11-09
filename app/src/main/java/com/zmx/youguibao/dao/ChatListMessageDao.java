@@ -28,13 +28,17 @@ public class ChatListMessageDao {
         //先查询当前的记录是不是已经在回话中了
         ChatMessagePojo c = selectChatlist(chat.getUser_id());
 
-        //如果等于null就可以插入，没有就省了
+        //如果等于null就可以插入最新聊天记录，有的的话就更新聊天的内容
         if(c == null){
+
             dao.insert(chat);
+
         }else {
 
-
-            Log.e("存在","存在:"+c.getUser_name());
+            //更新最新的未读消息
+            c.setContent(chat.getContent());
+            c.setTime(chat.getTime());
+            UpdateChatContent(c);
 
         }
 
@@ -55,6 +59,17 @@ public class ChatListMessageDao {
     public List<ChatMessagePojo> selectAllChatlist(String login_id){
 
         return dao.queryBuilder().where(ChatMessagePojoDao.Properties.Login_id.ge(login_id)).build().list();
+
+    }
+
+    /**
+     * 修改最新未读消息的提示
+     * @param c
+     */
+    public void UpdateChatContent(ChatMessagePojo c){
+
+        dao.update(c);
+
 
     }
 

@@ -206,6 +206,7 @@ public class LoginActivity extends BaseActivity implements LoginView{
     @Override
     public void Login(UserJson user) {
         progressDialog.dismiss();
+
         // 调用 Handler 来异步设置别名
         mHandler.sendMessage(mHandler.obtainMessage(MSG_SET_ALIAS, user.getU_id()));
         toast("登录成功");
@@ -227,6 +228,10 @@ public class LoginActivity extends BaseActivity implements LoginView{
 
     }
 
+
+    /**
+     * 设置极光推送别名
+     */
 
     private final TagAliasCallback mAliasCallback = new TagAliasCallback() {
         @Override

@@ -75,7 +75,7 @@ public class JPushReceiver extends BroadcastReceiver {
 
                         JSONObject jsonMessage = new JSONObject(message);
 
-                        //如果当前用户没有在会话列表中就添加
+                        //如果当前用户没有在会话列表中就添加,如果有的话就更新最新那条未读消息
                         ChatMessagePojo chat = new ChatMessagePojo();
                         chat.setLogin_id(SharePreferenceUtil.getInstance(context).getString(SharePreferenceUtil.u_id, ""));
                         chat.setUser_name(jsonMessage.getString("login_name"));
@@ -87,6 +87,10 @@ public class JPushReceiver extends BroadcastReceiver {
                         chat.setNo_reading("0");
                         //添加到会话列表
                         listDao.addChatList(chat);
+                        //通知更新
+                        for(int i = 0;i<chatListLiseners.size();i++)
+                            chatListLiseners.get(i).onServerChatList(chat);
+
 
                         //把消息加入到聊天记录中
                         ChatPojo chatPojo = new ChatPojo();
@@ -99,7 +103,7 @@ public class JPushReceiver extends BroadcastReceiver {
                         chatPojo.setUser_head(jsonMessage.getString("login_head"));
                         chatPojo.setUser_id(jsonMessage.getString("login_id"));
                         chatDao.addChatmessage(chatPojo);//添加到数据库记录表
-                        // 回调函数
+                        // 回调函数 通知更新
                         for (int i = 0; i < chatListeners.size(); i++)
                             chatListeners.get(i).onServerChat(chatPojo);
 
@@ -165,6 +169,13 @@ public class JPushReceiver extends BroadcastReceiver {
     public interface ServerChat{
         void onServerChat(ChatPojo chatPojo);//更新新消息
     }
+
+    //聊天列表回调接口
+    public static ArrayList<ServerChatList> chatListLiseners = new ArrayList<>();
+    public interface ServerChatList{
+        void onServerChatList(ChatMessagePojo chat);//更新聊天列表
+    }
+
 
 
 }

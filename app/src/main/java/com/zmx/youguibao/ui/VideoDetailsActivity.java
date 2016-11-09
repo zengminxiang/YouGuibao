@@ -54,9 +54,6 @@ import com.zmx.youguibao.utils.view.StatusBarUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-import greenDao.DaoMaster;
-import greenDao.DaoSession;
-import greenDao.MessageCountPojoDao;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 
 /**
@@ -84,7 +81,7 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
     //评论区
     private PtrClassicFrameLayout ptrClassicFrameLayout;
     private ListView mListView;
-    private View headview;
+    private View headview,footView;
     private CommentAdapter adapter;
 
     //点赞
@@ -130,7 +127,6 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
                         View itemView = (View) frameLayout.getParent();
 
                         if (itemView != null) {
-
                             itemView.findViewById(R.id.showview).setVisibility(View.VISIBLE);
                         }
                     }
@@ -140,12 +136,23 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
 
                 case TWO://更新adapter的数据
 
-                    //判断是否是最后一页
-                    if (pagenow == pagesize) {
+                   //判断有没有评论
+                    if(listss.size() <= 0){
 
                         ptrClassicFrameLayout.setLoadMoreEnable(false);
 
+                    }else{
+
+                        if (pagenow == pagesize || pagenow == 0) {
+
+                            ptrClassicFrameLayout.setLoadMoreEnable(false);
+
+                        }
+
+                        mListView.removeFooterView(footView);
+
                     }
+
                     adapter.notifyDataSetChanged();
 
                     break;
@@ -201,9 +208,11 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
         presenter.QueryComment("QueryComment", pagesize + "", videoListJson.getV_id() + "");//查询评论
 
         headview = View.inflate(this, R.layout.video_xml_head, null);
+        footView = View.inflate(this,R.layout.list_foot_no_data,null);
         ptrClassicFrameLayout = (PtrClassicFrameLayout) this.findViewById(R.id.test_list_view_frame);
         mListView = (ListView) this.findViewById(R.id.test_list_view);
         mListView.addHeaderView(headview);
+        mListView.addFooterView(footView);
         adapter = new CommentAdapter(this, listss);
         mListView.setAdapter(adapter);
         commentEdit = (EditText) findViewById(R.id.comment);
@@ -291,10 +300,17 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
                     @Override
                     public void run() {
 
+                        if (pagenow == pagesize || pagenow == 0) {
+
+                            ptrClassicFrameLayout.setLoadMoreEnable(false);
+
+                        }else {
+
                         pagesize++;
                         presenter.QueryComment("QueryComment", pagesize + "", videoListJson.getV_id() + "");//查询评论
-
                         ptrClassicFrameLayout.loadMoreComplete(true);
+
+                        }
                     }
                 }, 1000);
 
@@ -530,14 +546,11 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
     @Override
     public void QueryComment(List<VideoCommentJson> lists, String pagenow) {
 
-        Log.e("pagenowsss","pagenowssss"+pagenow);
         this.pagenow = Integer.parseInt(pagenow);
 
         for (VideoCommentJson v : lists) {
             listss.add(v);
         }
-
-        Log.e("查询了评论", "查了");
 
         handler.sendEmptyMessage(TWO);
 
@@ -552,7 +565,8 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
     public void AddComment(VideoCommentJson comment) {
 
         toast("评论成功，经验+1");
-        if (pagenow == pagesize) {
+        if (pagenow == pagesize || pagenow == 0) {
+
             listss.add(comment);
             handler.sendEmptyMessage(TWO);
 

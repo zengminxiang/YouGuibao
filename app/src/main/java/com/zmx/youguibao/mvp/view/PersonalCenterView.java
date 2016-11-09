@@ -18,4 +18,17 @@ public interface PersonalCenterView {
     //用户发表的视频
     void SelectUserVideos(int sun,List<VideoListJson> lists);
 
+    /**
+     * 查询是否关注
+     * @param state
+     */
+    void VSelectFollow(String state);
+
+    /**
+     * 添加关注
+     * @param state
+     */
+    void VAddFollow(String state);
+
+
 }
