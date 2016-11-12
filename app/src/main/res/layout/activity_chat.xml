@@ -5,8 +5,11 @@
     android:layout_height="match_parent"
     tools:context="com.zmx.youguibao.ui.ChatActivity">
 
+    <include android:id="@+id/title" layout="@layout/activity_head_layout"></include>
+
     <ListView
         android:id="@+id/listview"
+        android:layout_below="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:cacheColorHint="#00000000"

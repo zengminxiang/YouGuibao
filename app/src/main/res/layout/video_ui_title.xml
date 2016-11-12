@@ -1,23 +1,32 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="100px"
-    android:orientation="vertical">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/title_bage"
+    android:id="@+id/rlTitle"
+    >
+    <!--沉浸式activity，这个view是用来占位的-->
+    <View
+        android:id="@+id/position_view"
+        android:layout_width="30px"
+        android:layout_height="30px" />
 
     <RelativeLayout
+        android:layout_below="@+id/position_view"
         android:id="@+id/video_title_rl"
         android:layout_width="match_parent"
         android:layout_height="100px"
-        android:background="@color/white"
+        android:background="@color/title_bage"
         >
 
-        <View
-            android:id="@+id/back"
-            android:layout_width="70px"
-            android:layout_height="70px"
+        <ImageView
+            android:id="@+id/head_left"
+            android:layout_width="60px"
+            android:layout_height="60px"
             android:layout_centerVertical="true"
-            android:onClick="onClickBack"
-            android:background="@drawable/buttonstyle_a" />
+            android:padding="16px"
+            android:clickable="true"
+            android:scaleType="fitXY"
+            android:background="@drawable/head_left_btn" />
 
         <ImageView
             android:id="@+id/follow"
@@ -25,7 +34,7 @@
             android:layout_height="70px"
             android:layout_centerVertical="true"
             android:layout_marginLeft="30px"
-            android:layout_toRightOf="@+id/back"
+            android:layout_toRightOf="@+id/head_left"
             android:background="@drawable/ic_follow_a" />
 
         <ImageView
@@ -60,4 +69,4 @@
     </RelativeLayout>
 
 
-</LinearLayout>
+</RelativeLayout>

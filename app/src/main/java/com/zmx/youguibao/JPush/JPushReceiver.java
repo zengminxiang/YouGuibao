@@ -73,11 +73,13 @@ public class JPushReceiver extends BroadcastReceiver {
 
                     if (type.equals("5")) {
 
+                        Log.e("jsonObject","jsonObject:"+jsonObject.toString());
+
                         JSONObject jsonMessage = new JSONObject(message);
 
                         //如果当前用户没有在会话列表中就添加,如果有的话就更新最新那条未读消息
                         ChatMessagePojo chat = new ChatMessagePojo();
-                        chat.setLogin_id(SharePreferenceUtil.getInstance(context).getString(SharePreferenceUtil.u_id, ""));
+                        chat.setLogin_id(MyApplication.getU_id());
                         chat.setUser_name(jsonMessage.getString("login_name"));
                         chat.setUser_head(jsonMessage.getString("login_head"));
                         chat.setUser_id(jsonMessage.getString("login_id"));
@@ -88,13 +90,13 @@ public class JPushReceiver extends BroadcastReceiver {
                         //添加到会话列表
                         listDao.addChatList(chat);
                         //通知更新
-                        for(int i = 0;i<chatListLiseners.size();i++)
+                        for (int i = 0; i < chatListLiseners.size(); i++)
                             chatListLiseners.get(i).onServerChatList(chat);
 
 
                         //把消息加入到聊天记录中
                         ChatPojo chatPojo = new ChatPojo();
-                        chatPojo.setLogin_id(SharePreferenceUtil.getInstance(context).getString(SharePreferenceUtil.u_id, ""));
+                        chatPojo.setLogin_id(MyApplication.getU_id());
                         SimpleDateFormat dff = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                         chatPojo.setTime(dff.format(new Date()));
                         chatPojo.setType("0");
@@ -107,20 +109,18 @@ public class JPushReceiver extends BroadcastReceiver {
                         for (int i = 0; i < chatListeners.size(); i++)
                             chatListeners.get(i).onServerChat(chatPojo);
 
-                    } else {
-
-                        //查询本地数据库，拿到消息的类型，进行更改未读消息
-                        MessageCountPojo count = MessageDao.SelectMessage(Integer.parseInt(type));
-                        int counts = count.getCount();
-                        counts++;
-                        count.setCount(counts);
-                        MessageDao.UpdateMessage(count);//重新更新未读消息写入到数据库
-
-                        // 回调函数
-                        for (int i = 0; i < msgListeners.size(); i++)
-                            msgListeners.get(i).onServerMessage(counts);
-
                     }
+
+                    //查询本地数据库，拿到消息的类型，进行更改未读消息
+                    MessageCountPojo count = MessageDao.SelectMessage(Integer.parseInt(type));
+                    int counts = count.getCount();
+                    counts++;
+                    count.setCount(counts);
+                    MessageDao.UpdateMessage(count);//重新更新未读消息写入到数据库
+
+                    // 回调函数
+                    for (int i = 0; i < msgListeners.size(); i++)
+                        msgListeners.get(i).onServerMessage(Integer.parseInt(type), counts);
 
 
                 } catch (JSONException e) {
@@ -159,23 +159,23 @@ public class JPushReceiver extends BroadcastReceiver {
 
     public interface ServerMessage {
 
-        void onServerMessage(int count);//未读消息
+        void onServerMessage(int type, int count);//未读消息
 
     }
 
     //聊天消息回调接口
     public static ArrayList<ServerChat> chatListeners = new ArrayList<>();
 
-    public interface ServerChat{
+    public interface ServerChat {
         void onServerChat(ChatPojo chatPojo);//更新新消息
     }
 
     //聊天列表回调接口
     public static ArrayList<ServerChatList> chatListLiseners = new ArrayList<>();
-    public interface ServerChatList{
+
+    public interface ServerChatList {
         void onServerChatList(ChatMessagePojo chat);//更新聊天列表
     }
-
 
 
 }

@@ -67,9 +67,10 @@ public class RegisterActivity extends BaseActivity implements ObservableScrollVi
     @Override
     protected void initViews() {
 
-        // 1. 沉浸式状态栏
+        // 沉浸式状态栏
         positionView = findViewById(R.id.position_view);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+
             Window window = getWindow();
             window.setFlags(
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
@@ -81,10 +82,8 @@ public class RegisterActivity extends BaseActivity implements ObservableScrollVi
             positionView.setLayoutParams(lp);
 
         }
-
         AndroidBug5497Workaround.assistActivity(this);
 
-        setTitleGone();
         phone = getIntent().getStringExtra("phone");
         Log.e("phone","手机号"+phone);
         edit_sex = (TextView) findViewById(R.id.edit_sex);
@@ -249,33 +248,5 @@ public class RegisterActivity extends BaseActivity implements ObservableScrollVi
     }
 
 
-    /**
-     * 调整沉浸式菜单的title
-     */
-    protected void dealStatusBar(View view) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            int statusBarHeight = getStatusBarHeight();
-            ViewGroup.LayoutParams lp = view.getLayoutParams();
-            lp.height = statusBarHeight;
-            view.setLayoutParams(lp);
-        }
-    }
 
-    private int getStatusBarHeight() {
-
-        Class<?> c = null;
-        Object obj = null;
-        Field field = null;
-        int x = 0, statusBarHeight = 0;
-        try {
-            c = Class.forName("com.android.internal.R$dimen");
-            obj = c.newInstance();
-            field = c.getField("status_bar_height");
-            x = Integer.parseInt(field.get(obj).toString());
-            statusBarHeight = getResources().getDimensionPixelSize(x);
-        } catch (Exception e1) {
-            e1.printStackTrace();
-        }
-        return statusBarHeight;
-    }
 }

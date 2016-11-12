@@ -1,11 +1,17 @@
 package com.zmx.youguibao.ui;
 
+import android.content.Context;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.util.SparseArray;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView.OnScrollListener;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +24,7 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zmx.youguibao.BaseActivity;
+import com.zmx.youguibao.MyApplication;
 import com.zmx.youguibao.R;
 import com.zmx.youguibao.SharePreferenceUtil;
 import com.zmx.youguibao.adapter.UserVideoAdapter;
@@ -43,9 +50,9 @@ public class PersonalCenterActivity extends BaseActivity implements AbsListView.
     private SparseArray recordSp = new SparseArray(0);
     private int mCurrentfirstVisibleItem = 0;
     private int lastVisibileItem;
-    private RelativeLayout rlTitle, relayout;//头部局
-    private ImageView user_avatar;//头像
-    private TextView user_name, fans, follows, user_des, message, attention_user;//姓名，粉丝，关注，简介,关注
+    private RelativeLayout rlTitle;//头部局
+    private ImageView user_avatar,head_left;//头像
+    private TextView user_name, fans, follows, user_des, head_right_message, attention_user,head_title;//姓名，粉丝，关注，简介,关注
 
     private ListView lvTitleFade;
     private View listView_footer;
@@ -74,7 +81,21 @@ public class PersonalCenterActivity extends BaseActivity implements AbsListView.
     @Override
     protected void initViews() {
 
-        setTitleGone();
+        // 沉浸式状态栏
+        positionView = findViewById(R.id.position_view);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+
+            Window window = getWindow();
+            window.setFlags(
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+            int statusBarHeight = getStatusBarHeight();
+            ViewGroup.LayoutParams lp = positionView.getLayoutParams();
+            lp.height = statusBarHeight;
+            positionView.setLayoutParams(lp);
+
+        }
         showLoadingView();
         uid = this.getIntent().getStringExtra("uid");
         presenter = new UserPresenter(this, this);
@@ -84,32 +105,33 @@ public class PersonalCenterActivity extends BaseActivity implements AbsListView.
         rlTitle = (RelativeLayout) findViewById(R.id.rlTitle);
         lvTitleFade = (ListView) findViewById(R.id.lvTitleFade);
         lvTitleFade.setVisibility(View.GONE);
-        relayout = (RelativeLayout) findViewById(R.id.relayout);
-        StatusBarUtil.setTransparentForImageView(this, relayout);//状态栏一体化
         //设置标题背景透明
         rlTitle.getBackground().setAlpha(0);
         //滑动监听，注意implements OnScrollListener
         lvTitleFade.setOnScrollListener(this);
         View headview = LayoutInflater.from(this).inflate(R.layout.personal_center_title, null);
+
+        user_avatar = (ImageView) headview.findViewById(R.id.user_avatar);
+        head_right_message = (TextView) findViewById(R.id.head_right_message);
+        head_right_message.setOnClickListener(this);
+        head_title = (TextView) findViewById(R.id.head_title);
+        user_name = (TextView) headview.findViewById(R.id.user_name);
+        fans = (TextView) headview.findViewById(R.id.fans);
+        follows = (TextView) headview.findViewById(R.id.follows);
+        user_des = (TextView) headview.findViewById(R.id.user_des);
         attention_user = (TextView) headview.findViewById(R.id.attention_user);
         attention_user.setOnClickListener(this);
+        head_left = (ImageView) findViewById(R.id.head_left);
+        head_left.setOnClickListener(this);
+
         listView_footer = LayoutInflater.from(this).inflate(R.layout.listview_footer, null);
         login_load = (ProgressBar) listView_footer.findViewById(R.id.login_load);
         load_text = (TextView) listView_footer.findViewById(R.id.load_text);
         no_date = (TextView) listView_footer.findViewById(R.id.no_date);
         lvTitleFade.addHeaderView(headview, null, false);
         lvTitleFade.addFooterView(listView_footer);
-
         adapter = new UserVideoAdapter(this, list);
         lvTitleFade.setAdapter(adapter);
-
-        user_avatar = (ImageView) headview.findViewById(R.id.user_avatar);
-        message = (TextView) findViewById(R.id.message);
-        message.setOnClickListener(this);
-        user_name = (TextView) headview.findViewById(R.id.user_name);
-        fans = (TextView) headview.findViewById(R.id.fans);
-        follows = (TextView) headview.findViewById(R.id.follows);
-        user_des = (TextView) headview.findViewById(R.id.user_des);
 
     }
 
@@ -218,6 +240,7 @@ public class PersonalCenterActivity extends BaseActivity implements AbsListView.
                     dismissLoadingView();
                     lvTitleFade.setVisibility(View.VISIBLE);
                     user_name.setText(pcpojo.getU_name());
+                    head_title.setText(pcpojo.getU_name());
                     fans.setText("粉丝：" + pcpojo.getFans());
                     follows.setText("关注：" + pcpojo.getFollows());
                     user_des.setText(pcpojo.getU_desc());
@@ -225,16 +248,17 @@ public class PersonalCenterActivity extends BaseActivity implements AbsListView.
                             ImageLoadOptions.getOptions());
 
                     //判断当前登录的用户是否查看的是自己个人资料(关注按钮变成个人资料，和隐藏聊天图标)
-                    if (SharePreferenceUtil.getInstance(mActivity).getString(SharePreferenceUtil.u_id, "").equals(pcpojo.getU_id())) {
+                    if (MyApplication.getU_id().equals(pcpojo.getU_id())) {
 
                         followType = 1;
                         attention_user.setText("编辑个人资料");
                         attention_user.setCompoundDrawables(null, null, null, null);
-                        message.setVisibility(View.GONE);
+                        head_right_message.setVisibility(View.GONE);
 
                     } else {
 
-                        presenter.SelectFollows("SelectFollowUser", SharePreferenceUtil.getInstance(mActivity).getString(SharePreferenceUtil.u_id, ""), pcpojo.getU_id() + "");//查询是否关注
+                        head_right_message.setVisibility(View.VISIBLE);
+                        presenter.SelectFollows("SelectFollowUser", MyApplication.getU_id(), pcpojo.getU_id() + "");//查询是否关注
 
                     }
 
@@ -313,11 +337,20 @@ public class PersonalCenterActivity extends BaseActivity implements AbsListView.
                     //添加关注
                     case 3:
 
-                        presenter.AddFollows("AddFollowUser", SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id, ""), pcpojo.getU_id());
+                        presenter.AddFollows("AddFollowUser", MyApplication.getU_id(), pcpojo.getU_id());
 
                         break;
 
                 }
+
+                break;
+
+            //关闭
+            case R.id.head_left:
+
+                InputMethodManager inputmanger = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputmanger.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                onBackPressed();
 
                 break;
 

@@ -19,6 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.zmx.youguibao.BaseActivity;
+import com.zmx.youguibao.MyApplication;
 import com.zmx.youguibao.R;
 import com.zmx.youguibao.SharePreferenceUtil;
 import com.zmx.youguibao.mvp.bean.UserJson;
@@ -62,7 +63,6 @@ public class LoginActivity extends BaseActivity implements LoginView{
     @Override
     protected void initViews() {
 
-        setTitleGone();
         overridePendingTransition(R.anim.push_up_in,R.anim.push_up_out);
         userPresenter = new UserPresenter(this,this);
         layout = (RelativeLayout) findViewById(R.id.layout);
@@ -212,10 +212,16 @@ public class LoginActivity extends BaseActivity implements LoginView{
         toast("登录成功");
         AuthTest.getInstance().initAuth(mActivity, Contant.APP_KEY,Contant.APP_SECRET, user.getU_id());//授权趣拍sdk
         SharePreferenceUtil.getInstance(mActivity).saveKeyObjValue(SharePreferenceUtil.u_id, user.getU_id());
+        MyApplication.setU_id(user.getU_id());
         SharePreferenceUtil.getInstance(mActivity).saveKeyObjValue(SharePreferenceUtil.u_phone,user.getU_phone());
+        MyApplication.setU_phone(user.getU_phone());
         SharePreferenceUtil.getInstance(mActivity).saveKeyObjValue(SharePreferenceUtil.u_name,user.getU_name());
+        MyApplication.setU_name(user.getU_name());
         SharePreferenceUtil.getInstance(mActivity).saveKeyObjValue(SharePreferenceUtil.u_headurl,user.getU_headurl());
+        MyApplication.setU_headurl(user.getU_headurl());
         SharePreferenceUtil.getInstance(mActivity).saveKeyObjValue(SharePreferenceUtil.u_desc,user.getU_desc());
+        MyApplication.setU_desc(user.getU_desc());
+        MyApplication.setIsLogin(true);
         Intent intent = new Intent(action);
         sendBroadcast(intent);
         this.finish();

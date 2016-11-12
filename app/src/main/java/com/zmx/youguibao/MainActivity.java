@@ -88,10 +88,11 @@ public class MainActivity extends AutoLayoutActivity
     private ImageViewUtil head;//左侧头像
     private RelativeLayout message_layout,chat_layout;//消息
     private TextView name;//左侧名称
-    private BadgeView badgeView;//消息提示红点
-    private int commentMessageCount;//评论点赞关注未读消息的数量
+    private BadgeView comment_BadgeView,chat_BadgeView;//消息提示红点
+    private int commentMessageCount; //评论点赞关注未读消息的数量
     private int noticeCount;//公告消息未读数
     private int chatCount;//聊天未读数
+    private int message_Type;//消息都类型
     private DrawerLayout drawer;//左侧控件
 
     private MessageDao dao = new MessageDao();
@@ -119,6 +120,7 @@ public class MainActivity extends AutoLayoutActivity
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         mNavigationView.setNavigationItemSelectedListener(this);
         headerLayout = mNavigationView.inflateHeaderView(R.layout.nav_header_main);
+        getUserMsg();
         initView();
 
 
@@ -136,10 +138,16 @@ public class MainActivity extends AutoLayoutActivity
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-        badgeView = new BadgeView(this);
-        badgeView.setTargetView(message_layout);
+        //说说评论消息红点
+        comment_BadgeView = new BadgeView(this);
+        comment_BadgeView.setTargetView(message_layout);
         //设置相对位置
-        badgeView.setBadgeMargin(0, 5, 15, 0);
+        comment_BadgeView.setBadgeMargin(0, 5, 15, 0);
+
+        chat_BadgeView = new BadgeView(this);
+        chat_BadgeView.setTargetView(chat_layout);
+        chat_BadgeView.setBadgeMargin(0,5,15,0);
+
         name = (TextView) headerLayout.findViewById(R.id.nav_name);
         UpdateMessage();
 
@@ -189,7 +197,18 @@ public class MainActivity extends AutoLayoutActivity
             switch (msg.what){
 
                 case 1:
-                    badgeView.setBadgeCount(commentMessageCount);
+
+                    if(message_Type == 2 || message_Type == 3 || message_Type == 4){
+
+                        commentMessageCount = commentMessageCount+1;
+                        comment_BadgeView.setBadgeCount(commentMessageCount);
+
+                    }else if(message_Type == 5){
+
+                        chatCount = chatCount+1;
+                        chat_BadgeView.setBadgeCount(chatCount);
+
+                    }
                     break;
 
             }
@@ -224,16 +243,23 @@ public class MainActivity extends AutoLayoutActivity
 
         if (id == R.id.action_pubish) {
 
+            //判断用户是否登陆
+            if(MyApplication.isLogin()){
 
-            QupaiService qupaiService = QupaiManager
-                    .getQupaiService(context);
-            //引导，只显示一次，这里用SharedPreferences记录
-            final AppGlobalSetting sp = new AppGlobalSetting(getApplicationContext());
-            Boolean isGuideShow = sp.getBooleanGlobalItem(
-                    "Qupai_has_video_exist_in_user_list_pref", true);
+                QupaiService qupaiService = QupaiManager
+                        .getQupaiService(context);
+                //引导，只显示一次，这里用SharedPreferences记录
+                final AppGlobalSetting sp = new AppGlobalSetting(getApplicationContext());
+                Boolean isGuideShow = sp.getBooleanGlobalItem(
+                        "Qupai_has_video_exist_in_user_list_pref", true);
 
-            qupaiService.showRecordPage(MainActivity.this, RequestCode.RECORDE_SHOW, isGuideShow);
+                qupaiService.showRecordPage(MainActivity.this, RequestCode.RECORDE_SHOW, isGuideShow);
 
+            }else{
+
+
+
+            }
         }
 
         return super.onOptionsItemSelected(item);
@@ -250,7 +276,7 @@ public class MainActivity extends AutoLayoutActivity
 
         } else if (id == R.id.nav_gallery) {
 
-            if(!SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,"").equals("")){
+            if(MyApplication.isLogin()){
 
 
             }else{
@@ -261,7 +287,7 @@ public class MainActivity extends AutoLayoutActivity
             }
         } else if (id == R.id.nav_slideshow) {
 
-            if(!SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,"").equals("")){
+            if(MyApplication.isLogin()){
 
                 Intent intent = new Intent(this, SetUpActivity.class);
                 startActivity(intent);
@@ -315,7 +341,7 @@ public class MainActivity extends AutoLayoutActivity
 
             case R.id.fab_1:
 
-                if(!SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,"").equals("")){
+                if(MyApplication.isLogin()){
                     Intent i = new Intent(this, NearbyActivity.class);
                     startActivity(i);
 
@@ -329,7 +355,7 @@ public class MainActivity extends AutoLayoutActivity
             case R.id.nav_head:
 
 
-                if(!SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,"").equals("")){
+                if(MyApplication.isLogin()){
 
                     Intent intent = new Intent(this, PersonalCenterActivity.class);
                     intent.putExtra("uid",SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,""));
@@ -345,7 +371,7 @@ public class MainActivity extends AutoLayoutActivity
 
             case R.id.message_layout:
 
-                if(!SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,"").equals("")){
+                if(MyApplication.isLogin()){
 
                     Intent i = new Intent(this, MessageActivity.class);
                     startActivity(i);
@@ -360,7 +386,7 @@ public class MainActivity extends AutoLayoutActivity
             case R.id.chat_layout:
 
 
-                if(!SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,"").equals("")){
+                if(MyApplication.isLogin()){
 
                     Intent intents = new Intent(this, CharListActivity.class);
                     startActivity(intents);
@@ -394,17 +420,19 @@ public class MainActivity extends AutoLayoutActivity
     public void UpdateMessage(){
 
         //登录
-        if(!SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,"").equals("")){
+        if(MyApplication.isLogin()){
 
-            ImageLoader.getInstance().displayImage(UrlConfig.HEAD+SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_headurl,""),head,
+            ImageLoader.getInstance().displayImage(UrlConfig.HEAD+MyApplication.getU_headurl(),head,
                     ImageLoadOptions.getOptions());
-            name.setText(SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_name,""));
+            name.setText(MyApplication.getU_name());
 
             commentMessageCount = dao.SelectMessageCount(2)+dao.SelectMessageCount(3)+dao.SelectMessageCount(4);//查询评论相关消息未读数
             noticeCount = dao.SelectMessageCount(1);//查询
             chatCount = dao.SelectMessageCount(5);//查询聊天未读数
             //设置显示未读消息条数
-            badgeView.setBadgeCount(commentMessageCount);
+            comment_BadgeView.setBadgeCount(commentMessageCount);
+            chat_BadgeView.setBadgeCount(chatCount);
+
 
         }else{
 
@@ -429,9 +457,10 @@ public class MainActivity extends AutoLayoutActivity
      * @param count
      */
     @Override
-    public void onServerMessage(int count) {
+    public void onServerMessage(int type,int count) {
 
-        commentMessageCount = commentMessageCount+1;
+        message_Type = type;
+
         handler.sendEmptyMessage(1);
 
     }
@@ -441,15 +470,45 @@ public class MainActivity extends AutoLayoutActivity
         super.onStart();
 
         //查询未读消息，在登录的状态执行
-        if(!SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,"").equals("")){
+        if(MyApplication.isLogin()){
 
            commentMessageCount = dao.SelectMessageCount(2)+dao.SelectMessageCount(3)+dao.SelectMessageCount(4);//查询评论相关消息未读数
             noticeCount = dao.SelectMessageCount(1);//查询
             chatCount = dao.SelectMessageCount(5);//查询聊天未读数
             //设置显示未读消息条数
-            badgeView.setBadgeCount(commentMessageCount);
+            comment_BadgeView.setBadgeCount(commentMessageCount);
+            chat_BadgeView.setBadgeCount(chatCount);
 
         }
+
+    }
+
+    //获取用户信息
+    public void getUserMsg(){
+
+        String uid = SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,"");
+
+        if(uid.equals("")){
+
+            MyApplication.setIsLogin(false);
+
+        }else {
+
+            String name = SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_name,"");
+            String phone = SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_phone,"");
+            String headurl = SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_headurl,"");
+            String desc = SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_desc,"");
+            String accessToken = SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.accessToken,"");
+            MyApplication.setIsLogin(true);
+            MyApplication.setU_id(uid);
+            MyApplication.setU_name(name);
+            MyApplication.setU_phone(phone);
+            MyApplication.setU_headurl(headurl);
+            MyApplication.setU_desc(desc);
+            MyApplication.setAccessToken(accessToken);
+
+        }
+
 
     }
 

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -32,6 +33,7 @@ import com.duanqu.qupai.bean.QupaiUploadTask;
 import com.duanqu.qupai.upload.QupaiUploadListener;
 import com.duanqu.qupai.upload.UploadService;
 import com.zmx.youguibao.BaseActivity;
+import com.zmx.youguibao.MyApplication;
 import com.zmx.youguibao.R;
 import com.zmx.youguibao.SharePreferenceUtil;
 import com.zmx.youguibao.customview.MyRoundProgressBar;
@@ -77,7 +79,22 @@ public class PublishActivity extends BaseActivity implements UploadVideoView{
     @Override
     protected void initViews() {
 
-        setTitleGone();
+        // 沉浸式状态栏
+        positionView = findViewById(R.id.position_view);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+
+            Window window = getWindow();
+            window.setFlags(
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+            int statusBarHeight = getStatusBarHeight();
+            ViewGroup.LayoutParams lp = positionView.getLayoutParams();
+            lp.height = statusBarHeight;
+            positionView.setLayoutParams(lp);
+
+        }
+
         presenter = new UploadVideoPresenter(this,this);
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -271,7 +288,7 @@ public class PublishActivity extends BaseActivity implements UploadVideoView{
                 imageUrl = Contant.domain + "/v/" + responseMessage + ".jpg";
                 Log.e("videoUrl",""+videoUrl);
                 Log.e("imageUrl",""+imageUrl);
-                presenter.Upload("publish",SharePreferenceUtil.getInstance(mActivity).getString(SharePreferenceUtil.u_id,""),address,content.getText().toString(),imageUrl,videoUrl);
+                presenter.Upload("publish", MyApplication.getU_id(),address,content.getText().toString(),imageUrl,videoUrl);
             }
         });
 
@@ -279,7 +296,7 @@ public class PublishActivity extends BaseActivity implements UploadVideoView{
         Log.e("uuid","uuid"+uuid);
         Log.e("QupaiAuth",  "accessToken" + SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.accessToken,"") +"space"+ Contant.space);
         startUpload(createUploadTask(this, uuid, new File(videourl), new File(videoimg),
-                SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.accessToken,""), SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,""), Contant.shareType, Contant.tags, Contant.description));
+                SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.accessToken,""), MyApplication.getU_id(), Contant.shareType, Contant.tags, Contant.description));
     }
 
     /**

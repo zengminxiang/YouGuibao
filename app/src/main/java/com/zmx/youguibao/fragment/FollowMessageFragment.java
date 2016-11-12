@@ -105,7 +105,7 @@ public class FollowMessageFragment  extends BaseFragment implements MessageFollo
                 listss.clear();
                 page = 1;
                 load_tag = 0;
-                up.SelectFollowsMessage("QueryFollowMessage",page+"", SharePreferenceUtil.getInstance(mActivity).getString(SharePreferenceUtil.u_id,""));
+                up.SelectFollowsMessage("QueryFollowMessage",page+"", MyApplication.getU_id());
 
 
             }
@@ -126,7 +126,7 @@ public class FollowMessageFragment  extends BaseFragment implements MessageFollo
                 } else {
 
                     page++;
-                    up.SelectFollowsMessage("QueryFollowMessage",page+"", SharePreferenceUtil.getInstance(mActivity).getString(SharePreferenceUtil.u_id,""));
+                    up.SelectFollowsMessage("QueryFollowMessage",page+"", MyApplication.getU_id());
 
 
                 }

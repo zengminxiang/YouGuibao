@@ -100,7 +100,7 @@ public class CommentMessageFragment extends BaseFragment implements MessageView{
                 listss.clear();
                 page = 1;
                 load_tag = 0;
-                up.SelectMessageComment("QueryCommentMessage",page+"", SharePreferenceUtil.getInstance(mActivity).getString(SharePreferenceUtil.u_id,""));
+                up.SelectMessageComment("QueryCommentMessage",page+"", MyApplication.getU_id());
 
 
             }
@@ -121,7 +121,7 @@ public class CommentMessageFragment extends BaseFragment implements MessageView{
                 } else {
 
                     page++;
-                    up.SelectMessageComment("QueryCommentMessage",page+"", SharePreferenceUtil.getInstance(mActivity).getString(SharePreferenceUtil.u_id,""));
+                    up.SelectMessageComment("QueryCommentMessage",page+"", MyApplication.getU_id());
 
 
                 }

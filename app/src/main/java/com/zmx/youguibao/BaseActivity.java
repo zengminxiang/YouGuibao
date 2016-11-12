@@ -16,6 +16,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -34,9 +35,9 @@ public abstract class BaseActivity extends AutoLayoutActivity implements View.On
 
     protected Activity mActivity;
 
-    protected RelativeLayout layouts;//头部布局文件
-    protected TextView title;
-    protected View back;
+    protected View positionView;
+    protected ImageView head_left;//头像
+    protected TextView head_title;
 
     private LinearLayout load_view;//加载提示布局
 
@@ -60,10 +61,6 @@ public abstract class BaseActivity extends AutoLayoutActivity implements View.On
             ((FrameLayout) findViewById(R.id.frame_content)).addView(vContent);
 
         }
-        layouts = (RelativeLayout) findViewById(R.id.main_title_rl);
-        title = (TextView) findViewById(R.id.title);
-        back = findViewById(R.id.back);
-        back.setOnClickListener(this);
         initViews();
     }
 
@@ -71,35 +68,9 @@ public abstract class BaseActivity extends AutoLayoutActivity implements View.On
     @Override
     public void onClick(View v) {
 
-        switch (v.getId()) {
-
-            case R.id.back:
-
-                InputMethodManager inputmanger = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputmanger.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                onBackPressed();
-
-                break;
-
-        }
 
     }
 
-    /**
-     * 隐藏头部
-     */
-    public void setTitleGone() {
-        layouts.setVisibility(View.GONE);
-    }
-
-    /**
-     * 设置头部信息
-     *
-     * @param s
-     */
-    public void setTitle(String s) {
-        title.setText(s);
-    }
 
     /**
      * 设置加载提示框
@@ -122,7 +93,6 @@ public abstract class BaseActivity extends AutoLayoutActivity implements View.On
 
         if(load_view != null){
 
-            Log.e("55555555","sssssssss");
             load_view.setVisibility(View.GONE);
 
         }
@@ -183,6 +153,25 @@ public abstract class BaseActivity extends AutoLayoutActivity implements View.On
     //弹出框
     public void toast(String content, int duration) {
         Utils.toast(content, duration);
+    }
+
+    //获取状态栏的高度
+    public int getStatusBarHeight() {
+
+        Class<?> c = null;
+        Object obj = null;
+        Field field = null;
+        int x = 0, statusBarHeight = 0;
+        try {
+            c = Class.forName("com.android.internal.R$dimen");
+            obj = c.newInstance();
+            field = c.getField("status_bar_height");
+            x = Integer.parseInt(field.get(obj).toString());
+            statusBarHeight = getResources().getDimensionPixelSize(x);
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
+        return statusBarHeight;
     }
 
 

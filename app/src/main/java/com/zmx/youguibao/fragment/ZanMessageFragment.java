@@ -99,7 +99,7 @@ public class ZanMessageFragment extends BaseFragment implements MessageZanView{
                 listss.clear();
                 page = 1;
                 load_tag = 0;
-                up.SelectZanMessage("QueryZanMessage",page+"", SharePreferenceUtil.getInstance(mActivity).getString(SharePreferenceUtil.u_id,""));
+                up.SelectZanMessage("QueryZanMessage",page+"", MyApplication.getU_id());
 
 
             }
@@ -120,7 +120,7 @@ public class ZanMessageFragment extends BaseFragment implements MessageZanView{
                 } else {
 
                     page++;
-                    up.SelectZanMessage("QueryZanMessage",page+"", SharePreferenceUtil.getInstance(mActivity).getString(SharePreferenceUtil.u_id,""));
+                    up.SelectZanMessage("QueryZanMessage",page+"", MyApplication.getU_id());
 
 
                 }

@@ -19,6 +19,7 @@ import com.chanven.lib.cptr.PtrFrameLayout;
 import com.chanven.lib.cptr.loadmore.OnLoadMoreListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zmx.youguibao.BaseActivity;
+import com.zmx.youguibao.MyApplication;
 import com.zmx.youguibao.R;
 import com.zmx.youguibao.SharePreferenceUtil;
 import com.zmx.youguibao.adapter.CommentAdapter;
@@ -149,7 +150,7 @@ public class ReplyCommentActivity extends BaseActivity implements ReplyOneCommen
                     toast("输入内容");
                     return;
                 }
-                presenter.ReplyComment("ReplyComment",vcid, SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,""),reply_name,comment_text.getText().toString(),vid);
+                presenter.ReplyComment("ReplyComment",vcid, MyApplication.getU_id(),reply_name,comment_text.getText().toString(),vid);
                 break;
 
         }

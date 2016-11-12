@@ -40,6 +40,19 @@ import greenDao.DaoSession;
  */
 public class MyApplication extends Application {
 
+    public static String u_id = "u_id";//用户id
+    public static String u_phone = "u_phone";//手机号码
+    public static String u_pwd = "u_pwd";//密码
+    public static String u_name = "u_name";//用户名
+    public static String u_headurl = "u_headurl";//用户路径
+    public static String u_desc = "u_desc";//用户简介
+    public static String u_sex = "u_sex";//用户性别
+    public static String u_time = "u_time";//注册时间
+    public static String u_number = "u_number";//用户编号
+    public static String u_experience = "u_experience";//用户经验
+    private static boolean isLogin;//是否登录
+    private static String accessToken;//趣拍的token
+
     public static MyApplication mInstance;
 
     public static RequestQueue queue;//volley全局变量
@@ -245,6 +258,101 @@ public class MyApplication extends Application {
         }
     }
 
+    public static String getU_id() {
+        return u_id;
+    }
+
+    public static void setU_id(String u_id) {
+        MyApplication.u_id = u_id;
+    }
+
+    public static String getU_phone() {
+        return u_phone;
+    }
+
+    public static void setU_phone(String u_phone) {
+        MyApplication.u_phone = u_phone;
+    }
+
+    public static String getU_pwd() {
+        return u_pwd;
+    }
+
+    public static void setU_pwd(String u_pwd) {
+        MyApplication.u_pwd = u_pwd;
+    }
+
+    public static String getU_name() {
+        return u_name;
+    }
+
+    public static void setU_name(String u_name) {
+        MyApplication.u_name = u_name;
+    }
+
+    public static String getU_headurl() {
+        return u_headurl;
+    }
+
+    public static void setU_headurl(String u_headurl) {
+        MyApplication.u_headurl = u_headurl;
+    }
+
+    public static String getU_desc() {
+        return u_desc;
+    }
+
+    public static void setU_desc(String u_desc) {
+        MyApplication.u_desc = u_desc;
+    }
+
+    public static String getU_sex() {
+        return u_sex;
+    }
+
+    public static void setU_sex(String u_sex) {
+        MyApplication.u_sex = u_sex;
+    }
+
+    public static String getU_time() {
+        return u_time;
+    }
+
+    public static void setU_time(String u_time) {
+        MyApplication.u_time = u_time;
+    }
+
+    public static String getU_number() {
+        return u_number;
+    }
+
+    public static void setU_number(String u_number) {
+        MyApplication.u_number = u_number;
+    }
+
+    public static String getU_experience() {
+        return u_experience;
+    }
+
+    public static void setU_experience(String u_experience) {
+        MyApplication.u_experience = u_experience;
+    }
+
+    public static String getAccessToken() {
+        return accessToken;
+    }
+
+    public static void setAccessToken(String accessToken) {
+        MyApplication.accessToken = accessToken;
+    }
+
+    public static boolean isLogin() {
+        return isLogin;
+    }
+
+    public static void setIsLogin(boolean isLogin) {
+        MyApplication.isLogin = isLogin;
+    }
 }
 
 

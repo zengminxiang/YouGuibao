@@ -15,7 +15,7 @@ public class UrlConfig {
 
     public static Map<String,String> params;
 
-    private static String URL = "http://192.168.2.115:8080/Guiyoubao/";
+    private static String URL = "http://192.168.2.105:8080/Guiyoubao/";
     public static String HEAD = URL+"head/";
 
     //处理视频说说模块

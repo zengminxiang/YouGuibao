@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.duanqu.qupai.auth.AuthService;
 import com.duanqu.qupai.auth.QupaiAuthListener;
+import com.zmx.youguibao.MyApplication;
 import com.zmx.youguibao.SharePreferenceUtil;
 import com.zmx.youguibao.qupai.bean.Contant;
 
@@ -51,6 +52,7 @@ public class AuthTest {
                 Log.e(AUTHTAG, "onAuthComplte" + responseCode + "message" + responseMessage);
                 Contant.accessToken = responseMessage;
                 SharePreferenceUtil.getInstance(context).saveKeyObjValue(SharePreferenceUtil.accessToken,responseMessage);
+                MyApplication.setAccessToken(responseMessage);
 
             }
         });

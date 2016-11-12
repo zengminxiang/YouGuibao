@@ -1,11 +1,20 @@
 package com.zmx.youguibao.ui;
 
+import android.content.Context;
+import android.os.Build;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.jauker.widget.BadgeView;
 import com.zmx.youguibao.BaseActivity;
@@ -39,7 +48,25 @@ public class MessageActivity extends BaseActivity {
     @Override
     protected void initViews() {
 
-        setTitle("消息");
+        // 沉浸式状态栏
+        positionView = findViewById(R.id.position_view);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+
+            Window window = getWindow();
+            window.setFlags(
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+            int statusBarHeight = getStatusBarHeight();
+            ViewGroup.LayoutParams lp = positionView.getLayoutParams();
+            lp.height = statusBarHeight;
+            positionView.setLayoutParams(lp);
+
+        }
+        head_title = (TextView) findViewById(R.id.head_title);
+        head_title.setText("消息");
+        head_left = (ImageView) findViewById(R.id.head_left);
+        head_left.setOnClickListener(this);
 
         //左右滑动
         viewPager = (ViewPager) findViewById(R.id.message_viewpager);
@@ -91,4 +118,22 @@ public class MessageActivity extends BaseActivity {
         viewPager.setCurrentItem(savedInstanceState.getInt(POSITION));
     }
 
+    @Override
+    public void onClick(View v) {
+        super.onClick(v);
+
+        switch (v.getId()){
+
+            //关闭
+            case R.id.head_left:
+
+                InputMethodManager inputmanger = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputmanger.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                onBackPressed();
+
+                break;
+
+        }
+
+    }
 }
