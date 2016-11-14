@@ -1,6 +1,7 @@
 package com.zmx.youguibao.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -51,7 +52,7 @@ public class PersonalCenterActivity extends BaseActivity implements AbsListView.
     private int mCurrentfirstVisibleItem = 0;
     private int lastVisibileItem;
     private RelativeLayout rlTitle;//头部局
-    private ImageView user_avatar,head_left;//头像
+    private ImageView user_avatar,head_left,image_sex;//头像
     private TextView user_name, fans, follows, user_des, head_right_message, attention_user,head_title;//姓名，粉丝，关注，简介,关注
 
     private ListView lvTitleFade;
@@ -73,6 +74,8 @@ public class PersonalCenterActivity extends BaseActivity implements AbsListView.
     private TextView load_text, no_date;//上拉
     private ProgressBar login_load;//上拉
 
+    private View positionViews;
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_personal_center;
@@ -82,7 +85,7 @@ public class PersonalCenterActivity extends BaseActivity implements AbsListView.
     protected void initViews() {
 
         // 沉浸式状态栏
-        positionView = findViewById(R.id.position_view);
+        positionViews = findViewById(R.id.position_view);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 
             Window window = getWindow();
@@ -91,11 +94,12 @@ public class PersonalCenterActivity extends BaseActivity implements AbsListView.
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
             int statusBarHeight = getStatusBarHeight();
-            ViewGroup.LayoutParams lp = positionView.getLayoutParams();
+            ViewGroup.LayoutParams lp = positionViews.getLayoutParams();
             lp.height = statusBarHeight;
-            positionView.setLayoutParams(lp);
+            positionViews.setLayoutParams(lp);
 
         }
+
         showLoadingView();
         uid = this.getIntent().getStringExtra("uid");
         presenter = new UserPresenter(this, this);
@@ -117,6 +121,7 @@ public class PersonalCenterActivity extends BaseActivity implements AbsListView.
         head_title = (TextView) findViewById(R.id.head_title);
         user_name = (TextView) headview.findViewById(R.id.user_name);
         fans = (TextView) headview.findViewById(R.id.fans);
+        image_sex = (ImageView) headview.findViewById(R.id.image_sex);
         follows = (TextView) headview.findViewById(R.id.follows);
         user_des = (TextView) headview.findViewById(R.id.user_des);
         attention_user = (TextView) headview.findViewById(R.id.attention_user);
@@ -244,6 +249,15 @@ public class PersonalCenterActivity extends BaseActivity implements AbsListView.
                     fans.setText("粉丝：" + pcpojo.getFans());
                     follows.setText("关注：" + pcpojo.getFollows());
                     user_des.setText(pcpojo.getU_desc());
+
+                    if(pcpojo.getU_sex().equals("1")){
+                        image_sex.setBackgroundResource(R.mipmap.profile_avatar_genderbadge_male);
+                    }else if(pcpojo.getU_sex().equals("2")){
+                        image_sex.setBackgroundResource(R.mipmap.profile_avatar_genderbadge_female);
+                    }else {
+                        image_sex.setBackgroundResource(R.mipmap.profile_avatar_genderbadge_secret);
+                    }
+
                     ImageLoader.getInstance().displayImage(UrlConfig.HEAD + pcpojo.getU_headurl(), user_avatar,
                             ImageLoadOptions.getOptions());
 
@@ -308,8 +322,7 @@ public class PersonalCenterActivity extends BaseActivity implements AbsListView.
 
         switch (v.getId()) {
 
-            case R.id.message:
-
+            case R.id.head_right_message:
 
                 Bundle bundle = new Bundle();
                 bundle.putString("user_name", pcpojo.getU_name());
@@ -326,7 +339,7 @@ public class PersonalCenterActivity extends BaseActivity implements AbsListView.
 
                     //进入修改个人资料界面
                     case 1:
-
+                        startActivity(ModifyUserActivity.class,null,1);
                         break;
 
                     //取消关注
@@ -420,4 +433,41 @@ public class PersonalCenterActivity extends BaseActivity implements AbsListView.
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode){
+
+            case 1:
+
+                String isHead = data.getStringExtra("isHead");
+                String isSex = data.getStringExtra("isSex");
+
+                //更新了偷笑
+                if (isHead.equals("1")){
+
+                    ImageLoader.getInstance().displayImage(UrlConfig.HEAD + pcpojo.getU_headurl(), user_avatar,
+                            ImageLoadOptions.getOptions());
+
+                }
+
+                //更新了性别
+                if(isSex.equals(MyApplication.getU_sex())){
+
+                    if(pcpojo.getU_sex().equals("1")){
+                        image_sex.setBackgroundResource(R.mipmap.profile_avatar_genderbadge_male);
+                    }else if(pcpojo.getU_sex().equals("2")){
+                        image_sex.setBackgroundResource(R.mipmap.profile_avatar_genderbadge_female);
+                    }else {
+                        image_sex.setBackgroundResource(R.mipmap.profile_avatar_genderbadge_secret);
+                    }
+
+                }
+
+                break;
+
+        }
+
+    }
 }

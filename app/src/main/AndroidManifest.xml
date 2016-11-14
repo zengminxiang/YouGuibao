@@ -191,7 +191,9 @@
             android:value="8d3f81a12c423274d99dccf4" />
 
         <activity android:name=".ui.CharListActivity" />
-        <activity android:name=".ui.ChatActivity"></activity>
+        <activity android:name=".ui.ChatActivity"/>
+        <activity android:name=".ui.NoticeActivity" />
+        <activity android:name=".ui.ModifyUserActivity"></activity>
     </application>
 
 </manifest>

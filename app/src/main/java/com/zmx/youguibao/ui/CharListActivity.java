@@ -13,6 +13,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,6 +54,7 @@ public class CharListActivity extends BaseActivity implements JPushReceiver.Serv
 
     private ChatListMessageDao dao = new ChatListMessageDao();
     private MessageDao messageDao = new MessageDao();
+
 
     @Override
     protected int getLayoutId() {

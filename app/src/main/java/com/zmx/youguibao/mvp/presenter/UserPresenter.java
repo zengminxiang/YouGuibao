@@ -18,6 +18,7 @@ import com.zmx.youguibao.mvp.view.LoginView;
 import com.zmx.youguibao.mvp.view.MessageFollowsView;
 import com.zmx.youguibao.mvp.view.MessageView;
 import com.zmx.youguibao.mvp.view.MessageZanView;
+import com.zmx.youguibao.mvp.view.ModifyUserView;
 import com.zmx.youguibao.mvp.view.PersonalCenterView;
 
 import org.json.JSONArray;
@@ -41,6 +42,7 @@ public class UserPresenter{
     MessageView mv;
     MessageZanView mzv;
     MessageFollowsView mfv;
+    ModifyUserView muv;
 
     public UserPresenter(Context context, LoginView login){
 
@@ -67,6 +69,11 @@ public class UserPresenter{
 
     public UserPresenter(Context context, MessageFollowsView mfv){
         this.mfv = mfv;
+        model = new UserModel();
+    }
+
+    public UserPresenter(Context context, ModifyUserView muv){
+        this.muv = muv;
         model = new UserModel();
     }
 
@@ -338,6 +345,34 @@ public class UserPresenter{
                 }
             }
         });
+    }
+
+    /**
+     * 修改用户昵称
+     * @param tag
+     * @param uid
+     * @param
+     */
+    public void UpdateUserMessage(String tag,String type,String uid,String parameter){
+
+        model.UpdateUserMessage(tag,type, uid, parameter, new IDataRequestListener() {
+            @Override
+            public void loadSuccess(Object object) {
+
+                try {
+
+                    String state = new JSONObject(object.toString()).getString("state");
+                    String message = new JSONObject(object.toString()).getString("message");
+
+                    muv.VUpdateUserMessage(state,message);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+
     }
 
 }

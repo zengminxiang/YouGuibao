@@ -103,7 +103,6 @@ public class ChatActivity extends BaseActivity implements JPushReceiver.ServerCh
         send.setOnClickListener(this);
         listView = (ListView) findViewById(R.id.listview);
         list = chatDao.SelectAllChat(MyApplication.getU_id(),user_id);
-
         info();
 
     }

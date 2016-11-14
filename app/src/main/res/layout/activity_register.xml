@@ -22,41 +22,17 @@
                 <ImageView
                     android:id="@+id/imageView1"
                     android:layout_width="match_parent"
-                    android:layout_height="300px"
+                    android:layout_height="400px"
                     android:background="@mipmap/login_bg_cover"
                     android:scaleType="fitXY"></ImageView>
-
-                <RelativeLayout
-                    android:id="@+id/layout_b"
-                    android:layout_width="match_parent"
-                    android:layout_height="350px"
-                    android:layout_marginTop="100px">
-
-                    <com.zmx.youguibao.utils.view.ImageViewUtil
-                        android:id="@+id/user_head"
-                        android:layout_width="200px"
-                        android:layout_height="200px"
-                        android:layout_alignParentBottom="true"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginBottom="40px"
-                        android:src="@mipmap/register_avatar_btn_image_normal" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_centerHorizontal="true"
-                        android:text="选择头像" />
-
-                </RelativeLayout>
 
 
                 <LinearLayout
                     android:id="@+id/layout_c"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_below="@+id/layout_b"
-                    android:layout_marginTop="20px"
+                    android:layout_below="@+id/imageView1"
+                    android:layout_marginTop="50px"
                     android:orientation="vertical">
 
                     <RelativeLayout
@@ -246,7 +222,7 @@
                             android:layout_toRightOf="@+id/view_sex"
                             android:drawableRight="@mipmap/wallet_base_right_arrow"
                             android:gravity="center_vertical"
-                            android:text="选择昵称"
+                            android:text="选择性别"
                             android:textColorHint="#000000" />
 
 

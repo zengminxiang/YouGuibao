@@ -15,13 +15,13 @@ public class UrlConfig {
 
     public static Map<String,String> params;
 
-    private static String URL = "http://192.168.2.105:8080/Guiyoubao/";
+    private static String URL = "http://192.168.2.117:8080/Guiyoubao/";
     public static String HEAD = URL+"head/";
 
     //处理视频说说模块
     private static String UPLOADVIDEO = URL+"ViedoServlet";
 
-    private static String USER = URL + "UserServlet";
+    public static String USER = URL + "UserServlet";
 
 //    http://localhost:8080/Guiyoubao/UserServlet?tag=login&name=13751729147&pwd=123456
     public static String Login(String tag,String name,String pwd){
@@ -396,6 +396,25 @@ public class UrlConfig {
         params.put("login_name",login_name);
         params.put("login_head",login_head);
         params.put("content",content);
+        return CombinationUrl(USER,params);
+
+    }
+
+    /**
+     * 修改用户资料
+     * @param tag
+     * @param type  修改的类型
+     * @param uid   用户的id
+     * @param parameter  修改参数
+     * @return
+     */
+    public static String UpdateUserMessage(String tag,String type,String uid,String parameter){
+
+        params = new HashMap<>();
+        params.put("tag",tag);
+        params.put("type",type);
+        params.put("uid",uid);
+        params.put("parameter", parameter);
         return CombinationUrl(USER,params);
 
     }

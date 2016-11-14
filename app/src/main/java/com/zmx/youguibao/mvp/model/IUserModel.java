@@ -75,4 +75,16 @@ public interface IUserModel {
      */
     void IAddUserFollow(String tag,String guid,String buid,IDataRequestListener listener);
 
+    /**
+     * 修改用户资料
+     * @param tag
+     * @param type
+     * @param uid
+     * @param parameter
+     * @param listener
+     */
+    void IUpdateUserMessage(String tag,String type,String uid,String parameter,IDataRequestListener listener);
+
+
+
 }

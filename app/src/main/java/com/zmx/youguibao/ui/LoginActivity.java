@@ -221,6 +221,8 @@ public class LoginActivity extends BaseActivity implements LoginView{
         MyApplication.setU_headurl(user.getU_headurl());
         SharePreferenceUtil.getInstance(mActivity).saveKeyObjValue(SharePreferenceUtil.u_desc,user.getU_desc());
         MyApplication.setU_desc(user.getU_desc());
+        SharePreferenceUtil.getInstance(mActivity).saveKeyObjValue(SharePreferenceUtil.u_sex,user.getU_sex());
+        MyApplication.setU_sex(user.getU_sex());
         MyApplication.setIsLogin(true);
         Intent intent = new Intent(action);
         sendBroadcast(intent);

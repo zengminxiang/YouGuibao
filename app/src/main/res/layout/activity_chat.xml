@@ -7,9 +7,12 @@
 
     <include android:id="@+id/title" layout="@layout/activity_head_layout"></include>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/title">
     <ListView
         android:id="@+id/listview"
-        android:layout_below="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:cacheColorHint="#00000000"
@@ -25,7 +28,6 @@
         android:layout_width="match_parent"
         android:layout_height="90px"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
         android:background="#E8F2FE" >
 
         <EditText
@@ -52,5 +54,5 @@
             android:text="发送" />
     </RelativeLayout>
 
-
+    </RelativeLayout>
 </RelativeLayout>

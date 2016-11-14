@@ -63,6 +63,13 @@ public class UserModel implements IUserModel{
         IAddUserFollow(tag,guid,buid,listener);
     }
 
+    //修改昵称
+    public void UpdateUserMessage(String tag,String type,String uid,String parameter, final IDataRequestListener listener){
+
+        IUpdateUserMessage(tag,type,uid,parameter,listener);
+
+    }
+
 
 
     @Override
@@ -285,6 +292,29 @@ public class UserModel implements IUserModel{
         reqK.setTag("reqK");
         MyApplication.getHttpQueues().add(reqK);
         reqK.setShouldCache(true); // 控制是否缓存
+    }
+
+    @Override
+    public void IUpdateUserMessage(String tag,String type,String uid,String parameter,final IDataRequestListener listener) {
+
+        JsonObjectRequest reqL = new JsonObjectRequest(Request.Method.GET, UrlConfig.UpdateUserMessage(tag,type,uid,parameter), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+
+                listener.loadSuccess(jsonObject.toString());
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+            }
+        });
+
+        reqL.setTag("reqL");
+        MyApplication.getHttpQueues().add(reqL);
+        reqL.setShouldCache(true); // 控制是否缓存
+
     }
 
 }

@@ -17,13 +17,11 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.duanqu.qupai.sdk.android.QupaiManager;
 import com.duanqu.qupai.sdk.android.QupaiService;
@@ -38,15 +36,14 @@ import com.zmx.youguibao.dao.ChatListMessageDao;
 import com.zmx.youguibao.dao.MessageDao;
 import com.zmx.youguibao.fragment.FindFragment;
 import com.zmx.youguibao.fragment.FollowFragment;
-import com.zmx.youguibao.mvp.bean.ChatMessagePojo;
-import com.zmx.youguibao.mvp.bean.MessageCountPojo;
 import com.zmx.youguibao.qupai.util.RecordResult;
 import com.zmx.youguibao.qupai.util.RequestCode;
 import com.zmx.youguibao.ui.CharListActivity;
-import com.zmx.youguibao.ui.FeedbackActivity;
 import com.zmx.youguibao.ui.LoginActivity;
 import com.zmx.youguibao.ui.MessageActivity;
+import com.zmx.youguibao.ui.ModifyUserActivity;
 import com.zmx.youguibao.ui.NearbyActivity;
+import com.zmx.youguibao.ui.NoticeActivity;
 import com.zmx.youguibao.ui.PersonalCenterActivity;
 import com.zmx.youguibao.ui.PublishActivity;
 import com.zmx.youguibao.ui.SetUpActivity;
@@ -58,10 +55,8 @@ import com.zmx.youguibao.utils.view.StatusBarUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-import greenDao.MessageCountPojoDao;
-
 public class MainActivity extends AutoLayoutActivity
-        implements NavigationView.OnNavigationItemSelectedListener,View.OnClickListener,JPushReceiver.ServerMessage {
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, JPushReceiver.ServerMessage {
 
     private Context context = this;
     private TabLayout tabLayout;
@@ -72,7 +67,7 @@ public class MainActivity extends AutoLayoutActivity
 //    private NearbyFragment nf;//同城的fragment
 
     //tablayout的标题
-    private String[] mTitles = new String[]{"发现","关注"};
+    private String[] mTitles = new String[]{"发现", "关注"};
 
     private Toolbar toolbar;//头部
 
@@ -86,9 +81,9 @@ public class MainActivity extends AutoLayoutActivity
     private NavigationView mNavigationView;//左侧头部
     private View headerLayout;//左侧头部
     private ImageViewUtil head;//左侧头像
-    private RelativeLayout message_layout,chat_layout;//消息
+    private RelativeLayout message_layout, chat_layout, notice_layout;//消息
     private TextView name;//左侧名称
-    private BadgeView comment_BadgeView,chat_BadgeView;//消息提示红点
+    private BadgeView comment_BadgeView, chat_BadgeView;//消息提示红点
     private int commentMessageCount; //评论点赞关注未读消息的数量
     private int noticeCount;//公告消息未读数
     private int chatCount;//聊天未读数
@@ -104,7 +99,7 @@ public class MainActivity extends AutoLayoutActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        StatusBarUtil.setColorForDrawerLayout(this, drawerLayout,255);
+        StatusBarUtil.setColorForDrawerLayout(this, drawerLayout, 255);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("");
@@ -126,7 +121,7 @@ public class MainActivity extends AutoLayoutActivity
 
     }
 
-    private void initView(){
+    private void initView() {
 
         JPushReceiver.msgListeners.add(this);//设置新消息监听
         head = (ImageViewUtil) headerLayout.findViewById(R.id.nav_head);
@@ -135,6 +130,8 @@ public class MainActivity extends AutoLayoutActivity
         message_layout.setOnClickListener(this);
         chat_layout = (RelativeLayout) headerLayout.findViewById(R.id.chat_layout);
         chat_layout.setOnClickListener(this);
+        notice_layout = (RelativeLayout) headerLayout.findViewById(R.id.notice_layout);
+        notice_layout.setOnClickListener(this);
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -146,7 +143,7 @@ public class MainActivity extends AutoLayoutActivity
 
         chat_BadgeView = new BadgeView(this);
         chat_BadgeView.setTargetView(chat_layout);
-        chat_BadgeView.setBadgeMargin(0,5,15,0);
+        chat_BadgeView.setBadgeMargin(0, 5, 15, 0);
 
         name = (TextView) headerLayout.findViewById(R.id.nav_name);
         UpdateMessage();
@@ -183,29 +180,31 @@ public class MainActivity extends AutoLayoutActivity
         fam = (FloatingActionsMenu) findViewById(R.id.fab_menu);
 
         //注册监听广播
-        IntentFilter filter = new IntentFilter(LoginActivity.action);
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(LoginActivity.action);
+        filter.addAction(ModifyUserActivity.action);
         registerReceiver(broadcastReceiver, filter);
 
     }
 
-    private Handler handler = new Handler(){
+    private Handler handler = new Handler() {
 
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
 
-            switch (msg.what){
+            switch (msg.what) {
 
                 case 1:
 
-                    if(message_Type == 2 || message_Type == 3 || message_Type == 4){
+                    if (message_Type == 2 || message_Type == 3 || message_Type == 4) {
 
-                        commentMessageCount = commentMessageCount+1;
+                        commentMessageCount = commentMessageCount + 1;
                         comment_BadgeView.setBadgeCount(commentMessageCount);
 
-                    }else if(message_Type == 5){
+                    } else if (message_Type == 5) {
 
-                        chatCount = chatCount+1;
+                        chatCount = chatCount + 1;
                         chat_BadgeView.setBadgeCount(chatCount);
 
                     }
@@ -244,7 +243,7 @@ public class MainActivity extends AutoLayoutActivity
         if (id == R.id.action_pubish) {
 
             //判断用户是否登陆
-            if(MyApplication.isLogin()){
+            if (MyApplication.isLogin()) {
 
                 QupaiService qupaiService = QupaiManager
                         .getQupaiService(context);
@@ -255,8 +254,7 @@ public class MainActivity extends AutoLayoutActivity
 
                 qupaiService.showRecordPage(MainActivity.this, RequestCode.RECORDE_SHOW, isGuideShow);
 
-            }else{
-
+            } else {
 
 
             }
@@ -273,33 +271,32 @@ public class MainActivity extends AutoLayoutActivity
         if (id == R.id.nav_camera) {
 
 
-
         } else if (id == R.id.nav_gallery) {
 
-            if(MyApplication.isLogin()){
+            if (MyApplication.isLogin()) {
 
 
-            }else{
+            } else {
 
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
+                Intent intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
 
             }
         } else if (id == R.id.nav_slideshow) {
 
-            if(MyApplication.isLogin()){
+            if (MyApplication.isLogin()) {
 
                 Intent intent = new Intent(this, SetUpActivity.class);
                 startActivity(intent);
 
-            }else{
+            } else {
 
                 Intent intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);
 
             }
 
-        }else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
 
@@ -312,22 +309,23 @@ public class MainActivity extends AutoLayoutActivity
 
 
     String videoFile;
-    String [] thum;
+    String[] thum;
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
 
-            RecordResult result =new RecordResult(data);
+            RecordResult result = new RecordResult(data);
             //得到视频地址，和缩略图地址的数组，返回十张缩略图
             videoFile = result.getPath();
             thum = result.getThumbnail();
             result.getDuration();
 
-            Intent intent = new Intent(this,PublishActivity.class);
-            intent.putExtra("url",videoFile);
-            intent.putExtra("img",thum[0]);
+            Intent intent = new Intent(this, PublishActivity.class);
+            intent.putExtra("url", videoFile);
+            intent.putExtra("img", thum[0]);
             startActivity(intent);
 
         }
@@ -337,15 +335,15 @@ public class MainActivity extends AutoLayoutActivity
     @Override
     public void onClick(View v) {
 
-        switch (v.getId()){
+        switch (v.getId()) {
 
             case R.id.fab_1:
 
-                if(MyApplication.isLogin()){
+                if (MyApplication.isLogin()) {
                     Intent i = new Intent(this, NearbyActivity.class);
                     startActivity(i);
 
-                }else{
+                } else {
                     Intent intent = new Intent(this, LoginActivity.class);
                     startActivity(intent);
                 }
@@ -355,13 +353,13 @@ public class MainActivity extends AutoLayoutActivity
             case R.id.nav_head:
 
 
-                if(MyApplication.isLogin()){
+                if (MyApplication.isLogin()) {
 
                     Intent intent = new Intent(this, PersonalCenterActivity.class);
-                    intent.putExtra("uid",SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,""));
+                    intent.putExtra("uid", SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id, ""));
                     startActivity(intent);
 
-                }else{
+                } else {
                     Intent intents = new Intent(this, LoginActivity.class);
                     startActivity(intents);
                 }
@@ -371,12 +369,12 @@ public class MainActivity extends AutoLayoutActivity
 
             case R.id.message_layout:
 
-                if(MyApplication.isLogin()){
+                if (MyApplication.isLogin()) {
 
                     Intent i = new Intent(this, MessageActivity.class);
                     startActivity(i);
 
-                }else{
+                } else {
                     Intent intents = new Intent(this, LoginActivity.class);
                     startActivity(intents);
                 }
@@ -386,12 +384,27 @@ public class MainActivity extends AutoLayoutActivity
             case R.id.chat_layout:
 
 
-                if(MyApplication.isLogin()){
+                if (MyApplication.isLogin()) {
 
                     Intent intents = new Intent(this, CharListActivity.class);
                     startActivity(intents);
 
-                }else{
+                } else {
+                    Intent intents = new Intent(this, LoginActivity.class);
+                    startActivity(intents);
+                }
+                drawer.closeDrawer(GravityCompat.START);
+
+                break;
+
+            case R.id.notice_layout:
+
+                if (MyApplication.isLogin()) {
+
+                    Intent intents = new Intent(this, NoticeActivity.class);
+                    startActivity(intents);
+
+                } else {
                     Intent intents = new Intent(this, LoginActivity.class);
                     startActivity(intents);
                 }
@@ -409,7 +422,22 @@ public class MainActivity extends AutoLayoutActivity
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            UpdateMessage();
+            Log.e("接收", "接收到的广播：" + intent.getAction());
+
+            //处理不同的广播
+            //登录更新用户信息
+            if (intent.getAction().equals(LoginActivity.action)) {
+                UpdateMessage();
+            }
+            //修改头像
+            else if (intent.getAction().equals(ModifyUserActivity.action)) {
+
+                ImageLoader.getInstance().displayImage(UrlConfig.HEAD + MyApplication.getU_headurl(), head,
+                        ImageLoadOptions.getOptions());
+                name.setText(MyApplication.getU_name());
+
+            }
+
 
         }
     };
@@ -417,16 +445,16 @@ public class MainActivity extends AutoLayoutActivity
     /**
      * 更新用户资料
      */
-    public void UpdateMessage(){
+    public void UpdateMessage() {
 
         //登录
-        if(MyApplication.isLogin()){
+        if (MyApplication.isLogin()) {
 
-            ImageLoader.getInstance().displayImage(UrlConfig.HEAD+MyApplication.getU_headurl(),head,
+            ImageLoader.getInstance().displayImage(UrlConfig.HEAD + MyApplication.getU_headurl(), head,
                     ImageLoadOptions.getOptions());
             name.setText(MyApplication.getU_name());
 
-            commentMessageCount = dao.SelectMessageCount(2)+dao.SelectMessageCount(3)+dao.SelectMessageCount(4);//查询评论相关消息未读数
+            commentMessageCount = dao.SelectMessageCount(2) + dao.SelectMessageCount(3) + dao.SelectMessageCount(4);//查询评论相关消息未读数
             noticeCount = dao.SelectMessageCount(1);//查询
             chatCount = dao.SelectMessageCount(5);//查询聊天未读数
             //设置显示未读消息条数
@@ -434,7 +462,7 @@ public class MainActivity extends AutoLayoutActivity
             chat_BadgeView.setBadgeCount(chatCount);
 
 
-        }else{
+        } else {
 
             head.setBackgroundResource(R.mipmap.ic_launcher);
             name.setText("点击头像登录...");
@@ -442,7 +470,6 @@ public class MainActivity extends AutoLayoutActivity
         }
 
     }
-
 
 
     @Override
@@ -454,10 +481,11 @@ public class MainActivity extends AutoLayoutActivity
 
     /**
      * 监听未读评论的消息数量
+     *
      * @param count
      */
     @Override
-    public void onServerMessage(int type,int count) {
+    public void onServerMessage(int type, int count) {
 
         message_Type = type;
 
@@ -470,9 +498,9 @@ public class MainActivity extends AutoLayoutActivity
         super.onStart();
 
         //查询未读消息，在登录的状态执行
-        if(MyApplication.isLogin()){
+        if (MyApplication.isLogin()) {
 
-           commentMessageCount = dao.SelectMessageCount(2)+dao.SelectMessageCount(3)+dao.SelectMessageCount(4);//查询评论相关消息未读数
+            commentMessageCount = dao.SelectMessageCount(2) + dao.SelectMessageCount(3) + dao.SelectMessageCount(4);//查询评论相关消息未读数
             noticeCount = dao.SelectMessageCount(1);//查询
             chatCount = dao.SelectMessageCount(5);//查询聊天未读数
             //设置显示未读消息条数
@@ -484,27 +512,29 @@ public class MainActivity extends AutoLayoutActivity
     }
 
     //获取用户信息
-    public void getUserMsg(){
+    public void getUserMsg() {
 
-        String uid = SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id,"");
+        String uid = SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_id, "");
 
-        if(uid.equals("")){
+        if (uid.equals("")) {
 
             MyApplication.setIsLogin(false);
 
-        }else {
+        } else {
 
-            String name = SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_name,"");
-            String phone = SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_phone,"");
-            String headurl = SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_headurl,"");
-            String desc = SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_desc,"");
-            String accessToken = SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.accessToken,"");
+            String name = SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_name, "");
+            String phone = SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_phone, "");
+            String headurl = SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_headurl, "");
+            String desc = SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_desc, "");
+            String accessToken = SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.accessToken, "");
+            String sex = SharePreferenceUtil.getInstance(this).getString(SharePreferenceUtil.u_sex, "");
             MyApplication.setIsLogin(true);
             MyApplication.setU_id(uid);
             MyApplication.setU_name(name);
             MyApplication.setU_phone(phone);
             MyApplication.setU_headurl(headurl);
             MyApplication.setU_desc(desc);
+            MyApplication.setU_sex(sex);
             MyApplication.setAccessToken(accessToken);
 
         }
