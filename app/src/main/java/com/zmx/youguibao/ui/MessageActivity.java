@@ -23,6 +23,7 @@ import com.zmx.youguibao.fragment.CommentMessageFragment;
 import com.zmx.youguibao.fragment.ZanMessageFragment;
 import com.zmx.youguibao.fragment.tab.MessageFragmentAdapter;
 import com.zmx.youguibao.fragment.tab.MessageItem;
+import com.zmx.youguibao.utils.view.StatusBarUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,19 +51,7 @@ public class MessageActivity extends BaseActivity {
 
         // 沉浸式状态栏
         positionView = findViewById(R.id.position_view);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-
-            Window window = getWindow();
-            window.setFlags(
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
-            int statusBarHeight = getStatusBarHeight();
-            ViewGroup.LayoutParams lp = positionView.getLayoutParams();
-            lp.height = statusBarHeight;
-            positionView.setLayoutParams(lp);
-
-        }
+        StatusBarUtil.setTransparentForImageView(this,positionView);//状态栏一体化
         head_title = (TextView) findViewById(R.id.head_title);
         head_title.setText("消息");
         head_left = (ImageView) findViewById(R.id.head_left);

@@ -32,6 +32,7 @@ import com.zmx.youguibao.utils.UrlConfig;
 import com.zmx.youguibao.utils.Utils;
 import com.zmx.youguibao.utils.view.ImageLoadOptions;
 import com.zmx.youguibao.utils.view.ImageViewUtil;
+import com.zmx.youguibao.utils.view.StatusBarUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,11 +72,12 @@ public class ReplyCommentActivity extends BaseActivity implements ReplyOneCommen
     @Override
     protected void initViews() {
 
+        // 沉浸式状态栏
+        positionView = findViewById(R.id.position_view);
+        StatusBarUtil.setTransparentForImageView(this,positionView);//状态栏一体化
+
         vcid = getIntent().getStringExtra("vcid");
         vid = getIntent().getStringExtra("vid");
-
-        Log.e("vid","vid "+vid);
-
         presenter = new UploadVideoPresenter(this,this);
         presenter.QueryOneComment("QueryOneComment",vcid);
 

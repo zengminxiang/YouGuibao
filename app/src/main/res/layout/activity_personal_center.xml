@@ -19,14 +19,14 @@
     <RelativeLayout
         android:id="@+id/rlTitle"
         android:layout_width="match_parent"
-        android:layout_height="65dp"
+        android:layout_height="100px"
         android:background="#5677FB">
 
         <!--沉浸式activity，这个view是用来占位的   -->
         <View
             android:id="@+id/position_view"
-            android:layout_width="30px"
-            android:layout_height="30px" />
+            android:layout_width="0px"
+            android:layout_height="0px" />
 
 
         <RelativeLayout

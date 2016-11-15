@@ -12,6 +12,7 @@ import android.widget.Button;
 import com.zmx.youguibao.BaseActivity;
 import com.zmx.youguibao.R;
 import com.zmx.youguibao.SharePreferenceUtil;
+import com.zmx.youguibao.utils.view.StatusBarUtil;
 
 import java.util.Set;
 
@@ -35,7 +36,9 @@ public class SetUpActivity extends BaseActivity {
 
     @Override
     protected void initViews() {
-
+        // 沉浸式状态栏
+        positionView = findViewById(R.id.position_view);
+        StatusBarUtil.setTransparentForImageView(this,positionView);//状态栏一体化
         exit_login = (Button) findViewById(R.id.exit_login);
         exit_login.setOnClickListener(this);
 

@@ -24,6 +24,7 @@ import com.zmx.youguibao.utils.view.ImageViewUtil;
 import com.zmx.youguibao.utils.view.ObservableScrollView;
 
 import java.io.File;
+import java.lang.reflect.Field;
 
 /**
  * 作者：胖胖祥
@@ -201,7 +202,24 @@ public class RegisterActivity extends BaseActivity implements ObservableScrollVi
 
     }
 
+    //获取状态栏的高度
+    public int getStatusBarHeight() {
 
+        Class<?> c = null;
+        Object obj = null;
+        Field field = null;
+        int x = 0, statusBarHeight = 0;
+        try {
+            c = Class.forName("com.android.internal.R$dimen");
+            obj = c.newInstance();
+            field = c.getField("status_bar_height");
+            x = Integer.parseInt(field.get(obj).toString());
+            statusBarHeight = getResources().getDimensionPixelSize(x);
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
+        return statusBarHeight;
+    }
 
 
 }

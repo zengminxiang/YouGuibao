@@ -74,8 +74,6 @@ public class PersonalCenterActivity extends BaseActivity implements AbsListView.
     private TextView load_text, no_date;//上拉
     private ProgressBar login_load;//上拉
 
-    private View positionViews;
-
     @Override
     protected int getLayoutId() {
         return R.layout.activity_personal_center;
@@ -85,20 +83,8 @@ public class PersonalCenterActivity extends BaseActivity implements AbsListView.
     protected void initViews() {
 
         // 沉浸式状态栏
-        positionViews = findViewById(R.id.position_view);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-
-            Window window = getWindow();
-            window.setFlags(
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
-            int statusBarHeight = getStatusBarHeight();
-            ViewGroup.LayoutParams lp = positionViews.getLayoutParams();
-            lp.height = statusBarHeight;
-            positionViews.setLayoutParams(lp);
-
-        }
+        positionView = findViewById(R.id.position_view);
+        StatusBarUtil.setTransparentForImageView(this,positionView);//状态栏一体化
 
         showLoadingView();
         uid = this.getIntent().getStringExtra("uid");
@@ -443,6 +429,8 @@ public class PersonalCenterActivity extends BaseActivity implements AbsListView.
 
                 String isHead = data.getStringExtra("isHead");
                 String isSex = data.getStringExtra("isSex");
+                Log.e("isSex","isSex="+isSex);
+                Log.e("isSex","MyApplication.getU_sex()="+MyApplication.getU_sex());
 
                 //更新了偷笑
                 if (isHead.equals("1")){

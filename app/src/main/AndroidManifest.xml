@@ -172,7 +172,6 @@
                 <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED" />
                 <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED" />
                 <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED" />
-
                 <category android:name="com.zmx.youguibao" />
             </intent-filter>
         </receiver>
@@ -191,7 +190,7 @@
             android:value="8d3f81a12c423274d99dccf4" />
 
         <activity android:name=".ui.CharListActivity" />
-        <activity android:name=".ui.ChatActivity"/>
+        <activity android:name=".ui.ChatActivity" android:windowSoftInputMode="adjustResize" />
         <activity android:name=".ui.NoticeActivity" />
         <activity android:name=".ui.ModifyUserActivity"></activity>
     </application>

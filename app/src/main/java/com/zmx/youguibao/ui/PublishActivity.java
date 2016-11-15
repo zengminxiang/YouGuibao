@@ -40,6 +40,7 @@ import com.zmx.youguibao.customview.MyRoundProgressBar;
 import com.zmx.youguibao.mvp.presenter.UploadVideoPresenter;
 import com.zmx.youguibao.mvp.view.UploadVideoView;
 import com.zmx.youguibao.qupai.bean.Contant;
+import com.zmx.youguibao.utils.view.StatusBarUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -81,19 +82,7 @@ public class PublishActivity extends BaseActivity implements UploadVideoView{
 
         // 沉浸式状态栏
         positionView = findViewById(R.id.position_view);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-
-            Window window = getWindow();
-            window.setFlags(
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
-            int statusBarHeight = getStatusBarHeight();
-            ViewGroup.LayoutParams lp = positionView.getLayoutParams();
-            lp.height = statusBarHeight;
-            positionView.setLayoutParams(lp);
-
-        }
+        StatusBarUtil.setTransparentForImageView(this,positionView);//状态栏一体化
 
         presenter = new UploadVideoPresenter(this,this);
         DisplayMetrics metrics = new DisplayMetrics();

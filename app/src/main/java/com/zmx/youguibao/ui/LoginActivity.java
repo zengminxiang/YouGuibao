@@ -63,7 +63,7 @@ public class LoginActivity extends BaseActivity implements LoginView{
     @Override
     protected void initViews() {
 
-        overridePendingTransition(R.anim.push_up_in,R.anim.push_up_out);
+        overridePendingTransition(R.anim.push_up_in,R.anim.push_up_out);//进入模式
         userPresenter = new UserPresenter(this,this);
         layout = (RelativeLayout) findViewById(R.id.layout);
         register_icon = (ImageView) findViewById(R.id.register_icon);

@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -41,6 +42,7 @@ import com.zmx.youguibao.mvp.view.ModifyUserView;
 import com.zmx.youguibao.utils.UrlConfig;
 import com.zmx.youguibao.utils.view.ImageLoadOptions;
 import com.zmx.youguibao.utils.view.ImageViewUtil;
+import com.zmx.youguibao.utils.view.StatusBarUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -58,6 +60,7 @@ public class ModifyUserActivity extends BaseActivity implements ModifyUserView {
     private TextView edit_sex;//性别显示的text
     private TextView cancel;//取消
     private TextView name;//取消
+    private EditText edit_desc;//简介
 
     private View sex_inflate, photo_inflate;//选择性别的view
     private ImageButton secrecy, girl, boy;
@@ -83,19 +86,8 @@ public class ModifyUserActivity extends BaseActivity implements ModifyUserView {
 
         // 沉浸式状态栏
         positionView = findViewById(R.id.position_view);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        StatusBarUtil.setTransparentForImageView(this,positionView);//状态栏一体化
 
-            Window window = getWindow();
-            window.setFlags(
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
-            int statusBarHeight = getStatusBarHeight();
-            ViewGroup.LayoutParams lp = positionView.getLayoutParams();
-            lp.height = statusBarHeight;
-            positionView.setLayoutParams(lp);
-
-        }
         up = new UserPresenter(this, this);
         right = getResources().getDrawable(R.mipmap.wallet_base_right_arrow);
         right.setBounds(0, 0, right.getMinimumWidth(), right.getMinimumHeight());
@@ -109,10 +101,12 @@ public class ModifyUserActivity extends BaseActivity implements ModifyUserView {
         user_text_head = (TextView) findViewById(R.id.user_text_head);
         user_text_head.setOnClickListener(this);
         user_head = (ImageViewUtil) findViewById(R.id.user_head);
+        edit_desc = (EditText) findViewById(R.id.edit_desc);
 
         name.setText(MyApplication.getU_name());
+        edit_desc.setText(MyApplication.getU_desc());
         sex = MyApplication.getU_sex();
-        isSex = MyApplication.getU_sex();
+        isSex = sex;
         if (sex.equals("1")) {
 
             edit_sex.setText("男");
@@ -210,6 +204,7 @@ public class ModifyUserActivity extends BaseActivity implements ModifyUserView {
 
                 Intent intentss = new Intent();
                 intentss.putExtra("isHead", isHead);
+                intentss.putExtra("isSex",isSex);
                 setResult(1, intentss);
                 this.finish();
 

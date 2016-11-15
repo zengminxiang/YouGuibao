@@ -48,6 +48,7 @@ import com.zmx.youguibao.mvp.bean.VideoLikeJson;
 import com.zmx.youguibao.mvp.bean.VideoListJson;
 import com.zmx.youguibao.mvp.presenter.UploadVideoPresenter;
 import com.zmx.youguibao.mvp.view.VideoDetailsView;
+import com.zmx.youguibao.utils.AndroidBug5497Workaround;
 import com.zmx.youguibao.utils.UrlConfig;
 import com.zmx.youguibao.utils.view.ImageLoadOptions;
 import com.zmx.youguibao.utils.view.ImageViewUtil;
@@ -198,20 +199,7 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
     protected void initViews() {
 
         // 沉浸式状态栏
-        positionView = findViewById(R.id.position_view);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-
-            Window window = getWindow();
-            window.setFlags(
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
-            int statusBarHeight = getStatusBarHeight();
-            ViewGroup.LayoutParams lp = positionView.getLayoutParams();
-            lp.height = statusBarHeight;
-            positionView.setLayoutParams(lp);
-
-        }
+        StatusBarUtil.setColor(this, getResources().getColor(R.color.title_bage), 0);
 
         if (MyApplication.isLogin()) {
             WheterLogin = true;

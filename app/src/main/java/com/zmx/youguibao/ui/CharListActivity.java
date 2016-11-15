@@ -66,19 +66,7 @@ public class CharListActivity extends BaseActivity implements JPushReceiver.Serv
 
         // 沉浸式状态栏
         positionView = findViewById(R.id.position_view);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-
-            Window window = getWindow();
-            window.setFlags(
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
-            int statusBarHeight = getStatusBarHeight();
-            ViewGroup.LayoutParams lp = positionView.getLayoutParams();
-            lp.height = statusBarHeight;
-            positionView.setLayoutParams(lp);
-
-        }
+        StatusBarUtil.setTransparentForImageView(this,positionView);//状态栏一体化
         head_title = (TextView) findViewById(R.id.head_title);
         head_title.setText("会话列表");
         head_left = (ImageView) findViewById(R.id.head_left);

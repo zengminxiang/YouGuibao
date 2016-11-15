@@ -33,7 +33,9 @@ import com.zmx.youguibao.dao.ChatDao;
 import com.zmx.youguibao.dao.ChatListMessageDao;
 import com.zmx.youguibao.mvp.bean.ChatMessagePojo;
 import com.zmx.youguibao.mvp.bean.ChatPojo;
+import com.zmx.youguibao.utils.AndroidBug5497Workaround;
 import com.zmx.youguibao.utils.UrlConfig;
+import com.zmx.youguibao.utils.view.StatusBarUtil;
 
 import org.json.JSONObject;
 
@@ -74,19 +76,8 @@ public class ChatActivity extends BaseActivity implements JPushReceiver.ServerCh
 
         // 沉浸式状态栏
         positionView = findViewById(R.id.position_view);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-
-            Window window = getWindow();
-            window.setFlags(
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
-            int statusBarHeight = getStatusBarHeight();
-            ViewGroup.LayoutParams lp = positionView.getLayoutParams();
-            lp.height = statusBarHeight;
-            positionView.setLayoutParams(lp);
-
-        }
+        // 沉浸式状态栏
+        StatusBarUtil.setColor(this, getResources().getColor(R.color.title_bage), 0);
         head_title = (TextView) findViewById(R.id.head_title);
         head_left = (ImageView) findViewById(R.id.head_left);
         head_left.setOnClickListener(this);

@@ -156,7 +156,6 @@
                     android:layout_marginTop="16px"
                     android:ellipsize="end"
                     android:singleLine="true"
-                    android:text="@string/user_des"
                     android:textColor="#B1B1B1"
                     android:textSize="24px" />
 
