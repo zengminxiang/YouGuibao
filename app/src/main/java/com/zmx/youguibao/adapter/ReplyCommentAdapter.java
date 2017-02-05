@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.zmx.youguibao.R;
+import com.zmx.youguibao.emoticon.utils.SpanStringUtils;
 import com.zmx.youguibao.mvp.bean.ReplyCommentJson;
 import com.zmx.youguibao.mvp.bean.VideoCommentJson;
 
@@ -70,6 +71,7 @@ public class ReplyCommentAdapter extends BaseAdapter {
             v = LayoutInflater.from(context).inflate(R.layout.reply_comment_item, null);
             holder = new ViewHolder();
             holder.content = (TextView) v.findViewById(R.id.content);
+            holder.content_name = (TextView) v.findViewById(R.id.content_name);
             v.setTag(holder);
 
         } else {
@@ -82,12 +84,11 @@ public class ReplyCommentAdapter extends BaseAdapter {
         String bname = lists.get(position).getBu_name();//被回复的用户
         String comment = lists.get(position).getVr_content();//回复的内容
 
-        Log.e("数据", "uid " + uid + "name " + name + "bname " + bname + "comment " + comment);
+        holder.content_name.setText(UserNameOnclik(holder.content, name, uid, bname));
+        holder.content.setText(SpanStringUtils.getEmotionContent(0x0001,
+                context, holder.content, comment));
 
-
-        holder.content.setText(UserNameOnclik(holder.content, name, uid, bname, comment));
-
-        holder.content.setOnClickListener(new View.OnClickListener() {
+        holder.content_name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -106,10 +107,10 @@ public class ReplyCommentAdapter extends BaseAdapter {
     }
 
     public class ViewHolder {
-        TextView content;
+        TextView content_name,content;
     }
 
-    public SpannableStringBuilder UserNameOnclik(TextView comment_view, String name, String uid, String bname, String comments) {
+    public SpannableStringBuilder UserNameOnclik(TextView comment_view, String name, String uid, String bname) {
 
         StringBuilder actionText = new StringBuilder();
         actionText
@@ -123,7 +124,7 @@ public class ReplyCommentAdapter extends BaseAdapter {
 
         }
 
-        actionText.append(" : " + comments);
+        actionText.append(" : ");
         comment_view.setText(Html.fromHtml(actionText.toString()));
         comment_view.setMovementMethod(LinkMovementMethod
                 .getInstance());

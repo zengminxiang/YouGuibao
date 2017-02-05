@@ -75,6 +75,11 @@ public class SharePreferenceUtil {
     public String getString(String key, String defValue){
         return sp.getString(key, defValue);
     }
+
+    public int getIntType(String key, int defValue){
+        return sp.getInt(key, defValue);
+    }
+
     /**
      * 获取保存在本地的数据 未加密的
      * @param key
@@ -84,6 +89,7 @@ public class SharePreferenceUtil {
     public boolean getBoolean(String key, boolean defValue){
         return sp.getBoolean(key, defValue);
     }
+
 
     public static final String accessToken = "accessToken";
     public static String u_id = "u_id";

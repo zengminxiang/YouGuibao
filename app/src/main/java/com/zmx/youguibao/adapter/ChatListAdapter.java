@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zmx.youguibao.R;
+import com.zmx.youguibao.emoticon.utils.SpanStringUtils;
 import com.zmx.youguibao.mvp.bean.ChatMessagePojo;
 import com.zmx.youguibao.ui.ChatActivity;
 import com.zmx.youguibao.utils.UrlConfig;
@@ -128,7 +129,8 @@ public class ChatListAdapter extends BaseAdapter{
         // 从view中取得holder
         ViewHolder holder = (ViewHolder) view.getTag();
         ChatMessagePojo chat = (ChatMessagePojo) getItem(index);
-        holder.content.setText(chat.getContent());
+        holder.content.setText(SpanStringUtils.getEmotionContent(0x0001,
+                context, holder.content, chat.getContent()));
         holder.time.setText(Utils.dateDiff(chat.getTime(),new Date(),"yyyy-MM-dd HH:mm:ss"));
 
     }
@@ -170,7 +172,8 @@ public class ChatListAdapter extends BaseAdapter{
         }
 
         holder.name.setText(lists.get(position).getUser_name());
-        holder.content.setText(lists.get(position).getContent());
+        holder.content.setText(SpanStringUtils.getEmotionContent(0x0001,
+                context, holder.content, lists.get(position).getContent()));
         holder.time.setText(Utils.dateDiff(lists.get(position).getTime(),new Date(),"yyyy-MM-dd HH:mm:ss"));
 
         ImageLoader.getInstance().displayImage(UrlConfig.HEAD+lists.get(position).getUser_head(), holder.head,

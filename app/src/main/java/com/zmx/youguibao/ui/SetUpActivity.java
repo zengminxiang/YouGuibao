@@ -37,8 +37,8 @@ public class SetUpActivity extends BaseActivity {
     @Override
     protected void initViews() {
         // 沉浸式状态栏
-        positionView = findViewById(R.id.position_view);
-        StatusBarUtil.setTransparentForImageView(this,positionView);//状态栏一体化
+        // 沉浸式状态栏
+        StatusBarUtil.setColor(this, getResources().getColor(R.color.title_bage), 0);
         exit_login = (Button) findViewById(R.id.exit_login);
         exit_login.setOnClickListener(this);
 

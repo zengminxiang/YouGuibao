@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zmx.youguibao.R;
+import com.zmx.youguibao.emoticon.utils.SpanStringUtils;
 import com.zmx.youguibao.mvp.bean.VideoCommentJson;
 import com.zmx.youguibao.utils.UrlConfig;
 import com.zmx.youguibao.utils.view.ImageLoadOptions;
@@ -75,7 +76,8 @@ public class MessageCommentAdapter extends BaseAdapter{
         VideoCommentJson vcj = lists.get(position);
 
         holder.name.setText(vcj.getU_name());
-        holder.comment.setText(vcj.getVc_content());
+        holder.comment.setText(SpanStringUtils.getEmotionContent(0x0001,
+                context, holder.comment, vcj.getVc_content()));
         holder.time.setText(vcj.getVc_time());
         holder.content.setText(vcj.getV_content());
 

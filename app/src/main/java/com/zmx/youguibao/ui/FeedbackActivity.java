@@ -20,8 +20,6 @@ public class FeedbackActivity extends BaseActivity{
     @Override
     protected void initViews() {
 
-
-
     }
 
 }

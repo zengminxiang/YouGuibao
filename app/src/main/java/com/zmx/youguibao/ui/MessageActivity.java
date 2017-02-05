@@ -50,8 +50,7 @@ public class MessageActivity extends BaseActivity {
     protected void initViews() {
 
         // 沉浸式状态栏
-        positionView = findViewById(R.id.position_view);
-        StatusBarUtil.setTransparentForImageView(this,positionView);//状态栏一体化
+        StatusBarUtil.setColor(this, getResources().getColor(R.color.title_bage), 0);
         head_title = (TextView) findViewById(R.id.head_title);
         head_title.setText("消息");
         head_left = (ImageView) findViewById(R.id.head_left);

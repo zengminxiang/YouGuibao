@@ -8,8 +8,10 @@ import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -42,6 +44,8 @@ import com.zmx.youguibao.R;
 import com.zmx.youguibao.SharePreferenceUtil;
 import com.zmx.youguibao.adapter.CommentAdapter;
 import com.zmx.youguibao.adapter.VideoLikeAdapter;
+import com.zmx.youguibao.emoticon.boardview.EmotionKeyboard;
+import com.zmx.youguibao.emoticon.fragment.EmotionMainFragment;
 import com.zmx.youguibao.ijkplayer.playervideo.VideoPlayView;
 import com.zmx.youguibao.mvp.bean.VideoCommentJson;
 import com.zmx.youguibao.mvp.bean.VideoLikeJson;
@@ -64,12 +68,12 @@ import tv.danmaku.ijk.media.player.IMediaPlayer;
  * 时间：2016/8/27 0027 上午 11:20
  * 功能模块：视频详情界面
  */
-public class VideoDetailsActivity extends BaseActivity implements VideoDetailsView {
+public class VideoDetailsActivity extends BaseActivity implements VideoDetailsView, EmotionKeyboard.ChatCommentLiseners {
 
     //播放器 斤斤计较
-    private FrameLayout frameLayout, full_screen;
+    private FrameLayout frameLayout;
     private VideoPlayView videoItemView;//播放的view
-    private ImageView image_bg, follow, like,head_left;//视频的背景图，关注按钮，点赞按钮
+    private ImageView image_bg, follow, like, head_left;//视频的背景图，关注按钮，点赞按钮
     private RelativeLayout showview;
     private ImageViewUtil userhead;//发表视频用户的头像
 
@@ -84,7 +88,7 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
     //评论区
     private PtrClassicFrameLayout ptrClassicFrameLayout;
     private ListView mListView;
-    private View headview,footView;
+    private View headview, footView;
     private CommentAdapter adapter;
 
     //点赞
@@ -99,15 +103,16 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
     private int pagenow;//总页数
     private int pagesize = 1;//当前页
 
-    private EditText commentEdit;//评论框
-    private Button send;//评论按钮
 
     private boolean wheterLike = false;//是否点赞了
     private boolean repeatClick = true;//防止多次点击点赞按钮
 
     private Dialog dialog;//操作按钮弹出框
     private View dialog_operation;//操作的view
-    private TextView dialog_delete,dialog_cancel,dialog_report,dialog_c_follow;//弹出框的：删除、取消、举报、取消关注
+    private TextView dialog_delete, dialog_cancel, dialog_report, dialog_c_follow;//弹出框的：删除、取消、举报、取消关注
+
+    private EmotionKeyboard ek;
+    private EmotionMainFragment emotionMainFragment;
 
     private final int ONE = 1;//视频播放
     private final int TWO = 2;//下拉刷新新
@@ -139,12 +144,12 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
 
                 case TWO://更新adapter的数据
 
-                   //判断有没有评论
-                    if(listss.size() <= 0){
+                    //判断有没有评论
+                    if (listss.size() <= 0) {
 
                         ptrClassicFrameLayout.setLoadMoreEnable(false);
 
-                    }else{
+                    } else {
 
                         if (pagenow == pagesize || pagenow == 0) {
 
@@ -201,6 +206,9 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
         // 沉浸式状态栏
         StatusBarUtil.setColor(this, getResources().getColor(R.color.title_bage), 0);
 
+        ek = new EmotionKeyboard();
+        ek.setChatCommentLiseners(this);
+
         if (MyApplication.isLogin()) {
             WheterLogin = true;
         }
@@ -212,16 +220,13 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
         presenter.QueryComment("QueryComment", pagesize + "", videoListJson.getV_id() + "");//查询评论
 
         headview = View.inflate(this, R.layout.video_xml_head, null);
-        footView = View.inflate(this,R.layout.list_foot_no_data,null);
+        footView = View.inflate(this, R.layout.list_foot_no_data, null);
         ptrClassicFrameLayout = (PtrClassicFrameLayout) this.findViewById(R.id.test_list_view_frame);
         mListView = (ListView) this.findViewById(R.id.test_list_view);
         mListView.addHeaderView(headview);
         mListView.addFooterView(footView);
         adapter = new CommentAdapter(this, listss);
         mListView.setAdapter(adapter);
-        commentEdit = (EditText) findViewById(R.id.comment);
-        send = (Button) findViewById(R.id.send);
-        send.setOnClickListener(this);
         context = (TextView) headview.findViewById(R.id.context);
         context.setText(videoListJson.getV_content());
         time = (TextView) headview.findViewById(R.id.time);
@@ -263,7 +268,6 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
 
         //视频模块
         frameLayout = (FrameLayout) headview.findViewById(R.id.layout_video);//不全屏的
-        full_screen = (FrameLayout) findViewById(R.id.full_screen);//全屏的
         frameLayout.removeAllViews();
         frameLayout.addView(videoItemView);
         videoItemView.start(videoListJson.getV_videourl());
@@ -310,11 +314,11 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
 
                             ptrClassicFrameLayout.setLoadMoreEnable(false);
 
-                        }else {
+                        } else {
 
-                        pagesize++;
-                        presenter.QueryComment("QueryComment", pagesize + "", videoListJson.getV_id() + "");//查询评论
-                        ptrClassicFrameLayout.loadMoreComplete(true);
+                            pagesize++;
+                            presenter.QueryComment("QueryComment", pagesize + "", videoListJson.getV_id() + "");//查询评论
+                            ptrClassicFrameLayout.loadMoreComplete(true);
 
                         }
                     }
@@ -336,7 +340,7 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
         //注册监听广播
         IntentFilter filter = new IntentFilter(LoginActivity.action);
         registerReceiver(broadcastReceiver, filter);
-
+        initEmotionMainFragment();
     }
 
     @Override
@@ -387,28 +391,6 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
 
         switch (v.getId()) {
 
-            //评论
-            case R.id.send:
-
-                if (MyApplication.isLogin()) {
-
-                    if (TextUtils.isEmpty(commentEdit.getText().toString())) {
-                        Toast.makeText(this, "请输入内容", Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                    presenter.AddComment("AddComment", videoListJson.getV_id() + "",videoListJson.getUid()+"", MyApplication.getU_id(), commentEdit.getText().toString());
-                    commentEdit.setText("");
-                    hideSoftInput(commentEdit.getContext(), commentEdit);
-
-                } else {
-
-                    Intent intent = new Intent(this, LoginActivity.class);
-                    startActivity(intent);
-
-                }
-
-                break;
-
             //视频播放完监听
             case R.id.showview:
 
@@ -437,7 +419,7 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
             //点赞
             case R.id.like:
 
-                if(!repeatClick){
+                if (!repeatClick) {
                     return;
                 }
 
@@ -451,7 +433,7 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
                     } else {
 
                         repeatClick = false;
-                        presenter.AddClickALike("like",videoListJson.getUid()+"", videoListJson.getV_id() + "",MyApplication.getU_id());//点赞
+                        presenter.AddClickALike("like", videoListJson.getUid() + "", videoListJson.getV_id() + "", MyApplication.getU_id());//点赞
 
                     }
 
@@ -483,9 +465,7 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
 
             case R.id.head_left:
 
-                InputMethodManager inputmanger = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputmanger.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                onBackPressed();
+                this.finish();
 
                 break;
 
@@ -504,8 +484,6 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
 
             if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
 
-                full_screen.setVisibility(View.GONE);
-                full_screen.removeAllViews();
                 frameLayout.removeAllViews();
                 frameLayout.addView(videoItemView);
                 headview.setVisibility(View.VISIBLE);
@@ -518,9 +496,7 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
                 if (viewGroup == null)
                     return;
                 viewGroup.removeAllViews();
-                full_screen.addView(videoItemView);
                 headview.setVisibility(View.GONE);
-                full_screen.setVisibility(View.VISIBLE);
 
             }
 
@@ -570,6 +546,13 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
     public void AddComment(VideoCommentJson comment) {
 
         toast("评论成功，经验+1");
+
+        boolean mEmotionLayout =  emotionMainFragment.isViewShown();
+        if(mEmotionLayout){
+            emotionMainFragment.isInterceptBackPress();
+            emotionMainFragment.hideSoftInput();
+        }
+
         if (pagenow == pagesize || pagenow == 0) {
 
             listss.add(comment);
@@ -647,7 +630,7 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
     @Override
     public void VSelectLike(List<VideoLikeJson> likeJson, String pagenow) {
 
-        Log.e("pagenow","pagenow"+pagenow);
+        Log.e("pagenow", "pagenow" + pagenow);
         this.likePagenow = Integer.parseInt(pagenow);
         likelists.clear();
         for (VideoLikeJson j : likeJson) {
@@ -700,14 +683,14 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
         dialog_c_follow.setOnClickListener(this);
 
         //是否关注了当前用户，显示取消关注按钮
-        if(isFollow){
+        if (isFollow) {
             dialog_c_follow.setVisibility(View.VISIBLE);//显示取消关注
         }
 
         //判断是否是自己发表的视频
         if (MyApplication.getU_id().equals(VideoID)) {
             dialog_delete.setVisibility(View.VISIBLE);//显示删除
-        }else{
+        } else {
             dialog_report.setVisibility(View.VISIBLE);//显示举报
         }
 
@@ -729,15 +712,7 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
 //       将属性设置给窗体
         dialog.show();//显示对话框
     }
-
-    public static void hideSoftInput(Context context, View view) {
-
-        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0); //强制隐藏键盘
-
-    }
-
-
+    
     //注册广播监听是否登录
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
 
@@ -757,9 +732,57 @@ public class VideoDetailsActivity extends BaseActivity implements VideoDetailsVi
         videoItemView.stop();
         videoItemView.release();
         videoItemView.onDestroy();
-        videoItemView=null;
+        videoItemView = null;
 
     }
 
+    /**
+     * 初始化表情面板
+     */
+    public void initEmotionMainFragment() {
+        //构建传递参数
+        Bundle bundle = new Bundle();
+        //绑定主内容编辑框
+        bundle.putBoolean(EmotionMainFragment.BIND_TO_EDITTEXT, true);
+        //隐藏控件
+        bundle.putBoolean(EmotionMainFragment.HIDE_BAR_EDITTEXT_AND_BTN, false);
+        //替换fragment
+        //创建修改实例
+        emotionMainFragment = EmotionMainFragment.newInstance(EmotionMainFragment.class, bundle);
+        emotionMainFragment.bindToContentView(ptrClassicFrameLayout);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fl_emotionview_main, emotionMainFragment);
+        transaction.addToBackStack(null);
+        //提交修改
+        transaction.commit();
+    }
 
+    @Override
+    public void onBackPressed() {
+
+        /**
+         * 判断是否拦截返回键操作
+         */
+        if (!emotionMainFragment.isInterceptBackPress()) {
+            super.onBackPressed();
+        }
+    }
+
+
+    @Override
+    public void onChatCommentLiseners(String comment) {
+
+        if (MyApplication.isLogin()) {
+
+            presenter.AddComment("AddComment", videoListJson.getV_id() + "", videoListJson.getUid() + "", MyApplication.getU_id(), comment);
+
+        } else {
+
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+
+        }
+
+
+    }
 }

@@ -14,7 +14,6 @@
         android:id="@+id/relayout"
         android:layout_below="@+id/position_view"
         android:layout_width="match_parent"
-        android:layout_marginTop="5px"
         android:layout_height="100px">
 
         <TextView

@@ -148,7 +148,6 @@ public class MyApplication extends Application {
 //初始化，建议在application里面做初始化，这里做是为了方便开发者认识参数的意义
         qupaiService.initRecord(info, projectOptions, _UISettings);
 
-
         //异步加载图片配置
         configImageLoader();
         DisplayImageOptions defaultOptions = new DisplayImageOptions

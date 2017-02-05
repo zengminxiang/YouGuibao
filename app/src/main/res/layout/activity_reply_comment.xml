@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+    android:orientation="vertical">
+
+    <include layout="@layout/activity_head_layout"></include>
 
     <com.chanven.lib.cptr.PtrClassicFrameLayout
         xmlns:cube_ptr="http://schemas.android.com/apk/res-auto"
         android:id="@+id/test_list_view_frame"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/title"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:background="#f0f0f0"
-        android:layout_marginBottom="60dp"
         cube_ptr:ptr_duration_to_close="200"
         cube_ptr:ptr_duration_to_close_header="700"
         cube_ptr:ptr_keep_header_when_refresh="true"
@@ -31,5 +32,8 @@
             android:scrollbarStyle="outsideOverlay" />
     </com.chanven.lib.cptr.PtrClassicFrameLayout>
 
-    <include layout="@layout/comment_xml"/>
-</RelativeLayout>
+    <FrameLayout
+        android:id="@+id/fl_emotionview_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+</LinearLayout>

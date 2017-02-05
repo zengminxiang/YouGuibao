@@ -7,8 +7,8 @@ buildscript {
         classpath 'org.greenrobot:greendao-gradle-plugin:3.0.0'
     }
 }
-apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
+apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
@@ -101,10 +101,8 @@ dependencies {
     compile files('libs/BaiduLBS_Android.jar')
     //tab弹出框样式
     compile 'com.getbase:floatingactionbutton:1.10.1'
-    compile 'cn.jiguang:jpush:2.1.8'
-    // 此处以SDK 2.1.8版本为例极光
+    compile 'cn.jiguang:jpush:2.1.8' // 此处以SDK 2.1.8版本为例极光
     compile files('libs/badgeview.jar')
-    compile 'org.greenrobot:greendao:3.0.1'
-    //GreenDao 3.0使用方式
+    compile 'org.greenrobot:greendao:3.0.1'    //GreenDao 3.0使用方式
     compile files('libs/android-async-http-1.4.4.jar')
 }

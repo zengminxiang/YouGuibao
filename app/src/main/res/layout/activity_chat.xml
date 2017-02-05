@@ -1,56 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.zmx.youguibao.ui.ChatActivity">
+    android:orientation="vertical">
 
-    <include android:id="@+id/title" layout="@layout/activity_head_layout"></include>
+    <include layout="@layout/activity_head_layout"></include>
 
     <ListView
         android:id="@+id/listview"
-        android:layout_below="@+id/title"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:cacheColorHint="#00000000"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@android:color/white"
+        android:choiceMode="singleChoice"
         android:divider="#00000000"
+        android:dividerHeight="0dp"
         android:fadingEdge="none"
-        android:listSelector="#00000000"
-        android:layout_marginBottom="90px"
-        android:transcriptMode="alwaysScroll" >
-    </ListView>
+        />
 
-    <RelativeLayout
-        android:id="@+id/rela2"
+    <FrameLayout
+        android:id="@+id/fl_emotionview_main"
         android:layout_width="match_parent"
-        android:layout_height="90px"
-        android:visibility="gone"
-        android:layout_alignParentBottom="true"
-        android:background="#E8F2FE" >
-
-        <EditText
-            android:id="@+id/context"
-            android:layout_width="50dp"
-            android:layout_height="40dp"
-            android:layout_alignParentLeft="true"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginLeft="10dp"
-            android:layout_toLeftOf="@+id/send"
-            android:background="@drawable/chat_edittext" >
-
-            <requestFocus />
-        </EditText>
-
-        <Button
-            android:id="@+id/send"
-            android:layout_width="70dp"
-            android:layout_height="40dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:background="@mipmap/button"
-            android:text="发送" />
-    </RelativeLayout>
-
-    <include layout="@layout/comment_xml"/>
-</RelativeLayout>
+        android:layout_height="wrap_content" />
+</LinearLayout>

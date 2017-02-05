@@ -12,6 +12,8 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zmx.youguibao.R;
 import com.zmx.youguibao.SharePreferenceUtil;
+import com.zmx.youguibao.emoticon.fragment.EmotionMainFragment;
+import com.zmx.youguibao.emoticon.utils.SpanStringUtils;
 import com.zmx.youguibao.mvp.bean.ChatPojo;
 import com.zmx.youguibao.utils.UrlConfig;
 import com.zmx.youguibao.utils.view.ImageLoadOptions;
@@ -116,8 +118,8 @@ public class ChatAdapter extends BaseAdapter{
         }
 
         // 设置数据
-        // 设置时间格式
-        holder.mMsg.setText(chat.getMsg());
+        holder.mMsg.setText(SpanStringUtils.getEmotionContent(0x0001,
+                context, holder.mMsg, chat.getMsg()));
 
         //处理刷新数据后闪屏问题
         holder.head.setScaleType(ImageView.ScaleType.CENTER_CROP);

@@ -28,6 +28,7 @@ import java.util.List;
  * 功能模块：视频的适配器
  */
 public class VideoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
     private LayoutInflater mLayoutInflater;
     private Context mContext;
     private List<VideoListJson> lists;

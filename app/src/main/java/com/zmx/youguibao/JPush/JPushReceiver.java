@@ -156,7 +156,6 @@ public class JPushReceiver extends BroadcastReceiver {
 
     // 消息回调接口
     public static ArrayList<ServerMessage> msgListeners = new ArrayList<ServerMessage>();
-
     public interface ServerMessage {
 
         void onServerMessage(int type, int count);//未读消息
@@ -165,14 +164,12 @@ public class JPushReceiver extends BroadcastReceiver {
 
     //聊天消息回调接口
     public static ArrayList<ServerChat> chatListeners = new ArrayList<>();
-
     public interface ServerChat {
         void onServerChat(ChatPojo chatPojo);//更新新消息
     }
 
     //聊天列表回调接口
     public static ArrayList<ServerChatList> chatListLiseners = new ArrayList<>();
-
     public interface ServerChatList {
         void onServerChatList(ChatMessagePojo chat);//更新聊天列表
     }

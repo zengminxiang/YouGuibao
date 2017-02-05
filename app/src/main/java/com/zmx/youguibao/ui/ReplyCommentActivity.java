@@ -2,6 +2,7 @@ package com.zmx.youguibao.ui;
 
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -24,6 +25,9 @@ import com.zmx.youguibao.R;
 import com.zmx.youguibao.SharePreferenceUtil;
 import com.zmx.youguibao.adapter.CommentAdapter;
 import com.zmx.youguibao.adapter.ReplyCommentAdapter;
+import com.zmx.youguibao.emoticon.boardview.EmotionKeyboard;
+import com.zmx.youguibao.emoticon.fragment.EmotionMainFragment;
+import com.zmx.youguibao.emoticon.utils.SpanStringUtils;
 import com.zmx.youguibao.mvp.bean.ReplyCommentJson;
 import com.zmx.youguibao.mvp.bean.VideoCommentJson;
 import com.zmx.youguibao.mvp.presenter.UploadVideoPresenter;
@@ -42,15 +46,12 @@ import java.util.List;
  *时间：2016/9/5 0005 下午 2:44
  *功能模块：回复评论的列表
  */
-public class ReplyCommentActivity extends BaseActivity implements ReplyOneCommentView{
+public class ReplyCommentActivity extends BaseActivity implements ReplyOneCommentView,EmotionKeyboard.ChatCommentLiseners {
 
     private TextView name,time,comtext;
     private ImageViewUtil head;
-    private ImageView comment_button;
     private String vcid;
     private String vid;
-    private EditText comment_text;
-    private Button send;
 
     private ReplyCommentAdapter adapter;
     private PtrClassicFrameLayout ptrClassicFrameLayout;
@@ -60,6 +61,9 @@ public class ReplyCommentActivity extends BaseActivity implements ReplyOneCommen
     private View headview;
 
     private UploadVideoPresenter presenter;
+
+    private EmotionKeyboard ek;
+    private EmotionMainFragment emotionMainFragment;
 
     private String reply_name = "";//被回复的用户昵称
 
@@ -73,8 +77,15 @@ public class ReplyCommentActivity extends BaseActivity implements ReplyOneCommen
     protected void initViews() {
 
         // 沉浸式状态栏
-        positionView = findViewById(R.id.position_view);
-        StatusBarUtil.setTransparentForImageView(this,positionView);//状态栏一体化
+        StatusBarUtil.setColor(this, getResources().getColor(R.color.title_bage), 0);
+
+        head_title = (TextView) findViewById(R.id.head_title);
+        head_title.setText("详情");
+        head_left = (ImageView) findViewById(R.id.head_left);
+        head_left.setOnClickListener(this);
+
+        ek = new EmotionKeyboard();
+        ek.setChatCommentLiseners(this);
 
         vcid = getIntent().getStringExtra("vcid");
         vid = getIntent().getStringExtra("vid");
@@ -133,10 +144,8 @@ public class ReplyCommentActivity extends BaseActivity implements ReplyOneCommen
         comtext = (TextView) headview.findViewById(R.id.comtext);
         time = (TextView) headview.findViewById(R.id.time);
         head = (ImageViewUtil) headview.findViewById(R.id.head);
-        comment_button = (ImageView) headview.findViewById(R.id.comment_button);
-        comment_text = (EditText) findViewById(R.id.comment);
-        send = (Button) findViewById(R.id.send);
-        send.setOnClickListener(this);
+
+        initEmotionMainFragment();
 
     }
 
@@ -146,13 +155,8 @@ public class ReplyCommentActivity extends BaseActivity implements ReplyOneCommen
 
         switch (v.getId()){
 
-            case R.id.send:
-
-                if(TextUtils.isEmpty(comment_text.getText().toString())){
-                    toast("输入内容");
-                    return;
-                }
-                presenter.ReplyComment("ReplyComment",vcid, MyApplication.getU_id(),reply_name,comment_text.getText().toString(),vid);
+            case R.id.head_left:
+                this.finish();
                 break;
 
         }
@@ -171,9 +175,15 @@ public class ReplyCommentActivity extends BaseActivity implements ReplyOneCommen
                     Bundle bundle = msg.getData();
                     reply_name = bundle.getString("name");
                     String id = bundle.getString("uid");
-                    Log.e("sss","sss"+name);
-                    comment_text.setHint("回复 "+reply_name+" : ");
-                    Utils.showSoftInput(mActivity,comment_text);
+                    emotionMainFragment.setEdittextHint("回复 "+reply_name+" : ");
+
+                    //关闭输入法或者表情
+                    boolean mEmotionLayout =  emotionMainFragment.isViewShown();
+                    if(mEmotionLayout){
+                        emotionMainFragment.isInterceptBackPress();
+                    }
+                    Utils.showSoftInput(mActivity);
+
                     break;
 
             }
@@ -192,15 +202,14 @@ public class ReplyCommentActivity extends BaseActivity implements ReplyOneCommen
                 case 1:
 
                     name.setText(commentJson.getU_name());
-                    comtext.setText(commentJson.getVc_content());
+                    comtext.setText(SpanStringUtils.getEmotionContent(0x0001,
+                            mActivity, comtext, commentJson.getVc_content()));
                     time.setText(commentJson.getVc_time());
                     ImageLoader.getInstance().displayImage(UrlConfig.HEAD+commentJson.getU_head(), head,
                             ImageLoadOptions.getOptions());
 
                     for (ReplyCommentJson replys:commentJson.getReplylist()) {
-
                         listss.add(replys);
-
                     }
 
                     adapter.notifyDataSetChanged();
@@ -224,10 +233,56 @@ public class ReplyCommentActivity extends BaseActivity implements ReplyOneCommen
     public void VReplyComment(ReplyCommentJson rcj) {
 
         toast("评论成功");
-        comment_text.setText("");
+
+        boolean mEmotionLayout =  emotionMainFragment.isViewShown();
+        if(mEmotionLayout){
+            emotionMainFragment.isInterceptBackPress();
+            emotionMainFragment.hideSoftInput();
+        }
+
         listss.add(rcj);
         adapter.notifyDataSetChanged();
     }
 
+
+    @Override
+    public void onChatCommentLiseners(String comment) {
+
+        presenter.ReplyComment("ReplyComment",vcid, MyApplication.getU_id(),reply_name,comment,vid);
+
+
+    }
+
+    /**
+     * 初始化表情面板
+     */
+    public void initEmotionMainFragment() {
+        //构建传递参数
+        Bundle bundle = new Bundle();
+        //绑定主内容编辑框
+        bundle.putBoolean(EmotionMainFragment.BIND_TO_EDITTEXT, true);
+        //隐藏控件
+        bundle.putBoolean(EmotionMainFragment.HIDE_BAR_EDITTEXT_AND_BTN, false);
+        //替换fragment
+        //创建修改实例
+        emotionMainFragment = EmotionMainFragment.newInstance(EmotionMainFragment.class, bundle);
+        emotionMainFragment.bindToContentView(ptrClassicFrameLayout);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fl_emotionview_main, emotionMainFragment);
+        transaction.addToBackStack(null);
+        //提交修改
+        transaction.commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        /**
+         * 判断是否拦截返回键操作
+         */
+        if (!emotionMainFragment.isInterceptBackPress()) {
+            super.onBackPressed();
+        }
+    }
 
 }

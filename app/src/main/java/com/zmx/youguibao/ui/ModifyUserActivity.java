@@ -85,8 +85,7 @@ public class ModifyUserActivity extends BaseActivity implements ModifyUserView {
     protected void initViews() {
 
         // 沉浸式状态栏
-        positionView = findViewById(R.id.position_view);
-        StatusBarUtil.setTransparentForImageView(this,positionView);//状态栏一体化
+        StatusBarUtil.setColor(this, getResources().getColor(R.color.title_bage), 0);
 
         up = new UserPresenter(this, this);
         right = getResources().getDrawable(R.mipmap.wallet_base_right_arrow);

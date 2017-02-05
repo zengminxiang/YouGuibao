@@ -49,12 +49,11 @@ public class Utils {
     /**
      * 弹出输入法
      * @param context
-     * @param view
+     * @param
      */
-    public static void showSoftInput(Context context, View view){
+    public static void showSoftInput(Context context){
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-        //imm.showSoftInput(view, InputMethodManager.SHOW_FORCED);
     }
 
     /**

@@ -47,16 +47,6 @@
             android:background="@mipmap/nav_btn_like_pressed"
          />
 
-        <ImageView
-            android:id="@+id/cccc"
-            android:layout_width="70px"
-            android:layout_height="70px"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="30px"
-            android:layout_toRightOf="@+id/like"
-            android:background="@mipmap/portfolio_bottombar_more_pressed"
-            android:onClick="onClickOperation" />
-
         <com.zmx.youguibao.utils.view.ImageViewUtil
             android:id="@+id/user_head"
             android:layout_width="80px"
@@ -65,6 +55,17 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="10px"
             android:src="@mipmap/filter_preview_lomo" />
+
+        <ImageView
+            android:id="@+id/cccc"
+            android:layout_width="70px"
+            android:layout_height="70px"
+            android:layout_marginLeft="30px"
+            android:background="@mipmap/portfolio_bottombar_more_normal"
+            android:onClick="onClickOperation"
+            android:layout_alignTop="@+id/like"
+            android:layout_toEndOf="@+id/like"
+            android:layout_marginStart="17dp" />
 
     </RelativeLayout>
 

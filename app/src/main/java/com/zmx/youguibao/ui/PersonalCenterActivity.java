@@ -84,7 +84,19 @@ public class PersonalCenterActivity extends BaseActivity implements AbsListView.
 
         // 沉浸式状态栏
         positionView = findViewById(R.id.position_view);
-        StatusBarUtil.setTransparentForImageView(this,positionView);//状态栏一体化
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+
+            Window window = getWindow();
+            window.setFlags(
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+            int statusBarHeight = getStatusBarHeight();
+            ViewGroup.LayoutParams lp = positionView.getLayoutParams();
+            lp.height = statusBarHeight;
+            positionView.setLayoutParams(lp);
+
+        }
 
         showLoadingView();
         uid = this.getIntent().getStringExtra("uid");
@@ -432,7 +444,7 @@ public class PersonalCenterActivity extends BaseActivity implements AbsListView.
                 Log.e("isSex","isSex="+isSex);
                 Log.e("isSex","MyApplication.getU_sex()="+MyApplication.getU_sex());
 
-                //更新了偷笑
+                //更新了
                 if (isHead.equals("1")){
 
                     ImageLoader.getInstance().displayImage(UrlConfig.HEAD + pcpojo.getU_headurl(), user_avatar,

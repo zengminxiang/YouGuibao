@@ -86,5 +86,5 @@
     <string name="user_recommend_tip">TA的动态</string>
 
     <string name="face">粉丝：</string>
-
+    <string name="btn_send">发送</string>
 </resources>

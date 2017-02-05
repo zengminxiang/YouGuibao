@@ -7,7 +7,7 @@ import java.util.Map;
 
 /**
  *作者：胖胖祥
- *时间：2016/8/25 0025 上午 9:50
+ *时间：2016/8/25 0025 上午 9:50  重新修改
  *功能模块：api
  */
 public class UrlConfig {
@@ -15,7 +15,7 @@ public class UrlConfig {
 
     public static Map<String,String> params;
 
-    private static String URL = "http://192.168.2.117:8080/Guiyoubao/";
+    private static String URL = "http://192.168.1.106:8080/Guiyoubao/";
     public static String HEAD = URL+"head/";
 
     //处理视频说说模块

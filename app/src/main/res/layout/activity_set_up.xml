@@ -7,6 +7,8 @@
     android:orientation="vertical"
     tools:context="com.zmx.youguibao.ui.SetUpActivity">
 
+    <include layout="@layout/activity_head_layout"></include>
+
     <Button
         android:id="@+id/exit_login"
         android:layout_width="match_parent"

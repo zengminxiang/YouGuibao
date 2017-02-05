@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zhy.autolayout.utils.AutoUtils;
 import com.zmx.youguibao.R;
+import com.zmx.youguibao.emoticon.utils.SpanStringUtils;
 import com.zmx.youguibao.mvp.bean.ReplyCommentJson;
 import com.zmx.youguibao.mvp.bean.VideoCommentJson;
 import com.zmx.youguibao.ui.ReplyCommentActivity;
@@ -89,7 +90,8 @@ public class CommentAdapter extends BaseAdapter{
         }
 
         holder.name.setText(lists.get(position).getU_name());
-        holder.comtext.setText(lists.get(position).getVc_content());
+        holder.comtext.setText(SpanStringUtils.getEmotionContent(0x0001,
+                context, holder.comtext, lists.get(position).getVc_content()));
         holder.time.setText(lists.get(position).getVc_time());
 
         //处理刷新数据后闪屏问题
@@ -146,14 +148,16 @@ public class CommentAdapter extends BaseAdapter{
                 if (i == 0){
 
                     holder.comment_one.setVisibility(View.VISIBLE);
-                    holder.comment_one.setText(UserNameOnclik(holder.comment_one,name,uid,bname,comment));
+                    holder.comment_one.setText(SpanStringUtils.getEmotionContent(0x0001,
+                            context, holder.comtext, UserNameOnclik(holder.comment_one,name,uid,bname,comment).toString()));
 
                 }
 
                 if(i == 1){
 
                     holder.comment_two.setVisibility(View.VISIBLE);
-                    holder.comment_two.setText(UserNameOnclik(holder.comment_two,name,uid,bname,comment));
+                    holder.comment_two.setText(SpanStringUtils.getEmotionContent(0x0001,
+                            context, holder.comtext, UserNameOnclik(holder.comment_two,name,uid,bname,comment).toString()));
 
                 }
 
